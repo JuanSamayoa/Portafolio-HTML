@@ -1,59 +1,34 @@
-# MiPortafolio
+# Mi Portafolio
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.1.
+## Sobre Mí
+Soy un analista de QA con experiencia en pruebas manuales, caja negra, caja blanca, pruebas de humo y la creación de scripts y escenarios de prueba. Además, he desarrollado habilidades en el desarrollo frontend utilizando Angular, lo que me permite aportar una perspectiva integral en la calidad del software.
 
-## Development server
+También tengo experiencia en análisis de mercado y desarrollo de productos, con un enfoque estratégico en la identificación de oportunidades comerciales y diferenciación competitiva. Mi trabajo se basa en la innovación y la validación de necesidades insatisfechas en el mercado.
 
-To start a local development server, run:
+## Acerca del Proyecto
+Este proyecto es mi portafolio profesional, donde muestro mis habilidades, experiencia y proyectos en los que he trabajado. Está desarrollado en **Angular** y diseñado para reflejar mi capacidad técnica y mi enfoque en la calidad y usabilidad del software.
 
-```bash
-ng serve
-```
+### Características del Proyecto
+- **Desarrollado en Angular** para una experiencia de usuario dinámica y moderna.
+- **Diseño Responsive**, adaptable a diferentes dispositivos.
+- **Integración de buenas prácticas de QA** para asegurar un código limpio y funcional.
+- **Sección de proyectos**, donde muestro ejemplos de mis trabajos anteriores.
+- **Optimización de rendimiento y accesibilidad**.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Tecnologías Utilizadas
+- Angular
+- TypeScript
+- HTML5 / CSS3
+- Bootstrap / TailwindCSS
+- JavaScript
+- Git / GitHub
 
-## Code scaffolding
+## Contacto
+Si deseas conocer más sobre mi trabajo o colaborar en algún proyecto, puedes contactarme en:
+- **Correo electrónico:** [juancho1705@gmail.com](mailto:juancho1705@gmail.com)
+- **LinkedIn:** [linkedin.com/in/juan-enrique-samayoa-reyes-ba838a208/](https://www.linkedin.com/in/juan-enrique-samayoa-reyes-ba838a208/)
+- **GitHub:** [github.com/JuanSamayoa](https://github.com/JuanSamayoa)
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+---
+¡Gracias por visitar mi portafolio! 🚀
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.

@@ -18,7 +18,7 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent {
-  title = 'Mi Portafolio';
+  title = 'Mi Portafolio - Juan Samayoa';
 
   navItems = [
     { path: '/', label: 'Inicio' },

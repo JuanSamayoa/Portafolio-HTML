@@ -14,6 +14,8 @@ import { ProjectsComponent } from './components/projects/projects.component';
 import { ProjectDetailComponent } from './components/project-detail/project-detail.component';
 import { AboutComponent } from './components/about/about.component';
 import { ContactComponent } from './components/contact/contact.component';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @NgModule({
   declarations: [
@@ -33,8 +35,10 @@ import { ContactComponent } from './components/contact/contact.component';
     ProjectDetailComponent,
     AboutComponent,
     ContactComponent,
+    MatIconModule,
   ],
   providers: [],
   bootstrap: [],
 })
-export class AppModule {}
+export class AppModule {
+  }

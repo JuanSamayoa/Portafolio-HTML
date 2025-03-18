@@ -6,7 +6,6 @@ footer {
 }
 
 .container {
-  max-width: 1200px;
   margin: 0 auto;
   padding: 0 1rem;
   display: flex;
@@ -29,34 +28,6 @@ footer {
 
     &:hover {
       color: #ccc;
-    }
-  }
-}
-
-a.social-icon-link {
-  &.linkedin {
-
-    mat-icon ::ng-deep svg {
-      fill: white;
-    }
-
-    &:hover {
-      mat-icon ::ng-deep svg {
-        fill: #ccc;
-      }
-    }
-  }
-
-  &.github {
-
-    mat-icon ::ng-deep svg {
-      fill: white;
-    }
-
-    &:hover {
-      mat-icon ::ng-deep svg {
-        fill: #ccc;
-      }
     }
   }
 }

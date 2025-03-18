@@ -41,6 +41,14 @@ export class ProjectService {
       technologies: ['Node.js', 'Express', 'MongoDB'],
       liveUrl: 'https://project3.example.com',
     },
+    {
+      id: 3,
+      title: 'Project 4',
+      description: 'Description of project 4',
+      imageUrl: 'assets/images/project4.jpg',
+      technologies: ['Node.js', 'Express', 'MongoDB'],
+      liveUrl: 'https://project4.example.com',
+    },
   ];
 
   constructor() {}

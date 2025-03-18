@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "deploy": "ng build --configuration=production --base-href '/Portafolio-HTML/' --output-path docs && echo. > docs/.nojekyll && git add . && git commit -m \"Deploy update\" && git push origin main"
   },
   "private": true,
   "dependencies": {

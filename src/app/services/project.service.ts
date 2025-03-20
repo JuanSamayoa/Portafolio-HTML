@@ -18,11 +18,11 @@ export class ProjectService {
   private projects: Project[] = [
     {
       id: 1,
-      title: 'Project 1',
-      description: 'Description of project 1',
+      title: 'Sistemas de Recursos Humanos',
+      description: 'Sistema de Recursos Humanos para empresa, el cual gestiona desde nuevos empleados hasta las vacaciones de los mismos. Con capacidad de generar reportes.',
       imageUrl: 'assets/images/project1.jpg',
-      technologies: ['Angular', 'TypeScript', 'Bootstrap'],
-      githubUrl: 'https://github.com/yourusername/project1',
+      technologies: ['Java', 'SQL', 'Swing'],
+      githubUrl: 'https://github.com/JuanSamayoa/Portafolio-HTML',
       liveUrl: 'https://project1.example.com',
     },
     {

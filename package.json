@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "deploy": "ng build --configuration=production --output-path docs && xcopy /E /I /Y docs\\browser\\* docs\\ && rmdir /s /q docs\\browser && echo. > docs/.nojekyll && copy public\\404.html docs\\ && git add . && git commit -m \"Deploy update\" && git push origin main"
+    "deploy": "ng build --configuration=production --output-path docs && xcopy /E /I /Y docs\\browser\\* docs\\ && rmdir /s /q docs\\browser && echo. > docs/.nojekyll && copy public\\404.html docs\\ && echo juan-samayoa.is-a.dev > docs/CNAME && git add . && git commit -m \"Deploy update\" && git push origin main"
   },
   "private": true,
   "dependencies": {

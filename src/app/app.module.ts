@@ -14,12 +14,15 @@ import { ProjectsComponent } from './components/projects/projects.component';
 import { ProjectDetailComponent } from './components/project-detail/project-detail.component';
 import { AboutComponent } from './components/about/about.component';
 import { ContactComponent } from './components/contact/contact.component';
+import { CommonModule } from '@angular/common';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
-  declarations: [
-    // No declaramos ningún componente aquí
-  ],
+  declarations: [],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -34,10 +37,14 @@ import { MatIconModule } from '@angular/material/icon';
     ProjectDetailComponent,
     AboutComponent,
     ContactComponent,
+    CommonModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatButtonModule,
     MatIconModule,
+    MatListModule,
   ],
   providers: [],
   bootstrap: [],
 })
-export class AppModule {
-  }
+export class AppModule {}

@@ -1,13 +1,66 @@
+.header-container {
+  position: relative;
+}
+
 .spacer {
   flex: 1 1 auto;
 }
 
-nav {
-  display: flex;
-  gap: 1rem;
+// Overlay para oscurecer el contenido
+.sidenav-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: none;
 
-  a.active {
-    font-weight: bold;
-    text-decoration: underline;
+  &.visible {
+    display: block;
+  }
+}
+
+// Sidenav a pantalla completa
+.mobile-sidenav {
+  position: fixed;
+  top: 0;
+  left: -300px;
+  width: 300px;
+  height: 100vh;
+  background-color: white;
+  z-index: 1001; // Valor mayor que el overlay y toolbar
+  transition: left 0.3s ease;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+
+  &.open {
+    left: 0;
+  }
+}
+
+// Header del sidenav con botón de cierre
+.sidenav-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+// Media queries
+@media (max-width: 768px) {
+  .desktop-nav {
+    display: none;
+  }
+
+  .menu-button {
+    display: block;
+  }
+}
+
+@media (min-width: 769px) {
+  .menu-button {
+    display: none;
   }
 }

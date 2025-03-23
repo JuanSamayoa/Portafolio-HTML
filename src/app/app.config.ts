@@ -1,7 +1,8 @@
 import { ApplicationConfig } from '@angular/core';
-import { provideRouter, withHashLocation } from '@angular/router';
+import { provideRouter } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient } from '@angular/common/http';
+import { MatIconRegistry } from '@angular/material/icon';
 
 import { routes } from './app.routes';
 
@@ -10,5 +11,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideAnimations(),
     provideHttpClient(),
+    MatIconRegistry,
   ],
 };

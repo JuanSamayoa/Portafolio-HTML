@@ -18,7 +18,6 @@ export class AppComponent implements OnInit {
   constructor(private iconService: IconService) {}
 
   ngOnInit() {
-    // Registra los iconos una vez al inicio de la aplicación
     this.iconService.registerIcons();
   }
 }

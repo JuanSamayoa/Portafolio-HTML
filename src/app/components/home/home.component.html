@@ -60,7 +60,7 @@
           <img [src]="project.imageUrl" [alt]="project.title" class="image-placeholder" />
         </div>
         <h3>{{ project.title }}</h3>
-        <p>{{ project.description }}</p>
+        <p>{{ project.shortDescription }}</p>
         <a [routerLink]="['/projects', project.id]" class="project-link">Ver detalles</a>
       </div>
     </div>

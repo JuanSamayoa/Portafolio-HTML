@@ -1,5 +1,9 @@
 /* Custom Theming for Angular Material */
 @use '@angular/material' as mat;
+@include mat.core();
+
+//$my-custom-primary: mat.define-palette(mat.$indigo-palette);
+//$my-custom-tertiary: mat.define-palette(mat.$amber-palette);
 
 html {
   @include mat.theme((color: (theme-type: light,
@@ -10,6 +14,7 @@ html {
       density: 0,
     ));
 }
+
 
 * {
   font-family: "Ubuntu", sans-serif;

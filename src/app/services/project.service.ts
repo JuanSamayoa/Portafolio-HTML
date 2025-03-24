@@ -20,11 +20,11 @@ export class ProjectService {
     {
       id: 1,
       title: 'Sistemas de Recursos Humanos',
-      shortDescription: 'Sistema de Recursos Humanos con capacidad de reportes y gestión de empleados',
+      shortDescription: 'Sistema de Recursos Humanos con capacidad de reportes y gestión de empleados.',
       description:
         'El Sistema de Recursos Humanos es una aplicación diseñada para la gestión eficiente del personal dentro de una organización. Su objetivo es organizar y coordinar todas las actividades relacionadas con la contratación, administración de empleados, permisos, licencias, vacaciones y movimientos dentro de la empresa. Además, ofrece un módulo de reportes para la toma de decisiones estratégicas en el departamento de Recursos Humanos.',
       imageUrl: 'assets/img/humanresources.webp',
-      technologies: ['Java', 'SQL', 'Swing', 'SQL Server'],
+      technologies: ['Java', 'SQL', 'Swing'],
       githubUrl: 'https://github.com/JuanSamayoa/SistemaRecursosHumanos',
     },
     {

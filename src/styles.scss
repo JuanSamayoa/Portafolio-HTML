@@ -2,19 +2,9 @@
 @use '@angular/material' as mat;
 @include mat.core();
 
-//$my-custom-primary: mat.define-palette(mat.$indigo-palette);
-//$my-custom-tertiary: mat.define-palette(mat.$amber-palette);
-
 html {
-  @include mat.theme((color: (theme-type: light,
-        primary: mat.$azure-palette,
-        tertiary: mat.$blue-palette,
-      ),
-      typography: Roboto,
-      density: 0,
-    ));
+  @include mat.theme((color: (theme-type: light, primary: mat.$blue-palette, tertiary: mat.$blue-palette, ), typography: Roboto, density: 0, ));
 }
-
 
 * {
   font-family: "Ubuntu", sans-serif;

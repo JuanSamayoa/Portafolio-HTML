@@ -1,34 +1,58 @@
-# Mi Portafolio
+# Portafolio de Juan Samayoa | QA & Desarrollo Web
 
-## Sobre Mí
-Soy un analista de QA con experiencia en pruebas manuales, caja negra, caja blanca, pruebas de humo y la creación de scripts y escenarios de prueba. Además, he desarrollado habilidades en el desarrollo frontend utilizando Angular, lo que me permite aportar una perspectiva integral en la calidad del software.
+![Astro Badge](https://img.shields.io/badge/Astro-BC52EE?logo=astro&logoColor=fff&style=flat)
+![Tailwind CSS Badge](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white)
+![TypeScript Badge](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)
+![Angular Badge](https://img.shields.io/badge/Angular-DD0031?style=flat&logo=angular&logoColor=white)
 
-También tengo experiencia en análisis de mercado y desarrollo de productos, con un enfoque estratégico en la identificación de oportunidades comerciales y diferenciación competitiva. Mi trabajo se basa en la innovación y la validación de necesidades insatisfechas en el mercado.
+## 📋 Acerca de este proyecto
 
-## Acerca del Proyecto
-Este proyecto es mi portafolio profesional, donde muestro mis habilidades, experiencia y proyectos en los que he trabajado. Está desarrollado en **Angular** y diseñado para reflejar mi capacidad técnica y mi enfoque en la calidad y usabilidad del software.
+Este portafolio profesional, desarrollado con Astro y Tailwind CSS, exhibe mi experiencia como Ingeniero de Pruebas TI y desarrollador web, mostrando mis proyectos más relevantes y trayectoria profesional.
 
-### Características del Proyecto
-- **Desarrollado en Angular** para una experiencia de usuario dinámica y moderna.
-- **Diseño Responsive**, adaptable a diferentes dispositivos.
-- **Integración de buenas prácticas de QA** para asegurar un código limpio y funcional.
-- **Sección de proyectos**, donde muestro ejemplos de mis trabajos anteriores.
-- **Optimización de rendimiento y accesibilidad**.
+### ✨ Características del sitio
 
-## Tecnologías Utilizadas
-- Angular
-- TypeScript
-- HTML5 / CSS3
-- Bootstrap / TailwindCSS
-- JavaScript
-- Git / GitHub
+- **Diseño responsive** adaptado para dispositivos móviles, tablets y desktop
+- **Modo claro/oscuro** integrado con preferencias del sistema
+- **Navegación fluida** entre secciones con animaciones suaves
+- **Componentes interactivos** diseñados para mejorar la experiencia de usuario
+- **Sistema de etiquetas tecnológicas** con colores específicos por tecnología
+- **Secciones organizadas** para mostrar experiencia, proyectos y habilidades
+- **Integración de contacto** con links directos a redes sociales y CV
 
-## Contacto
-Si deseas conocer más sobre mi trabajo o colaborar en algún proyecto, puedes contactarme en:
-- **Correo electrónico:** [juancho1705@gmail.com](mailto:juancho1705@gmail.com)
-- **LinkedIn:** [linkedin.com/in/juan-enrique-samayoa-reyes-ba838a208/](https://www.linkedin.com/in/juan-enrique-samayoa-reyes-ba838a208/)
-- **GitHub:** [github.com/JuanSamayoa](https://github.com/JuanSamayoa)
+## 👨‍💻 Sobre mí
+
+Soy un Analista de QA con +3 años de experiencia en pruebas manuales y automatizadas. Cuento con sólidos conocimientos en desarrollo frontend utilizando Angular y una base en Java, lo que me permite comprender tanto la calidad del software como su proceso de desarrollo.
+
+### 🛠️ Habilidades clave
+
+- **QA & Testing**
+  - Pruebas funcionales manuales y automatizadas (Selenium WebDriver)
+  - Testing de APIs con Postman
+  - Gestión de pruebas con Jira y X-Ray
+  - Documentación técnica y reportes de defectos
+
+- **Desarrollo**
+  - Frontend: Angular, TypeScript, HTML, CSS, Tailwind 
+  - Automatización: Python, Selenium
+  - Desktop: Java, Swing
+  - Manejo de datos: SQL (Oracle, Microsoft SQL Server, PostgreSQL)
+
+## 💼 Proyectos destacados
+
+El portafolio incluye varios de mis proyectos más relevantes:
+
+- **Sistema de Recursos Humanos (Desktop)**: Aplicación Java que gestiona empleados, vacaciones y reportes
+- **Plataforma de bodas**: Solución web completa con stack PEAN (PostgreSQL, Express, Angular, Node)
+- **Frontend de Gestión de Agentes**: Interfaz bancaria desarrollada en Angular
+- **Herramientas de automatización**: Scripts Python para optimización de procesos
+
+## 📬 Contacto
+
+- **LinkedIn**: [juansamayoa](https://www.linkedin.com/in/juansamayoa/)
+- **GitHub**: [JuanSamayoa](https://github.com/JuanSamayoa)
+- **Email**: juancho1705@gmail.com
+- **CV**: [Ver Curriculum](https://www.canva.com/design/DAGNavqG4Po/IehvEaoao5122cmKtPrSrg/edit)
 
 ---
-¡Gracias por visitar mi portafolio! 🚀
 
+Desarrollado con Astro y Tailwind CSS | Juan Samayoa | Guatemala

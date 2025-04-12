@@ -1,0 +1,43 @@
+---
+// Componente para volver al inicio con animación
+---
+
+<button 
+  id="scroll-to-top"
+  aria-label="Volver al inicio"
+  class="fixed bottom-5 right-5 bg-primary/80 hover:bg-primary text-white rounded-full p-3 shadow-lg z-50 opacity-0 invisible transition-all duration-300 transform translate-y-10"
+>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+  </svg>
+</button>
+
+<script>
+  // Controla la visibilidad y comportamiento del botón de scroll
+  document.addEventListener('DOMContentLoaded', () => {
+    const scrollButton = document.getElementById('scroll-to-top');
+    
+    // Mostrar/ocultar botón según posición de scroll
+    const toggleScrollButton = () => {
+      if (window.scrollY > 300) {
+        scrollButton?.classList.remove('opacity-0', 'invisible', 'translate-y-10');
+        scrollButton?.classList.add('opacity-100', 'translate-y-0');
+      } else {
+        scrollButton?.classList.add('opacity-0', 'invisible', 'translate-y-10');
+        scrollButton?.classList.remove('opacity-100', 'translate-y-0');
+      }
+    };
+    
+    // Scroll suave hacia arriba
+    scrollButton?.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+    
+    // Verificar scroll al cargar y al hacer scroll
+    window.addEventListener('scroll', toggleScrollButton);
+    toggleScrollButton();
+  });
+</script>

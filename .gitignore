@@ -1,15 +1,32 @@
-# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
-
-# Compiled output
+# Build output
+dist/
 /dist
 /tmp
 /out-tsc
 /bazel-out
+/docs
 
-# Node
+# Generated types & dev files
+.astro/
+/.angular/cache
+
+# Dependencies
+node_modules/
 /node_modules
-npm-debug.log
-yarn-error.log
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+/libpeerconnection.log
+testem.log
+
+# Environment variables
+.env
+.env.production
+.env.local
+.env.development
 
 # IDEs and editors
 .idea/
@@ -29,13 +46,18 @@ yarn-error.log
 .history/*
 
 # Miscellaneous
-/.angular/cache
 .sass-cache/
 /connect.lock
 /coverage
-/libpeerconnection.log
-testem.log
 /typings
+*.code-workspace
+.editorconfig
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+*.sublime-settings
+*.sublime-metrics*
 
 # System files
 .DS_Store

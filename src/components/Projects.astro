@@ -1,0 +1,150 @@
+---
+import ProjectItem from "./ProjectItem.astro";
+import FolderIcon from "./icons/FolderIcon.astro";
+
+interface Tag {
+  text: string;
+  color?: string;
+}
+
+interface Project {
+  title: string;
+  description: string;
+  image?: string;
+  tags: Tag[];
+  link?: string;
+  github?: string;
+  featured?: boolean;
+}
+
+// Datos de proyectos
+const projectsData: Project[] = [
+  {
+    title: "Sistema de Recursos Humanos - Desktop",
+    description:
+      "Integra funciones como agregar empleados, modificación de los mismos, capacidad para dar vacaciones, solicitudes generales, permisos especiales, licencias de ley, además de generar reportes y con capacidad de perfilamiento.",
+    image: "/assets/img/humanresources.webp",
+    tags: [
+      { text: "Java" },
+      { text: "Microsoft SQL Server" },
+      { text: "Swing" },
+    ],
+    featured: true,
+    github: "https://github.com/JuanSamayoa/SistemaRecursosHumanos",
+  },
+  {
+    title: "Plataforma de bodas",
+    description:
+      "Plataforma que incluye frontend, backend y base de datos para una visualización general del evento, así como enviar mensajes, asistencia, mapa del lugar, entre otros.",
+    image: "/assets/img/wedding-platform.webp", 
+    tags: [
+      { text: "PostgreSQL" },
+      { text: "Express JS" },
+      { text: "Angular" },
+      { text: "TypeScript" },
+      { text: "Tailwind" },
+      { text: "Node JS" },
+    ],
+    github: "https://github.com/JuanSamayoa/postman-collection-example",
+  },
+  {
+    title: "Frontend de Gestión de Agentes",
+    description:
+      "Interfaz desarrollada en Angular para la gestión interna de agentes bancarios, venta de productos, colocación de tarjetas de débito, visualización de comisiones y módulo adminsitrativo.",
+    image: "/assets/img/agents.webp",
+    tags: [{ text: "Angular" }, { text: "TypeScript" }, { text: "Tailwind" }],
+  },
+  {
+    title: "Bot de automatización para CRM",
+    description:
+      "Script en Python que automatiza tareas repetitivas en el sistema CRM, reduciendo el tiempo de procesamiento en un 60% y minimizando errores humanos.",
+    tags: [{ text: "Python" }, { text: "Automation" }, { text: "CRM" }],
+    github: "https://github.com/JuanSamayoa/crm-automation-tool",
+  },
+];
+---
+
+<div class="w-full reveal-section">
+  <h2
+    class="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white mb-2 flex items-center gap-2 reveal-item"
+  >
+    <FolderIcon class="inline-block w-7 h-7 md:w-8 md:h-8" />
+    Proyectos Destacados
+  </h2>
+
+  <p class="text-gray-600 dark:text-gray-400 mb-8 reveal-item">
+    Una selección de mis trabajos y proyectos personales
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+    {
+      projectsData.map((project, index) => (
+        <div class="reveal-item" style={`--reveal-delay: ${index * 100}ms`}>
+          <ProjectItem
+            title={project.title}
+            description={project.description}
+            image={project.image}
+            tags={project.tags}
+            link={project.link}
+            github={project.github}
+            featured={project.featured}
+          />
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .reveal-section {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .reveal-item {
+    opacity: 0;
+    transform: translateY(30px);
+    transition:
+      opacity 0.6s ease-out,
+      transform 0.8s ease-out;
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .reveal-item.is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+
+<script>
+  // Configuración de las animaciones de revelación al hacer scroll
+  document.addEventListener("DOMContentLoaded", () => {
+    const revealItems = document.querySelectorAll(".reveal-item");
+
+    if ("IntersectionObserver" in window) {
+      const revealObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-revealed");
+              revealObserver.unobserve(entry.target); // Solo animar una vez
+            }
+          });
+        },
+        {
+          threshold: 0.1, // 10% del elemento visible
+          rootMargin: "0px 0px -50px 0px", // Trigger un poco antes
+        }
+      );
+
+      revealItems.forEach((item) => {
+        revealObserver.observe(item);
+      });
+    } else {
+      // Fallback para navegadores sin soporte
+      revealItems.forEach((item) => {
+        item.classList.add("is-revealed");
+      });
+    }
+  });
+</script>

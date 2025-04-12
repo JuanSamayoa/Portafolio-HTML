@@ -1,0 +1,144 @@
+---
+import Header from "../components/Header.astro";
+import Background from "../components/Background.astro";
+import ScrollToTop from "../components/ScrollToTop.astro";
+import "@fontsource/onest";
+
+// Definición de la interfaz para las props
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+// Valores predeterminados para las props
+const {
+  title = "Mi Portafolio | Desarrollador Web",
+  description = "Portafolio profesional de desarrollador web",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es" class="scroll-smooth transition-colors duration-500">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <!-- Agregar Intersection Observer Polyfill para soporte en navegadores antiguos -->
+    <script is:inline>
+      !(function (t, e) {
+        "object" == typeof exports && "undefined" != typeof module
+          ? (module.exports = e())
+          : "function" == typeof define && define.amd
+            ? define(e)
+            : ((t =
+                "undefined" != typeof globalThis
+                  ? globalThis
+                  : t || self).IntersectionObserver = e());
+      })(
+        this,
+        (function () {
+          // ...intersection observer polyfill code
+          return "IntersectionObserver" in window &&
+            "IntersectionObserverEntry" in window &&
+            "intersectionRatio" in window.IntersectionObserverEntry.prototype
+            ? window.IntersectionObserver
+            : function () {
+                // ...polyfill implementation
+              };
+        })()
+      );
+    </script>
+  </head>
+  <body class="transition-colors duration-500">
+    <Background />
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <ScrollToTop />
+    <script is:inline>
+      // Script inicial para configurar el tema al cargar la página
+      try {
+        const theme =
+          localStorage.getItem("theme") ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+        document.documentElement.classList.toggle("dark", theme === "dark");
+      } catch (error) {
+        console.warn("Error al establecer tema:", error);
+        // Fallback al tema claro si hay error
+        document.documentElement.classList.remove("dark");
+      }
+
+      // Manejador global específico para el error de Shiki
+      window.addEventListener("error", function (event) {
+        if (
+          (event.message && event.message.includes("Shiki")) ||
+          event.message.includes("Language `Astro`")
+        ) {
+          console.warn(
+            "Interceptado error de resaltado de sintaxis:",
+            event.message
+          );
+          event.preventDefault(); // Prevenir que el error se propague
+          return true; // Indicar que el error ha sido manejado
+        }
+      });
+
+      // Manejador especial para promesas rechazadas
+      window.addEventListener("unhandledrejection", function (event) {
+        if (
+          event.reason &&
+          (event.reason.toString().includes("Shiki") ||
+            event.reason.toString().includes("Language `Astro`"))
+        ) {
+          console.warn("Interceptada promesa rechazada:", event.reason);
+          event.preventDefault(); // Evitar que la promesa rechazada cause problemas
+        }
+      });
+    </script>
+  </body>
+  <style is:global>
+    :root {
+      --color-primary-rgb: 59, 130, 246; /* Mantener para otros usos */
+      scroll-behavior: smooth; /* Reforzar el comportamiento de scroll suave globalmente */
+    }
+
+    /* Asegurarnos de que los enlaces de navegación tengan transición suave */
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
+</html>
+
+<style>
+  :root {
+    color-scheme: light dark;
+  }
+
+  html {
+    font-family: "Onest", sans-serif;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+  }
+
+  main {
+    flex-grow: 1;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+    position: relative;
+    z-index: 1;
+  }
+</style>

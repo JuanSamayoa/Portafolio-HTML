@@ -1,0 +1,143 @@
+---
+import ExperienceItem from "./ExperienceItem.astro";
+import BriefcaseIcon from "../components/icons/BrierfcaseIcon.astro";
+
+interface Badge {
+  text: string;
+  color?: string;
+}
+
+// Datos de experiencia incorporados directamente en el componente
+const experienceData = [
+  {
+    date: "Octubre 2024 - Presente",
+    title: "Ingeniero de Pruebas TI I",
+    company: "Conduent Business Services, Guatemala",
+    location: "Ciudad de Guatemala",
+    description:
+      "Responsable de manejo de aplicativos para clientes farmaceuticos. Manejando Power Bi, Oracle SQL, y automatizando dashboard con Python Selenium con una ahorro de 30% en tiempos de ejecución de pruebas.",
+    badges: [
+      { text: "Selenium" },
+      { text: "Python" },
+      { text: "Oracle SQL" },
+      { text: "Power BI" },
+    ],
+    isActive: true,
+  },
+  {
+    date: "Julio 2022 - Octubre 2024",
+    title: "Analista Especializado QA",
+    company: "Banco Industrial, S.A.",
+    location: "Ciudad de Guatemala",
+    description:
+      "Responsable de las pruebas manuales para cliente interno de Agentes Bancarios. Automatizando un flujo completo con Postman Flows al 100%. Implementación de un 25% de automatización de procesos para QA manual.",
+    badges: [{ text: "Jira" }, { text: "Postman" }, { text: "X-Ray" }],
+  },
+  {
+    date: "Febrero 2024 - Octubre 2024",
+    title: "Desarrollador Frontend (Paralelo)",
+    company: "Banco Industrial, S.A.",
+    location: "Ciudad de Guatemala",
+    description:
+      "Desarrollo de plataforma para Agentes Bancarios. Manejo de Angular, TypeScript y Tailwind para el desarrollo de la plataforma en móvil y desktop.",
+    badges: [
+      { text: "Angular" },
+      { text: "HTML/CSS" },
+      { text: "TypeScript" },
+      { text: "Tailwind" },
+    ],
+  },
+  {
+    date: "Abril 2021 - Julio 2022",
+    title: "Customer Resolution Expert",
+    company: "Alorica Comunicaciones Limitada",
+    location: "Ciudad de Guatemala",
+    description:
+      "Automatización de procesos para telefonía de EE.UU. Implementando respuestas automáticas, resolución al frontline, desbloqueo de dispositivos móviles, entre otros aspectos",
+    badges: [{ text: "CRM" }, { text: "Slack" }, { text: "Python" }],
+  },
+];
+---
+
+<div class="w-full reveal-section">
+  <h2 class="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white mb-2 flex items-center gap-2 reveal-item">
+    <BriefcaseIcon class="inline-block w-7 h-7 md:w-8 md:h-8" />
+    Experiencia Profesional
+  </h2>
+  
+  <p class="text-gray-600 dark:text-gray-400 mb-8 reveal-item">
+    Mi recorrido profesional hasta la fecha
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+    <!-- Línea de tiempo en tablet/desktop -->
+    <ol
+      class="col-span-full md:col-span-12 lg:col-span-10 lg:col-start-2 relative border-s border-gray-200 dark:border-gray-700 transition-colors duration-500 hover:border-primary/30 dark:hover:border-primary/30"
+    >
+      {
+        experienceData.map((item, index) => (
+          <div class="reveal-item" style={`--reveal-delay: ${index * 150}ms`}>
+            <ExperienceItem
+              date={item.date}
+              title={item.title}
+              company={item.company}
+              location={item.location}
+              description={item.description}
+              badges={item.badges}
+              isActive={item.isActive}
+            />
+          </div>
+        ))
+      }
+    </ol>
+  </div>
+</div>
+
+<style>
+  .reveal-section {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .reveal-item {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.8s ease-out;
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  
+  .reveal-item.is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+
+<script>
+  // Configuración de las animaciones de revelación al hacer scroll
+  document.addEventListener('DOMContentLoaded', () => {
+    const revealItems = document.querySelectorAll('.reveal-item');
+    
+    if ('IntersectionObserver' in window) {
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-revealed');
+            revealObserver.unobserve(entry.target); // Solo animar una vez
+          }
+        });
+      }, {
+        threshold: 0.1, // 10% del elemento visible
+        rootMargin: '0px 0px -50px 0px' // Trigger un poco antes
+      });
+      
+      revealItems.forEach(item => {
+        revealObserver.observe(item);
+      });
+    } else {
+      // Fallback para navegadores sin soporte
+      revealItems.forEach(item => {
+        item.classList.add('is-revealed');
+      });
+    }
+  });
+</script>

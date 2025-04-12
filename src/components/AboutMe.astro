@@ -1,0 +1,187 @@
+---
+import UserIcon from "./icons/UserIcon.astro";
+---
+
+<div class="w-full reveal-section">
+  <h2
+    class="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white mb-2 flex items-center gap-2 reveal-item"
+  >
+    <UserIcon class="inline-block w-7 h-7 md:w-8 md:h-8" />
+    Sobre Mí
+  </h2>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+    <!-- Foto e info personal -->
+    <div
+      class="lg:col-span-4 flex flex-col items-center lg:items-start reveal-item"
+    >
+      <div class="relative w-48 h-80 mb-6 rounded-lg overflow-hidden mx-auto">
+        <img
+          src="/assets/img/about.webp"
+          alt="Foto ampliada de Juan Samayoa"
+          class="w-full h-full object-cover"
+        />
+      </div>
+
+      <ul class="space-y-2 w-full max-w-xs">
+        <li class="flex items-center gap-2 text-gray-700 dark:text-gray-300">
+          <span class="font-semibold min-w-24">Ubicación:</span>
+          <span>Guatemala</span>
+        </li>
+        <li class="flex items-center gap-2 text-gray-700 dark:text-gray-300">
+          <span class="font-semibold min-w-24">Educación:</span>
+          <span
+            >Ing. en Sistemas de la Información y Ciencias de la Computación</span
+          >
+        </li>
+        <li class="flex items-center gap-2 text-gray-700 dark:text-gray-300">
+          <span class="font-semibold min-w-24">Universidad:</span>
+          <span>Universidad Mariano Galvez de Guatemala</span>
+        </li>
+        <li class="flex items-center gap-2 text-gray-700 dark:text-gray-300">
+          <span class="font-semibold min-w-24">Idiomas:</span>
+          <span>Español (Nativo), Inglés (B2)</span>
+        </li>
+        <li class="flex items-center gap-2 text-gray-700 dark:text-gray-300">
+          <span class="font-semibold min-w-24">Stacks:</span>
+          <span>Java, Angular, Python</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Biografía y habilidades -->
+    <div class="lg:col-span-8 space-y-6">
+      <div class="reveal-item" style="--reveal-delay: 100ms">
+        <h3 class="text-xl font-bold mb-3 text-gray-800 dark:text-white">
+          Mi Historia
+        </h3>
+        <div class="space-y-4 text-gray-600 dark:text-gray-300">
+          <p>
+            Soy un Analista de QA con experiencia en pruebas manuales, caja
+            negra, caja blanca y pruebas de humo. Además, cuento con
+            conocimientos en desarrollo frontend utilizando Angular y una sólida
+            base en Java, lo que me permite comprender tanto la calidad del
+            software como su proceso de desarrollo. He participado en diversos
+            proyectos, tanto personales como profesionales, adquiriendo
+            experiencia en múltiples áreas de la tecnología.
+          </p>
+
+          <p>
+            Desde temprana edad me he sentido atraído por el mundo de la
+            informática, explorando tanto el hardware como el software a través
+            de cursos y proyectos personales. Mi primer lenguaje de programación
+            fue Java, y con el tiempo me he especializado en Angular y en
+            aseguramiento de la calidad.
+          </p>
+
+          <p>
+            Me apasionan la tecnología, la mejora continua y el aprendizaje
+            constante. Me considero una persona proactiva, responsable y
+            comprometida con mi trabajo. Siempre busco la excelencia en lo que
+            hago y disfruto colaborar en equipo para alcanzar objetivos comunes.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+        <div>
+          <h4 class="font-semibold mb-2 text-gray-700 dark:text-gray-200">
+            QA & Testing
+          </h4>
+          <ul
+            class="list-disc list-inside text-sm text-gray-600 dark:text-gray-300"
+          >
+            <li>Pruebas funcionales (manuales y automatizadas)</li>
+            <li>Selenium WebDriver</li>
+            <li>Postman (APIs y Flows)</li>
+            <li>Jira y X-Ray para gestión de pruebas</li>
+            <li>Redacción de casos de prueba y documentación técnica</li>
+            <li>Análisis técnico y reportes de defectos</li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold mb-2 text-gray-700 dark:text-gray-200">
+            Desarrollo
+          </h4>
+          <ul
+            class="list-disc list-inside text-sm text-gray-600 dark:text-gray-300"
+          >
+            <li>Automatización con Python</li>
+            <li>Desarrollo web con HTML, CSS y JavaScript</li>
+            <li>Angular & TypeScript (Frontend)</li>
+            <li>SQL para consultas y análisis de datos</li>
+            <li>Java y Swing (aplicaciones de escritorio)</li>
+            <li>VB.NET / ASP.NET (básico/intermedio)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="reveal-item" style="--reveal-delay: 300ms">
+        <h3 class="text-xl font-bold mb-3 text-gray-800 dark:text-white">
+          Intereses
+        </h3>
+        <p class="text-gray-600 dark:text-gray-300">
+          Fuera del trabajo, disfruto aprender sobre temas nuevos. Además, tengo
+          una gran pasión por el fútbol; estuve muy cerca de convertirme en
+          futbolista amateur en la liga nacional de Guatemala. Me gusta ver
+          fútbol, explorar áreas en las que aún no soy experto para expandir mis
+          horizontes, y conocer personas en todos los lugares posibles.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .reveal-section {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .reveal-item {
+    opacity: 0;
+    transform: translateY(30px);
+    transition:
+      opacity 0.6s ease-out,
+      transform 0.8s ease-out;
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .reveal-item.is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+
+<script>
+  // Configuración de las animaciones de revelación al hacer scroll
+  document.addEventListener("DOMContentLoaded", () => {
+    const revealItems = document.querySelectorAll(".reveal-item");
+
+    if ("IntersectionObserver" in window) {
+      const revealObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-revealed");
+              revealObserver.unobserve(entry.target); // Solo animar una vez
+            }
+          });
+        },
+        {
+          threshold: 0.1, // 10% del elemento visible
+          rootMargin: "0px 0px -50px 0px", // Trigger un poco antes
+        }
+      );
+
+      revealItems.forEach((item) => {
+        revealObserver.observe(item);
+      });
+    } else {
+      // Fallback para navegadores sin soporte
+      revealItems.forEach((item) => {
+        item.classList.add("is-revealed");
+      });
+    }
+  });
+</script>

@@ -1,0 +1,204 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  tags: Array<{ text: string; color?: string }>;
+  link?: string;
+  github?: string;
+  featured?: boolean;
+}
+
+const {
+  title,
+  description,
+  image,
+  tags = [],
+  link,
+  github,
+  featured = false
+} = Astro.props;
+
+/**
+ * Asigna un color específico basado en el nombre de la tecnología o herramienta
+ * @param {string} text - El nombre de la tecnología/herramienta
+ * @returns {string} - El nombre del color a utilizar
+ */
+function getTechColor(text: string): string {
+  // Normalizar el texto para comparación
+  const normalizedText = text.toLowerCase();
+  
+  // Mapa de tecnologías a colores característicos
+  const techColors: Record<string, string> = {
+    // Lenguajes de programación
+    "python": "python",
+    "typescript": "typescript", 
+    "javascript": "javascript",
+    "html": "html",
+    "css": "css",
+    "html/css": "html",
+    "java": "java",
+    "sql": "sql",
+    
+    // Frameworks y bibliotecas
+    "angular": "angular",
+    "react": "react",
+    "vue": "vue",
+    "tailwind": "tailwind",
+    "express": "express",
+    "express js": "express",
+    "node": "nodejs",
+    "node js": "nodejs",
+    "swing": "java",
+    
+    // Bases de datos
+    "postgresql": "postgresql",
+    "microsoft sql server": "sqlserver",
+    "oracle": "oracle",
+    "oracle sql": "oracle",
+    
+    // Herramientas y plataformas
+    "postman": "postman",
+    "jira": "jira",
+    "slack": "slack",
+    "selenium": "selenium",
+    "x-ray": "xray",
+    "power bi": "powerbi",
+    "crm": "crm",
+    "api testing": "postman",
+    "automation": "selenium",
+  };
+  
+  // Si existe una coincidencia exacta, usarla
+  if (normalizedText in techColors) {
+    return techColors[normalizedText];
+  }
+  
+  // Si no hay coincidencia exacta, buscar coincidencia parcial
+  for (const [tech, color] of Object.entries(techColors)) {
+    if (normalizedText.includes(tech)) {
+      return color;
+    }
+  }
+  
+  return "neutral";
+}
+
+/**
+ * Genera las clases CSS para los badges basado en el color especificado
+ */
+function getBadgeClass(color = "neutral", text = "") {
+  // Verificar si hay un color específico para la tecnología
+  const techColor = getTechColor(text);
+  
+  // Constantes de clases base para todos los badges
+  const BASE_CLASSES = "text-xs font-medium px-2 py-0.5 rounded transition-all duration-300";
+  
+  // Colores específicos de tecnologías
+  const TECH_COLORS = {
+    "python": "bg-[#3776AB]/10 text-[#3776AB] dark:bg-[#3776AB]/20 dark:text-[#3776AB] border border-[#3776AB]/30",
+    "typescript": "bg-[#3178C6]/10 text-[#3178C6] dark:bg-[#3178C6]/20 dark:text-[#3178C6] border border-[#3178C6]/30",
+    "javascript": "bg-[#F7DF1E]/10 text-[#746A00] dark:bg-[#F7DF1E]/20 dark:text-[#F7DF1E] border border-[#F7DF1E]/30",
+    "angular": "bg-[#DD0031]/10 text-[#DD0031] dark:bg-[#DD0031]/20 dark:text-[#DD0031] border border-[#DD0031]/30",
+    "react": "bg-[#61DAFB]/10 text-[#149ECA] dark:bg-[#61DAFB]/20 dark:text-[#61DAFB] border border-[#61DAFB]/30",
+    "vue": "bg-[#4FC08D]/10 text-[#4FC08D] dark:bg-[#4FC08D]/20 dark:text-[#4FC08D] border border-[#4FC08D]/30",
+    "html": "bg-[#E34F26]/10 text-[#E34F26] dark:bg-[#E34F26]/20 dark:text-[#E34F26] border border-[#E34F26]/30",
+    "css": "bg-[#1572B6]/10 text-[#1572B6] dark:bg-[#1572B6]/20 dark:text-[#1572B6] border border-[#1572B6]/30",
+    "tailwind": "bg-[#06B6D4]/10 text-[#06B6D4] dark:bg-[#06B6D4]/20 dark:text-[#06B6D4] border border-[#06B6D4]/30",
+    "postman": "bg-[#FF6C37]/10 text-[#FF6C37] dark:bg-[#FF6C37]/20 dark:text-[#FF6C37] border border-[#FF6C37]/30",
+    "jira": "bg-[#0052CC]/10 text-[#0052CC] dark:bg-[#0052CC]/20 dark:text-[#0052CC] border border-[#0052CC]/30",
+    "selenium": "bg-[#43B02A]/10 text-[#43B02A] dark:bg-[#43B02A]/20 dark:text-[#43B02A] border border-[#43B02A]/30",
+    "powerbi": "bg-[#F2C811]/10 text-[#7F6A00] dark:bg-[#F2C811]/20 dark:text-[#F2C811] border border-[#F2C811]/30",
+    "neutral": "bg-gray-100 text-gray-800 dark:bg-gray-700/70 dark:text-gray-300",
+    
+    // Nuevos colores añadidos
+    "java": "bg-[#007396]/10 text-[#007396] dark:bg-[#007396]/20 dark:text-[#007396] border border-[#007396]/30",
+    "sqlserver": "bg-[#CC2927]/10 text-[#CC2927] dark:bg-[#CC2927]/20 dark:text-[#CC2927] border border-[#CC2927]/30",
+    "postgresql": "bg-[#336791]/10 text-[#336791] dark:bg-[#336791]/20 dark:text-[#336791] border border-[#336791]/30",
+    "express": "bg-[#000000]/10 text-[#000000] dark:bg-[#ffffff]/20 dark:text-[#ffffff] border border-[#000000]/30 dark:border-[#ffffff]/30",
+    "nodejs": "bg-[#339933]/10 text-[#339933] dark:bg-[#339933]/20 dark:text-[#339933] border border-[#339933]/30",
+  };
+  
+  // Usar el color específico de la tecnología o el color genérico proporcionado
+  const finalColor = techColor !== "neutral" ? techColor : color;
+  
+  // Si hay un color específico para la tecnología, usarlo
+  if (finalColor in TECH_COLORS) {
+    return `${BASE_CLASSES} ${TECH_COLORS[finalColor as keyof typeof TECH_COLORS]}`;
+  }
+  
+  return `${BASE_CLASSES} ${TECH_COLORS.neutral}`;
+}
+---
+
+<article class={`relative rounded-lg overflow-hidden border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800/50 shadow-sm hover:shadow-md transition-all duration-300 h-full flex flex-col ${featured ? 'border-primary/20 dark:border-primary/30 ring-1 ring-primary/10' : ''}`}>
+  {image && (
+    <div class="aspect-video w-full overflow-hidden">
+      <img 
+        src={image} 
+        alt={`Imagen del proyecto ${title}`} 
+        class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+        loading="lazy"
+      />
+    </div>
+  )}
+  
+  <div class="p-5 flex flex-col flex-grow">
+    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2 group-hover:text-primary transition-colors">
+      {title}
+      {featured && (
+        <span class="inline-flex items-center ml-2 px-2 py-0.5 rounded text-xs bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary-300">
+          Destacado
+        </span>
+      )}
+    </h3>
+    
+    <p class="text-gray-600 dark:text-gray-300 mb-4 flex-grow">
+      {description}
+    </p>
+    
+    {tags.length > 0 && (
+      <div class="flex flex-wrap gap-2 mb-4">
+        {tags.map(tag => (
+          <span class={getBadgeClass(tag.color, tag.text)}>
+            {tag.text}
+          </span>
+        ))}
+      </div>
+    )}
+    
+    <div class="flex justify-between items-center mt-auto pt-3 border-t border-gray-100 dark:border-gray-700/50">
+      {link && (
+        <a 
+          href={link} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="text-sm text-primary dark:text-primary-300 hover:text-primary-600 dark:hover:text-primary-200 transition-colors flex items-center"
+        >
+          <span>Ver demo</span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+        </a>
+      )}
+      
+      {github && (
+        <a 
+          href={github} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors flex items-center"
+        >
+          <span>Ver código</span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 24 24" fill="currentColor">
+            <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.748 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
+          </svg>
+        </a>
+      )}
+      
+      {!link && !github && (
+        <span class="text-xs text-gray-500 dark:text-gray-400 italic">Proyecto privado</span>
+      )}
+    </div>
+  </div>
+</article>

@@ -1,0 +1,90 @@
+/* Animaciones globales para el portafolio */
+
+/* Efecto de entrada desde abajo */
+.fade-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.8s ease-out;
+}
+
+.fade-up.animated {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Efecto de entrada desde la izquierda */
+.fade-right {
+  opacity: 0;
+  transform: translateX(-30px);
+  transition: opacity 0.6s ease-out, transform 0.8s ease-out;
+}
+
+.fade-right.animated {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Efecto de entrada desde la derecha */
+.fade-left {
+  opacity: 0;
+  transform: translateX(30px);
+  transition: opacity 0.6s ease-out, transform 0.8s ease-out;
+}
+
+.fade-left.animated {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Delay para secuencia de animaciones */
+.delay-100 {
+  transition-delay: 100ms;
+}
+
+.delay-200 {
+  transition-delay: 200ms;
+}
+
+.delay-300 {
+  transition-delay: 300ms;
+}
+
+.delay-400 {
+  transition-delay: 400ms;
+}
+
+.delay-500 {
+  transition-delay: 500ms;
+}
+
+/* Animación de pulse para destacar elementos */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(var(--color-primary-rgb), 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(var(--color-primary-rgb), 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(var(--color-primary-rgb), 0);
+  }
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+/* Desactivar animaciones si el usuario prefiere reducir el movimiento */
+@media (prefers-reduced-motion) {
+  .fade-up,
+  .fade-right,
+  .fade-left {
+    transition: none;
+    transform: none;
+    opacity: 1;
+  }
+  
+  .pulse {
+    animation: none;
+  }
+}

@@ -1,0 +1,45 @@
+/* Estilos críticos para el funcionamiento básico */
+:root {
+  --color-primary: #3b82f6;
+  --color-primary-rgb: 59, 130, 246;
+  --color-secondary: #9333ea;
+  --color-accent: #14b8a6;
+}
+
+/* Estilos de modo oscuro */
+.dark {
+  --bg-color: #000;
+  --text-color: #fff;
+}
+
+/* Estilos de modo claro */
+:root:not(.dark) {
+  --bg-color: #fff;
+  --text-color: #333;
+}
+
+/* Estilos básicos */
+html {
+  font-family: system-ui, sans-serif;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Animaciones básicas */
+.reveal-item {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.8s ease-out;
+}
+
+.reveal-item.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}

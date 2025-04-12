@@ -6,14 +6,20 @@ import tailwind from '@astrojs/tailwind';
 export default defineConfig({
   integrations: [tailwind()],
   site: 'https://juan-samayoa.is-a.dev',
-  base: '/',  // Cambiado a '/' en lugar de './'
-  outDir: './docs',
+  base: '/',  // Usar raíz para rutas absolutas
+  outDir: './docs',  // Mantener el directorio de salida para GitHub Pages
+  // Configuración simplificada
   build: {
-    assets: '_astro', // Usar el prefijo estándar de Astro
+    assets: 'assets'
   },
   vite: {
     build: {
-      assetsInlineLimit: 0, // Evita la incrustación inline de assets pequeños
+      assetsInlineLimit: 0 // Evitar la incrustación inline de assets pequeños
+    },
+    server: {
+      watch: {
+        usePolling: true
+      }
     }
   }
 });

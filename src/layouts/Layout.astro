@@ -27,19 +27,14 @@ const {
     <meta name="description" content={description} />
     <title>{title}</title>
     
-    <!-- Solución simple para IntersectionObserver -->
+    <!-- Polyfill simplificado para IntersectionObserver -->
     <script is:inline>
-      // Verificación mínima antes de usar IntersectionObserver
       if (typeof IntersectionObserver === 'undefined') {
-        // IntersectionObserver polyfill simplificado
-        window.IntersectionObserver = function(callback, options) {
+        // Definición simple de IntersectionObserver para navegadores que no lo soportan
+        window.IntersectionObserver = function(callback) {
           this.observe = function(element) {
-            // Simular que todos los elementos son visibles
             setTimeout(function() {
-              callback([{
-                isIntersecting: true,
-                target: element
-              }]);
+              callback([{isIntersecting: true, target: element}]);
             }, 100);
           };
           this.unobserve = function() {};
@@ -56,7 +51,7 @@ const {
     </main>
     <ScrollToTop />
     <script is:inline>
-      // Script inicial para configurar el tema
+      // Script inicial para configurar el tema al cargar la página
       try {
         const theme = localStorage.getItem("theme") || 
                     (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
@@ -65,46 +60,6 @@ const {
         console.warn("Error al establecer tema:", error);
         document.documentElement.classList.remove("dark");
       }
-
-      // Función de utilidad para inicializar elementos si los scripts fallan
-      document.addEventListener('DOMContentLoaded', function() {
-        // 1. Inicializar ScrollToTop si falla el script principal
-        const scrollToTopBtn = document.getElementById('scroll-to-top');
-        if (scrollToTopBtn && !scrollToTopBtn.hasAttribute('data-initialized')) {
-          window.addEventListener('scroll', function() {
-            if (window.scrollY > 300) {
-              scrollToTopBtn.classList.remove('opacity-0', 'invisible', 'translate-y-10');
-              scrollToTopBtn.classList.add('opacity-100', 'translate-y-0');
-            } else {
-              scrollToTopBtn.classList.add('opacity-0', 'invisible', 'translate-y-10');
-              scrollToTopBtn.classList.remove('opacity-100', 'translate-y-0');
-            }
-          });
-          
-          scrollToTopBtn.addEventListener('click', function() {
-            window.scrollTo({top: 0, behavior: 'smooth'});
-          });
-          
-          scrollToTopBtn.setAttribute('data-initialized', 'true');
-        }
-        
-        // 2. Inicializar elementos de revelación
-        document.querySelectorAll('.reveal-item:not(.is-revealed)').forEach(function(item) {
-          item.classList.add('is-revealed');
-        });
-        
-        // 3. Inicializar menú móvil
-        const mobileMenuBtn = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        
-        if (mobileMenuBtn && mobileMenu && !mobileMenuBtn.hasAttribute('data-initialized')) {
-          mobileMenuBtn.addEventListener('click', function() {
-            mobileMenu.classList.toggle('hidden');
-          });
-          
-          mobileMenuBtn.setAttribute('data-initialized', 'true');
-        }
-      });
     </script>
   </body>
 </html>

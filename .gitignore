@@ -4,7 +4,7 @@ dist/
 /tmp
 /out-tsc
 /bazel-out
-/docs
+# Eliminar docs de aquí, ya que necesitamos incluirlo para GitHub Pages
 
 # Generated types & dev files
 .astro/

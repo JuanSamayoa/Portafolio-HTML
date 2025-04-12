@@ -27,16 +27,24 @@ const {
     <meta name="description" content={description} />
     <title>{title}</title>
     
-    <!-- Reemplazar el polyfill problemático con una implementación más robusta -->
+    <!-- Solución simple para IntersectionObserver -->
     <script is:inline>
-      if (!('IntersectionObserver' in window) || 
-          !('IntersectionObserverEntry' in window) ||
-          !('intersectionRatio' in window.IntersectionObserverEntry.prototype)) {
-        
-        // Importar el polyfill desde un CDN confiable
-        const polyfillScript = document.createElement('script');
-        polyfillScript.src = 'https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver';
-        document.head.appendChild(polyfillScript);
+      // Verificación mínima antes de usar IntersectionObserver
+      if (typeof IntersectionObserver === 'undefined') {
+        // IntersectionObserver polyfill simplificado
+        window.IntersectionObserver = function(callback, options) {
+          this.observe = function(element) {
+            // Simular que todos los elementos son visibles
+            setTimeout(function() {
+              callback([{
+                isIntersecting: true,
+                target: element
+              }]);
+            }, 100);
+          };
+          this.unobserve = function() {};
+          this.disconnect = function() {};
+        };
       }
     </script>
   </head>
@@ -48,59 +56,57 @@ const {
     </main>
     <ScrollToTop />
     <script is:inline>
-      // Script inicial para configurar el tema al cargar la página
+      // Script inicial para configurar el tema
       try {
-        const theme =
-          localStorage.getItem("theme") ||
-          (window.matchMedia("(prefers-color-scheme: dark)").matches
-            ? "dark"
-            : "light");
+        const theme = localStorage.getItem("theme") || 
+                    (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
         document.documentElement.classList.toggle("dark", theme === "dark");
       } catch (error) {
         console.warn("Error al establecer tema:", error);
-        // Fallback al tema claro si hay error
         document.documentElement.classList.remove("dark");
       }
 
-      // Manejador global específico para el error de Shiki
-      window.addEventListener("error", function (event) {
-        if (
-          (event.message && event.message.includes("Shiki")) ||
-          event.message.includes("Language `Astro`")
-        ) {
-          console.warn(
-            "Interceptado error de resaltado de sintaxis:",
-            event.message
-          );
-          event.preventDefault(); // Prevenir que el error se propague
-          return true; // Indicar que el error ha sido manejado
+      // Función de utilidad para inicializar elementos si los scripts fallan
+      document.addEventListener('DOMContentLoaded', function() {
+        // 1. Inicializar ScrollToTop si falla el script principal
+        const scrollToTopBtn = document.getElementById('scroll-to-top');
+        if (scrollToTopBtn && !scrollToTopBtn.hasAttribute('data-initialized')) {
+          window.addEventListener('scroll', function() {
+            if (window.scrollY > 300) {
+              scrollToTopBtn.classList.remove('opacity-0', 'invisible', 'translate-y-10');
+              scrollToTopBtn.classList.add('opacity-100', 'translate-y-0');
+            } else {
+              scrollToTopBtn.classList.add('opacity-0', 'invisible', 'translate-y-10');
+              scrollToTopBtn.classList.remove('opacity-100', 'translate-y-0');
+            }
+          });
+          
+          scrollToTopBtn.addEventListener('click', function() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+          });
+          
+          scrollToTopBtn.setAttribute('data-initialized', 'true');
         }
-      });
-
-      // Manejador especial para promesas rechazadas
-      window.addEventListener("unhandledrejection", function (event) {
-        if (
-          event.reason &&
-          (event.reason.toString().includes("Shiki") ||
-            event.reason.toString().includes("Language `Astro`"))
-        ) {
-          console.warn("Interceptada promesa rechazada:", event.reason);
-          event.preventDefault(); // Evitar que la promesa rechazada cause problemas
+        
+        // 2. Inicializar elementos de revelación
+        document.querySelectorAll('.reveal-item:not(.is-revealed)').forEach(function(item) {
+          item.classList.add('is-revealed');
+        });
+        
+        // 3. Inicializar menú móvil
+        const mobileMenuBtn = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        if (mobileMenuBtn && mobileMenu && !mobileMenuBtn.hasAttribute('data-initialized')) {
+          mobileMenuBtn.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+          });
+          
+          mobileMenuBtn.setAttribute('data-initialized', 'true');
         }
       });
     </script>
   </body>
-  <style is:global>
-    :root {
-      --color-primary-rgb: 59, 130, 246; /* Mantener para otros usos */
-      scroll-behavior: smooth; /* Reforzar el comportamiento de scroll suave globalmente */
-    }
-
-    /* Asegurarnos de que los enlaces de navegación tengan transición suave */
-    html {
-      scroll-behavior: smooth;
-    }
-  </style>
 </html>
 
 <style>

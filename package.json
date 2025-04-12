@@ -7,7 +7,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "deploy": "astro build --outDir=docs && echo. > docs/.nojekyll && copy public\\404.html docs\\ 2>nul || echo No 404.html found in public && echo juan-samayoa.is-a.dev > docs/CNAME && git add . && git commit -m \"deploy: auto deploy update\" && git push origin main"
+    "deploy": "astro build --outDir=docs && copy public\\*.* docs\\ && echo. > docs/.nojekyll && echo juan-samayoa.is-a.dev > docs/CNAME && git add . && git commit -m \"deploy: auto deploy update\" && git push origin main"
   },
   "dependencies": {
     "@fontsource/onest": "^5.2.7",

@@ -22,34 +22,22 @@ const {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
     <title>{title}</title>
-    <!-- Agregar Intersection Observer Polyfill para soporte en navegadores antiguos -->
+    
+    <!-- Reemplazar el polyfill problemático con una implementación más robusta -->
     <script is:inline>
-      !(function (t, e) {
-        "object" == typeof exports && "undefined" != typeof module
-          ? (module.exports = e())
-          : "function" == typeof define && define.amd
-            ? define(e)
-            : ((t =
-                "undefined" != typeof globalThis
-                  ? globalThis
-                  : t || self).IntersectionObserver = e());
-      })(
-        this,
-        (function () {
-          // ...intersection observer polyfill code
-          return "IntersectionObserver" in window &&
-            "IntersectionObserverEntry" in window &&
-            "intersectionRatio" in window.IntersectionObserverEntry.prototype
-            ? window.IntersectionObserver
-            : function () {
-                // ...polyfill implementation
-              };
-        })()
-      );
+      if (!('IntersectionObserver' in window) || 
+          !('IntersectionObserverEntry' in window) ||
+          !('intersectionRatio' in window.IntersectionObserverEntry.prototype)) {
+        
+        // Importar el polyfill desde un CDN confiable
+        const polyfillScript = document.createElement('script');
+        polyfillScript.src = 'https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver';
+        document.head.appendChild(polyfillScript);
+      }
     </script>
   </head>
   <body class="transition-colors duration-500">

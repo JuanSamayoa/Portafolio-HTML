@@ -1,0 +1,93 @@
+---
+// CertificationCard.astro
+interface Props {
+  title: string;
+  issuer: string;
+  image: string;
+  date?: string;
+  link?: string;
+}
+const { title, issuer, image, date, link } = Astro.props;
+
+// Generar un id único para el modal basado en el título
+const modalId = `modal-${title.replace(/\s+/g, "-").toLowerCase()}`;
+---
+<div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 flex flex-col items-center text-center hover:shadow-2xl transition-shadow duration-300 max-w-md mx-auto relative">
+  <img
+    src={image}
+    alt={title}
+    class="w-48 h-48 md:w-64 md:h-64 object-contain mb-4 rounded-lg cursor-pointer border-2 border-primary/30 hover:border-primary transition-all duration-300"
+    loading="lazy"
+    onclick={`document.getElementById('${modalId}').showModal();`}
+    tabindex="0"
+    aria-label={`View ${title} certificate fullscreen`}
+    role="button"
+  />
+  <h3 class="font-semibold text-2xl md:text-3xl text-gray-800 dark:text-white mb-1">{title}</h3>
+  <p class="text-base md:text-lg text-gray-500 dark:text-gray-300">{issuer}</p>
+  {date && <p class="text-sm text-gray-400 mt-1">{date}</p>}
+  {link && link.trim() !== "" && (
+    <a href={link} target="_blank" rel="noopener noreferrer" class="mt-3 text-primary underline text-sm">View certificate</a>
+  )}
+
+  <dialog id={modalId} class="z-50 rounded-xl p-0 bg-transparent w-[95vw] max-w-none md:w-[80vw] lg:w-[60vw]">
+    <div class="relative flex flex-col items-center bg-black/80 backdrop-blur-sm rounded-xl p-2 md:p-4">
+      <button type="button" class="absolute top-2 right-2 text-white text-3xl font-bold bg-black/60 rounded-full w-10 h-10 flex items-center justify-center hover:bg-primary/80 transition" onclick={`document.getElementById('${modalId}').close();`} aria-label="Close fullscreen certificate">&times;</button>
+      <img src={image} alt={title} class="w-[90vw] max-w-full max-h-[70vh] md:w-[75vw] md:max-h-[70vh] lg:w-[55vw] lg:max-h-[80vh] object-contain rounded-xl shadow-2xl border-4 border-primary/60" />
+      <div class="mt-4 text-white text-center">
+        <h3 class="font-semibold text-xl md:text-2xl">{title}</h3>
+        <p class="text-base">{issuer}</p>
+        {date && <p class="text-sm mt-1">{date}</p>}
+      </div>
+    </div>
+  </dialog>
+</div>
+
+<script>
+// Cerrar el modal con Escape y al hacer click fuera
+if (typeof window !== 'undefined') {
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('dialog[open]').forEach(d => {
+        if (d instanceof HTMLDialogElement) d.close();
+      });
+    }
+  });
+}
+</script>
+
+<style>
+  @media (max-width: 767px) {
+    dialog {
+      width: 95vw !important;
+      max-width: none !important;
+    }
+    dialog img {
+      width: 90vw !important;
+      max-width: 100% !important;
+      max-height: 70vh !important;
+    }
+  }
+  @media (min-width: 768px) and (max-width: 1023px) {
+    dialog {
+      width: 80vw !important;
+      max-width: none !important;
+    }
+    dialog img {
+      width: 75vw !important;
+      max-width: 100% !important;
+      max-height: 70vh !important;
+    }
+  }
+  @media (min-width: 1024px) {
+    dialog {
+      width: 60vw !important;
+      max-width: none !important;
+    }
+    dialog img {
+      width: 55vw !important;
+      max-width: 100% !important;
+      max-height: 80vh !important;
+    }
+  }
+</style>

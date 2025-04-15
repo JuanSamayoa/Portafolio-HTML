@@ -1,0 +1,74 @@
+---
+import CertificationCard from "./CertificationCard.astro";
+
+const certifications = [
+  {
+    title: "Entrenamiento desarrollo seguro",
+    issuer: "DEVEL Cybersecurity",
+    image: "/assets/certificates/secure-development.webp",
+    date: "2023",
+    link: "",
+  },
+  {
+    title: "Scrum Foundations Professional Certificate",
+    issuer: "Certiprof",
+    image: "/assets/certificates/scrum-foundation.webp",
+    date: "2022",
+    link: "",
+  },
+  {
+    title: "Introducción a la Programación",
+    issuer: "Intecap / Fundación Carlos Slim",
+    image: "/assets/certificates/programming-introduction.webp",
+    date: "2020",
+    link: "",
+  },
+  {
+    title: "Desarrollador Backend",
+    issuer: "Intecap / Fundación Carlos Slim",
+    image: "/assets/certificates/backend-developer.webp",
+    date: "2020",
+    link: "",
+  },
+  {
+    title: "Programador (Orientado a Objetos)",
+    issuer: "Udemy",
+    image: "/assets/certificates/oo-programmer.webp",
+    date: "2020",
+    link: "",
+  },
+  {
+    title: "Programación Orientada a Objetos",
+    issuer: "Instituto Nacional de ",
+    image: "/assets/certificates/selenium-udemy.png",
+    date: "2022",
+    link: "",
+  },
+
+  // Puedes agregar más certificaciones siguiendo este formato
+];
+---
+
+<section class="w-full mt-12">
+  <h2
+    class="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white mb-2 flex items-center gap-2"
+  >
+    Certificados
+  </h2>
+  <p class="text-gray-600 dark:text-gray-400 mb-8">
+    Mis cursos y certificaciones principales
+  </p>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+    {
+      certifications.map((cert) => (
+        <CertificationCard
+          title={cert.title}
+          issuer={cert.issuer}
+          image={cert.image}
+          date={cert.date}
+          link={cert.link}
+        />
+      ))
+    }
+  </div>
+</section>

@@ -79,26 +79,39 @@ const certifications = [
     date: "2025",
     link: "https://capacitateparaelempleo.org/verifica/5b432ce5-1d22-4d92-9bcb-15564ee310b6/65528ffe-22c1-4c2d-9768-0ec5b06516cf",
   },
+  {
+    title: "Desarrollador de sitios web responsivos",
+    issuer: "Capacitate para el Empleo / Fundación Carlos Slim ",
+    image: "/assets/certificates/responsive-developer.webp",
+    date: "2025",
+    link: "https://capacitateparaelempleo.org/verifica/5b432ce5-1d22-4d92-9bcb-15564ee310b6/edb7e15b-e5ab-40a4-8e6d-eaf12e45d7aa",
+  },
   // Puedes agregar más certificaciones siguiendo este formato
 ];
 ---
 
 <section class="w-full mt-12">
-  <h2 class="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white mb-2 flex items-center gap-2">
+  <h2
+    class="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white mb-2 flex items-center gap-2"
+  >
     Certificados
   </h2>
   <p class="text-gray-600 dark:text-gray-400 mb-8">
     Mis cursos y certificaciones
   </p>
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-    {certifications.map((cert) => (
-      <CertificationCard
-        title={cert.title}
-        issuer={cert.issuer}
-        image={cert.image}
-        date={cert.date}
-        link={cert.link}
-      />
-    ))}
+  <div
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
+  >
+    {
+      certifications.map((cert) => (
+        <CertificationCard
+          title={cert.title}
+          issuer={cert.issuer}
+          image={cert.image}
+          date={cert.date}
+          link={cert.link}
+        />
+      ))
+    }
   </div>
 </section>

@@ -2,13 +2,15 @@
 import LinkedInIcon from './icons/LinkedInIcon.astro';
 import GitHubIcon from './icons/GitHubIcon.astro';
 import EmailIcon from './icons/EmailIcon.astro';
+import DocumentIcon from './icons/DocumentIcon.astro';
 
 interface Props {
   linkedInUrl?: string;
   githubUrl?: string;
   email?: string;
   showLabels?: boolean;
-  cvUrl?: string; // Nueva prop para el enlace al CV
+  cvEsUrl?: string; // Enlace al CV en español
+  cvEnUrl?: string; // Enlace al CV en inglés
 }
 
 const { 
@@ -16,7 +18,8 @@ const {
   githubUrl = "https://github.com/yourusername",
   email = "tu-email@ejemplo.com",
   showLabels = false,
-  cvUrl = "https://www.canva.com/design/DAGNavqG4Po/IehvEaoao5122cmKtPrSrg/edit?utm_content=DAGNavqG4Po&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
+  cvEsUrl,
+  cvEnUrl
 } = Astro.props;
 
 // Implementar manejo de errores para carga de componentes
@@ -78,31 +81,27 @@ try {
     </li>
   )}
 
-  {cvUrl && (
+  {cvEsUrl && (
     <li>
-      <a href={cvUrl}
+      <a href={cvEsUrl}
         target="_blank"
         rel="noopener noreferrer"
         class="social-link cv-link"
-        aria-label="Ver CV">
-        <svg 
-          xmlns="http://www.w3.org/2000/svg" 
-          width="24" 
-          height="24" 
-          viewBox="0 0 24 24" 
-          fill="none" 
-          stroke="currentColor" 
-          stroke-width="2" 
-          stroke-linecap="round" 
-          stroke-linejoin="round"
-        >
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-          <path d="M14 2v6h6"></path>
-          <path d="M16 13H8"></path>
-          <path d="M16 17H8"></path>
-          <path d="M10 9H8"></path>
-        </svg>
-        {showLabels && <span>CV</span>}
+        aria-label="Ver CV en Español">
+        <DocumentIcon class="social-icon" />
+        {showLabels && <span>CV ES</span>}
+      </a>
+    </li>
+  )}
+  {cvEnUrl && (
+    <li>
+      <a href={cvEnUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="social-link cv-link"
+        aria-label="View CV in English">
+        <DocumentIcon class="social-icon" />
+        {showLabels && <span>CV EN</span>}
       </a>
     </li>
   )}

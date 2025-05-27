@@ -7,19 +7,15 @@ import MailIcon from "./icons/MailIcon.astro";
     <MailIcon class="inline-block w-7 h-7 md:w-8 md:h-8" />
     Contacto
   </h2>
-  
   <p class="text-gray-600 dark:text-gray-400 mb-8 reveal-item">
     ¿Interesado en colaborar o tienes alguna pregunta? ¡Contáctame!
   </p>
-
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
     <!-- Información de contacto -->
     <div class="reveal-item" style="--reveal-delay: 100ms">
       <div class="bg-white dark:bg-gray-800/70 p-6 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm h-full">
         <h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Información de Contacto</h3>
-        
         <div class="space-y-4">
-          
           <div class="flex items-start gap-3">
             <div class="bg-primary/10 dark:bg-primary/20 p-3 rounded-full mt-0.5">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -32,7 +28,6 @@ import MailIcon from "./icons/MailIcon.astro";
               <a href="mailto:juancho1705@gmail.com" class="text-primary hover:underline">juancho1705@gmail.com</a>
             </div>
           </div>
-          
           <div class="flex items-start gap-3">
             <div class="bg-primary/10 dark:bg-primary/20 p-3 rounded-full mt-0.5">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -45,7 +40,6 @@ import MailIcon from "./icons/MailIcon.astro";
               <p class="text-gray-600 dark:text-gray-300">Ciudad de Guatemala, Guatemala</p>
             </div>
           </div>
-          
           <div class="flex items-start gap-3">
             <div class="bg-primary/10 dark:bg-primary/20 p-3 rounded-full mt-0.5">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -62,10 +56,11 @@ import MailIcon from "./icons/MailIcon.astro";
         </div>
       </div>
     </div>
-    
     <!-- Formulario de contacto -->
     <div class="reveal-item" style="--reveal-delay: 200ms">
-      <form class="bg-white dark:bg-gray-800/70 p-6 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm space-y-4">
+      <div id="contact-success" class="hidden mb-4 p-3 rounded bg-green-100 text-green-800 dark:bg-green-900/60 dark:text-green-200 text-sm">¡Mensaje enviado correctamente!</div>
+      <div id="contact-error" class="hidden mb-4 p-3 rounded bg-red-100 text-red-800 dark:bg-red-900/60 dark:text-red-200 text-sm"></div>
+      <form id="contact-form" class="bg-white dark:bg-gray-800/70 p-6 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm space-y-4">
         <div>
           <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nombre</label>
           <input 
@@ -76,7 +71,6 @@ import MailIcon from "./icons/MailIcon.astro";
             class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-colors"
           />
         </div>
-        
         <div>
           <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
           <input 
@@ -87,7 +81,6 @@ import MailIcon from "./icons/MailIcon.astro";
             class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-colors"
           />
         </div>
-        
         <div>
           <label for="subject" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Asunto</label>
           <input 
@@ -98,7 +91,6 @@ import MailIcon from "./icons/MailIcon.astro";
             class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-colors"
           />
         </div>
-        
         <div>
           <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mensaje</label>
           <textarea 
@@ -109,16 +101,52 @@ import MailIcon from "./icons/MailIcon.astro";
             class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-colors"
           ></textarea>
         </div>
-        
         <div>
           <button 
+            id="contact-submit"
             type="submit"
-            class="w-full py-2.5 px-5 bg-primary hover:bg-primary-600 text-white font-medium rounded-md shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-primary/50"
+            class="w-full py-2.5 px-5 bg-primary hover:bg-primary-600 text-white font-medium rounded-md shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-60 disabled:cursor-not-allowed"
           >
             Enviar Mensaje
           </button>
         </div>
       </form>
+      <script is:inline>
+        const form = document.getElementById('contact-form');
+        const btn = document.getElementById('contact-submit');
+        const success = document.getElementById('contact-success');
+        const error = document.getElementById('contact-error');
+        if (form) {
+          form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            btn.disabled = true;
+            success.classList.add('hidden');
+            error.classList.add('hidden');
+            error.textContent = '';
+            const data = {
+              name: form.name.value,
+              email: form.email.value,
+              subject: form.subject.value,
+              message: form.message.value
+            };
+            try {
+              const res = await fetch('https://my-wedding-database.vercel.app/api/portafolio/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+              });
+              if (!res.ok) throw new Error('No se pudo enviar el mensaje');
+              success.classList.remove('hidden');
+              form.reset();
+            } catch (err) {
+              error.textContent = 'Ocurrió un error al enviar el mensaje. Intenta de nuevo más tarde.';
+              error.classList.remove('hidden');
+            } finally {
+              btn.disabled = false;
+            }
+          });
+        }
+      </script>
     </div>
   </div>
 </div>

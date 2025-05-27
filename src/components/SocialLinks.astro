@@ -122,6 +122,10 @@ try {
     overflow: hidden;
   }
 
+  .social-link span:empty {
+    display: none; /* Oculta el span si está vacío */
+  }
+
   .social-icon {
     width: 1.5rem;
     height: 1.5rem;
@@ -214,5 +218,10 @@ try {
     background-color: rgba(0, 0, 0, 0.2);
     border-color: #000000;
     color: #ffffff;
+  }
+
+  /* Ocultar los elementos <span> vacíos para evitar espacios adicionales */
+  span:empty {
+    display: none;
   }
 </style>

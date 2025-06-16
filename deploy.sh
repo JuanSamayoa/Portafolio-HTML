@@ -11,15 +11,27 @@ if [ -z "$commit_message" ]; then
     exit 1
 fi
 
+echo "🏗️  Construyendo proyecto..."
+npm run build
+
+if [ $? -ne 0 ]; then
+    echo "Error: Fallo en build"
+    exit 1
+fi
+
+echo "🌐 Configurando dominio personalizado..."
+echo "juan-samayoa.is-a.dev" > docs/CNAME
+echo ".nojekyll" > docs/.nojekyll
+
 echo "Preparando archivos para deploy..."
 
-# Agregar todos los archivos
-echo "� Agregando archivos al staging area..."
+# Agregar todos los archivos incluido docs/
+echo "📁 Agregando archivos al staging area..."
 git add .
 
-# Remover carpetas específicas del staging area
+# Remover solo carpetas específicas del staging area (NO docs/)
 echo "🗑️  Removiendo carpetas no deseadas del commit..."
-git reset HEAD .astro/ .vscode/ node_modules/ docs/ 2>/dev/null || true
+git reset HEAD .astro/ .vscode/ node_modules/ 2>/dev/null || true
 
 echo "📝 Haciendo commit..."
 git commit -m "$commit_message"

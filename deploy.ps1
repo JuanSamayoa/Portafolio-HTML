@@ -10,15 +10,27 @@ if ([string]::IsNullOrWhiteSpace($commitMessage)) {
     exit 1
 }
 
+Write-Host "🏗️  Construyendo proyecto..."
+npm run build
+
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "Error: Fallo en build"
+    exit 1
+}
+
+Write-Host "🌐 Configurando dominio personalizado..."
+"juan-samayoa.is-a.dev" | Out-File -FilePath "docs/CNAME" -Encoding ASCII -NoNewline
+".nojekyll" | Out-File -FilePath "docs/.nojekyll" -Encoding ASCII
+
 Write-Host "Preparando archivos para deploy..."
 
-# Agregar todos los archivos
-Write-Host "� Agregando archivos al staging area..."
+# Agregar todos los archivos incluido docs/
+Write-Host "📁 Agregando archivos al staging area..."
 git add .
 
-# Remover carpetas específicas del staging area
+# Remover solo carpetas específicas del staging area (NO docs/)
 Write-Host "🗑️  Removiendo carpetas no deseadas del commit..."
-git reset HEAD .astro/ .vscode/ node_modules/ docs/ 2>$null
+git reset HEAD .astro/ .vscode/ node_modules/ 2>$null
 
 Write-Host "📝 Haciendo commit..."
 git commit -m $commitMessage

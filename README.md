@@ -3,87 +3,83 @@
 ![Astro Badge](https://img.shields.io/badge/Astro-BC52EE?logo=astro&logoColor=fff&style=flat)
 ![Tailwind CSS Badge](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white)
 ![TypeScript Badge](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)
+
 ## 📋 Acerca de este proyecto
 
-Este portafolio profesional, desarrollado con Astro y Tailwind CSS, exhibe mi experiencia como Ingeniero de Pruebas TI y desarrollador web, mostrando mis proyectos más relevantes y trayectoria profesional.
+Portafolio profesional desarrollado con **Astro** y **Tailwind CSS**, diseñado para mostrar mi experiencia como Ingeniero de Pruebas TI y desarrollador web. El sitio presenta una arquitectura moderna, optimizada para rendimiento y SEO, con un sistema de componentes reutilizables y un design system consistente.
 
-### ✨ Características del sitio
+### ✨ Características técnicas
 
-- **Diseño responsive** adaptado para dispositivos móviles, tablets y desktop
-- **Modo claro/oscuro** integrado con preferencias del sistema
-- **Navegación fluida** entre secciones con animaciones suaves
-- **Componentes interactivos** diseñados para mejorar la experiencia de usuario
-- **Sistema de etiquetas tecnológicas** con colores específicos por tecnología
-- **Secciones organizadas** para mostrar experiencia, proyectos y habilidades
-- **Integración de contacto** con links directos a redes sociales y CV
+- **Framework**: Astro 4.x con generación estática optimizada
+- **Estilos**: Tailwind CSS con design system personalizado
+- **Componentes**: Arquitectura Atomic Design (átomos, moléculas, organismos)
+- **Tipado**: TypeScript para mayor robustez y mantenibilidad
+- **Responsive Design**: Mobile-first con breakpoints optimizados
+- **Modo claro/oscuro**: Implementación nativa con persistencia local
+- **Animaciones**: CSS3 y transiciones suaves para UX mejorada
+- **SEO**: Meta tags, Open Graph y estructura semántica optimizada
+- **PWA**: Manifest y iconos para instalación como aplicación web
+- **Accesibilidad**: ARIA labels, navegación por teclado y contraste optimizado
 
-## 👨‍💻 Sobre mí
+### 🎨 Design System
 
-Soy un Analista de QA con +3 años de experiencia en pruebas manuales y automatizadas. Cuento con sólidos conocimientos en desarrollo frontend utilizando Angular y una base en Java, lo que me permite comprender tanto la calidad del software como su proceso de desarrollo.
+- **Tipografía**: Inter como fuente principal para máxima legibilidad
+- **Colores**: Paleta consistente con variables CSS personalizadas
+- **Componentes**: Badge system con colores específicos por tecnología
+- **Espaciado**: Sistema de spacing basado en Tailwind con customizaciones
+- **Animaciones**: Micro-interacciones y estados hover consistentes
 
-### 🛠️ Habilidades clave
-
-- **QA & Testing**
-  - Pruebas funcionales manuales y automatizadas (Selenium WebDriver)
-  - Testing de APIs con Postman
-  - Gestión de pruebas con Jira y X-Ray
-  - Documentación técnica y reportes de defectos
-
-- **Desarrollo**
-  - Frontend: Angular, TypeScript, HTML, CSS, Tailwind 
-  - Automatización: Python, Selenium
-  - Desktop: Java, Swing
-  - Manejo de datos: SQL (Oracle, Microsoft SQL Server, PostgreSQL)
-
-## 💼 Proyectos destacados
-
-El portafolio incluye varios de mis proyectos más relevantes:
-
-- **Sistema de Recursos Humanos (Desktop)**: Aplicación Java que gestiona empleados, vacaciones y reportes
-- **Plataforma de bodas**: Solución web completa con stack PEAN (PostgreSQL, Express, Angular, Node)
-- **Frontend de Gestión de Agentes**: Interfaz bancaria desarrollada en Angular
-- **Herramientas de automatización**: Scripts Python para optimización de procesos
-
-## 📂 Estructura del Proyecto
-
-El proyecto está organizado de la siguiente manera:
+### 🏗️ Arquitectura del proyecto
 
 ```
-mi-portafolio/
-├── astro.config.mjs
-├── package.json
-├── README.md
-├── tailwind.config.mjs
-├── tsconfig.json
-├── docs/
-│   ├── index.html
-│   ├── assets/
-│   └── scripts/
-├── public/
-│   ├── favicon.ico
-│   ├── favicon.svg
-│   └── assets/
-├── src/
-│   ├── components/
-│   ├── layouts/
-│   ├── pages/
-│   ├── styles/
-│   └── utils/
+src/
+├── components/
+│   ├── atoms/           # Componentes básicos (Button, Text, Badge)
+│   ├── molecules/       # Componentes compuestos (SectionContainer)
+│   └── organisms/       # Secciones completas (Header, Hero, Projects)
+├── data/
+│   └── portfolio.ts     # Datos centralizados del portafolio
+├── layouts/
+│   └── Layout.astro     # Layout base con SEO y PWA
+├── pages/
+│   └── index.astro      # Página principal
+├── styles/
+│   └── global.css       # Estilos globales y variables CSS
+└── utils/
+    ├── getTechColor.ts  # Utilidad para colores de tecnologías
+    └── validation.ts    # Validaciones de formularios
 ```
 
-Cada carpeta tiene un propósito específico:
+### 🚀 Tecnologías y herramientas
 
-- **docs/**: Archivos generados para la documentación y despliegue.
-- **public/**: Recursos públicos como imágenes y scripts.
-- **src/**: Código fuente del proyecto, incluyendo componentes, estilos y utilidades.
+- **Build**: Astro con optimizaciones de producción
+- **Estilos**: Tailwind CSS con configuración personalizada
+- **Iconos**: Lucide Icons para consistencia visual
+- **Deployment**: GitHub Actions con deploy automático a GitHub Pages
+- **Dominio**: Configuración para dominio personalizado (juan-samayoa.is-a.dev)
+- **Análisis**: Estructura preparada para Google Analytics
 
-## 📬 Contacto
+### 📊 Características del contenido
 
-- **LinkedIn**: [juansamayoa](https://www.linkedin.com/in/juansamayoa/)
-- **GitHub**: [JuanSamayoa](https://github.com/JuanSamayoa)
-- **Email**: juancho1705@gmail.com
-- **CV**: [Ver Curriculum](https://www.canva.com/design/DAGNavqG4Po/IehvEaoao5122cmKtPrSrg/edit)
+- **Secciones organizadas**: Hero, Sobre mí, Experiencia, Proyectos, Certificaciones, Contacto
+- **CV multiidioma**: Selector de CV en español e inglés
+- **Certificaciones**: Sistema de "Ver más" para mostrar certificaciones destacadas
+- **Proyectos**: Cards interactivas con tecnologías y enlaces
+- **Experiencia**: Timeline profesional con detalles técnicos
+- **Contacto**: Enlaces directos a redes sociales y email
+
+### 🔧 Optimizaciones implementadas
+
+- **Performance**: Lazy loading de imágenes y componentes
+- **SEO**: Sitemap automático y meta tags dinámicos
+- **Accesibilidad**: Navegación por teclado y screen readers
+- **Mobile**: Diseño mobile-first con navegación adaptativa
+- **Carga**: Optimización de assets y minificación automática
+
+## 🌐 Sitio en vivo
+
+**URL**: [https://juan-samayoa.is-a.dev](https://juan-samayoa.is-a.dev)
 
 ---
 
-Desarrollado por Juan Samayoa.
+Desarrollado por Juan Samayoa | Ingeniero de Pruebas TI & Desarrollador Web

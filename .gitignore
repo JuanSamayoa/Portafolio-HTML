@@ -1,11 +1,10 @@
 # Build output
 dist/
-docs/
 /dist
 /tmp
 /out-tsc
 /bazel-out
-# docs/ y dist/ ignorados - GitHub hace el build automáticamente
+# docs/ se incluye en el repositorio para GitHub Pages
 
 # Generated types & dev files
 .astro/

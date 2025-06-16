@@ -24,13 +24,28 @@ const modalId = `modal-${title.replace(/\s+/g, "-").toLowerCase()}`;
     role="button"
   />
   <h3 class="font-semibold text-lg md:text-xl text-gray-800 dark:text-white mb-1 line-clamp-2 leading-tight">{title}</h3>
-  <p class="text-sm md:text-base text-gray-500 dark:text-gray-300 line-clamp-1">{issuer}</p>
-  {date && <p class="text-xs text-gray-400 mt-1">{date}</p>}
+  <p class="text-sm md:text-base text-gray-500 dark:text-gray-300 line-clamp-1 mb-2">{issuer}</p>
+  {date && <p class="text-xs text-gray-400 mb-3">{date}</p>}
+  
+  <!-- Spacer para empujar el botón hacia abajo -->
   <div class="flex-grow"></div>
+  
+  <!-- Botón de certificado (solo si tiene link) -->
   {link && link.trim() !== "" && (
-    <a href={link} target="_blank" rel="noopener noreferrer" class="absolute left-0 right-0 bottom-0 mb-4 flex justify-center">
-      <span class="bg-primary text-white rounded-full px-3 py-1.5 text-xs shadow-md hover:bg-primary/90 transition">Ver certificado</span>
-    </a>
+    <div class="mt-auto mb-2">
+      <a 
+        href={link} 
+        target="_blank" 
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-white font-medium rounded-full px-4 py-2 text-sm shadow-md transition-all duration-200 hover:shadow-lg hover:scale-105"
+        aria-label={`Verificar certificado: ${title}`}
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+        </svg>
+        Ver certificado
+      </a>
+    </div>
   )}
 
   <dialog id={modalId} class="z-50 rounded-xl p-0 bg-transparent w-[95vw] max-w-none md:w-[80vw] lg:w-[60vw]">

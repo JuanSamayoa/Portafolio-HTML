@@ -1,10 +1,11 @@
 # Build output
 dist/
+docs/
 /dist
 /tmp
 /out-tsc
 /bazel-out
-# Eliminar docs de aquí, ya que necesitamos incluirlo para GitHub Pages
+# docs/ y dist/ ignorados - GitHub hace el build automáticamente
 
 # Generated types & dev files
 .astro/
@@ -62,3 +63,5 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+/.vscode
+.vscode/

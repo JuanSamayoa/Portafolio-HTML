@@ -1,0 +1,141 @@
+---
+/**
+ * BUTTON ATOM - Componente base para todos los botones
+ * ===================================================
+ * Siguiendo principios de Atomic Design
+ */
+
+export interface Props {
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  disabled?: boolean;
+  loading?: boolean;
+  fullWidth?: boolean;
+  href?: string;
+  target?: '_blank' | '_self' | '_parent' | '_top';
+  rel?: string;
+  type?: 'button' | 'submit' | 'reset';
+  class?: string;
+  id?: string;
+  ariaLabel?: string;
+}
+
+const {
+  variant = 'primary',
+  size = 'md',
+  disabled = false,
+  loading = false,
+  fullWidth = false,
+  href,
+  target,
+  rel,
+  type = 'button',
+  class: className = '',
+  id,
+  ariaLabel,
+  ...rest
+} = Astro.props;
+
+// Estilos base del botón
+const baseStyles = 'inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none';
+
+// Variantes de estilo
+const variants = {
+  primary: 'bg-primary hover:bg-blue-700 active:bg-blue-800 text-white shadow-lg focus:ring-primary',
+  secondary: 'bg-secondary hover:bg-green-700 active:bg-green-800 text-white shadow-lg focus:ring-secondary',
+  outline: 'border-2 border-primary text-primary hover:bg-primary hover:text-white active:bg-blue-700 focus:ring-primary',
+  ghost: 'text-primary hover:bg-gray-100 dark:hover:bg-gray-800 active:bg-gray-200 focus:ring-primary',
+  danger: 'bg-error hover:bg-red-700 active:bg-red-800 text-white shadow-lg focus:ring-error'
+};
+
+// Tamaños
+const sizes = {
+  xs: 'px-2.5 py-1.5 text-xs rounded-md',
+  sm: 'px-3 py-2 text-sm rounded-md',
+  md: 'px-4 py-2.5 text-sm rounded-lg',
+  lg: 'px-6 py-3 text-base rounded-lg',
+  xl: 'px-8 py-4 text-lg rounded-xl'
+};
+
+// Compilar clases
+const buttonClasses = [
+  baseStyles,
+  variants[variant],
+  sizes[size],
+  fullWidth ? 'w-full' : '',
+  loading ? 'cursor-wait' : '',
+  className
+].filter(Boolean).join(' ');
+
+// Determinar si es un enlace o botón
+const isLink = !!href;
+const Component = isLink ? 'a' : 'button';
+---
+
+<Component
+  {id}
+  class={buttonClasses}
+  disabled={disabled || loading}
+  type={!isLink ? type : undefined}
+  href={isLink ? href : undefined}
+  target={isLink ? target : undefined}
+  rel={isLink && target === '_blank' ? (rel || 'noopener noreferrer') : rel}
+  aria-label={ariaLabel}
+  {...rest}
+>
+  {loading && (
+    <svg
+      class="animate-spin -ml-1 mr-2 h-4 w-4"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <circle
+        class="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        stroke-width="4"
+      ></circle>
+      <path
+        class="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+      ></path>
+    </svg>
+  )}
+  
+  <slot />
+</Component>
+
+<style>
+  /* Estilos adicionales para estados especiales */
+  .group:hover .group-hover\:animate-bounce {
+    animation: bounce 0.6s ease-in-out;
+  }
+  
+  /* Efecto ripple opcional */
+  .ripple-effect {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .ripple-effect::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+  }
+  
+  .ripple-effect:active::before {
+    width: 300px;
+    height: 300px;
+  }
+</style>

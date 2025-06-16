@@ -1,0 +1,212 @@
+---
+/**
+ * SECTION CONTAINER MOLECULE
+ * ========================= 
+ * Contenedor mejorado para secciones con design system
+ */
+
+export interface Props {
+  id?: string;
+  variant?: 'default' | 'primary' | 'secondary' | 'accent' | 'dark';
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
+  pattern?: 'none' | 'dots' | 'grid' | 'diagonal';
+  class?: string;
+  contained?: boolean;
+  centered?: boolean;
+  withAnimation?: boolean;
+}
+
+const {
+  id,
+  variant = 'default',
+  size = 'lg',
+  pattern = 'none',
+  class: className = '',
+  contained = true,
+  centered = false,
+  withAnimation = true,
+  ...rest
+} = Astro.props;
+
+// Variantes de background
+const variants = {
+  default: 'bg-white dark:bg-neutral-900',
+  primary: 'bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-950 dark:to-neutral-900',
+  secondary: 'bg-gradient-to-br from-secondary-50 to-secondary-100 dark:from-secondary-950 dark:to-neutral-900',
+  accent: 'bg-gradient-to-br from-accent-50 to-accent-100 dark:from-accent-950 dark:to-neutral-900',
+  dark: 'bg-neutral-900 dark:bg-neutral-950'
+};
+
+// Tamaños de padding
+const sizes = {
+  sm: 'py-8 md:py-12',
+  md: 'py-12 md:py-16',
+  lg: 'py-16 md:py-20',
+  xl: 'py-20 md:py-24',
+  full: 'min-h-screen py-16 md:py-20'
+};
+
+// Patrones de fondo
+const patterns = {
+  none: '',
+  dots: 'bg-dot-pattern bg-dot-md',
+  grid: 'bg-grid-pattern bg-grid-md',
+  diagonal: 'bg-gradient-to-br'
+};
+
+// Container y centrado
+const containerClass = contained ? 'container mx-auto px-4 sm:px-6 lg:px-8' : '';
+const centeredClass = centered ? 'flex items-center justify-center' : '';
+
+// Animación
+const animationClass = withAnimation ? 'reveal-section' : '';
+
+// Compilar clases
+const sectionClasses = [
+  'relative transition-colors duration-500',
+  variants[variant],
+  sizes[size],
+  patterns[pattern],
+  centeredClass,
+  animationClass,
+  className
+].filter(Boolean).join(' ');
+
+const contentClasses = [
+  containerClass,
+  centered ? 'text-center' : '',
+  'relative z-10'
+].filter(Boolean).join(' ');
+---
+
+<section 
+  {id}
+  class={sectionClasses}
+  data-variant={variant}
+  {...rest}
+>
+  <!-- Overlay para patrones -->
+  {pattern !== 'none' && (
+    <div class="absolute inset-0 opacity-5 dark:opacity-10 pointer-events-none">
+      {pattern === 'dots' && (
+        <div class="absolute inset-0 bg-dot-pattern bg-dot-md"></div>
+      )}
+      {pattern === 'grid' && (
+        <div class="absolute inset-0 bg-grid-pattern bg-grid-md"></div>
+      )}
+    </div>
+  )}
+  
+  <!-- Gradiente decorativo para variantes especiales -->
+  {variant !== 'default' && variant !== 'dark' && (
+    <div class="absolute inset-0 bg-gradient-to-br from-transparent via-white/5 to-transparent pointer-events-none"></div>
+  )}
+  
+  <!-- Contenido principal -->
+  <div class={contentClasses}>
+    <slot />
+  </div>
+</section>
+
+<style>
+  /* Animaciones de revelación mejoradas */
+  .reveal-section {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .reveal-section .reveal-item {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), 
+                transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  
+  .reveal-section .reveal-item.is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  /* Patrones de fondo personalizados */
+  .bg-dot-pattern {
+    background-image: radial-gradient(circle, currentColor 1px, transparent 1px);
+  }
+  
+  .bg-grid-pattern {
+    background-image: 
+      linear-gradient(currentColor 1px, transparent 1px),
+      linear-gradient(90deg, currentColor 1px, transparent 1px);
+  }
+  
+  /* Efectos paralax suaves */
+  .parallax-bg {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+  
+  /* Responsive improvements */
+  @media (max-width: 640px) {
+    .reveal-section .reveal-item {
+      transform: translateY(20px); /* Menos movimiento en móvil */
+    }
+  }
+  
+  /* Mejoras de accesibilidad */
+  @media (prefers-reduced-motion: reduce) {
+    .reveal-section .reveal-item {
+      transition: opacity 0.3s ease;
+      transform: none;
+    }
+    
+    .reveal-section .reveal-item.is-revealed {
+      transform: none;
+    }
+  }
+  
+  /* Dark mode improvements */
+  @media (prefers-color-scheme: dark) {
+    .bg-dot-pattern,
+    .bg-grid-pattern {
+      opacity: 0.3;
+    }
+  }
+</style>
+
+<script>
+  // Script mejorado para animaciones de revelación
+  document.addEventListener('DOMContentLoaded', () => {
+    // Configuración del observador
+    const observerConfig = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+    
+    // Función para revelar elementos
+    function revealElement(entries: IntersectionObserverEntry[]) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-revealed');
+          // Opcional: dejar de observar después de la primera aparición
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }
+    
+    // Crear observador
+    const revealObserver = new IntersectionObserver(revealElement, observerConfig);
+    
+    // Observar todos los elementos con clase reveal-item
+    const revealItems = document.querySelectorAll('.reveal-item');
+    revealItems.forEach(item => {
+      revealObserver.observe(item);
+    });
+    
+    // Fallback para navegadores sin soporte
+    if (!('IntersectionObserver' in window)) {
+      revealItems.forEach(item => {
+        item.classList.add('is-revealed');
+      });
+    }
+  });
+</script>

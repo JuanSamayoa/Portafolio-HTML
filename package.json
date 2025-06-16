@@ -10,6 +10,7 @@
     "deploy": "astro build && copy /y public\\*.* docs\\ && echo.> docs\\.nojekyll && echo juan-samayoa.is-a.dev > docs\\CNAME && git add . && git commit -m \"deploy: actualización del sitio\" && git push origin main"
   },
   "dependencies": {
+    "@fontsource/inter": "^5.1.0",
     "@fontsource/onest": "^5.2.7",
     "astro": "^5.6.1"
   },

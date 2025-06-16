@@ -1,0 +1,139 @@
+---
+/**
+ * CARD ATOM - Componente base para todas las tarjetas
+ * ==================================================
+ * Siguiendo principios de Atomic Design
+ */
+
+export interface Props {
+  variant?: 'default' | 'outlined' | 'elevated' | 'filled' | 'glass';
+  padding?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
+  rounded?: 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
+  shadow?: 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+  hover?: boolean;
+  interactive?: boolean;
+  class?: string;
+  id?: string;
+}
+
+const {
+  variant = 'default',
+  padding = 'md',
+  rounded = 'xl',
+  shadow = 'md',
+  hover = false,
+  interactive = false,
+  class: className = '',
+  id,
+  ...rest
+} = Astro.props;
+
+// Estilos base
+const baseStyles = 'transition-all duration-300';
+
+// Variantes
+const variants = {
+  default: 'bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700',
+  outlined: 'bg-transparent border-2 border-neutral-300 dark:border-neutral-600',
+  elevated: 'bg-white dark:bg-neutral-800 border-0',
+  filled: 'bg-neutral-50 dark:bg-neutral-900 border-0',
+  glass: 'bg-white/80 dark:bg-neutral-800/80 backdrop-blur-sm border border-white/20 dark:border-neutral-700/20'
+};
+
+// Padding
+const paddings = {
+  none: '',
+  sm: 'p-3',
+  md: 'p-4',
+  lg: 'p-6',
+  xl: 'p-8'
+};
+
+// Rounded
+const roundedStyles = {
+  none: '',
+  sm: 'rounded-sm',
+  md: 'rounded-md',
+  lg: 'rounded-lg',
+  xl: 'rounded-xl',
+  '2xl': 'rounded-2xl',
+  '3xl': 'rounded-3xl'
+};
+
+// Shadows
+const shadows = {
+  none: '',
+  sm: 'shadow-sm',
+  md: 'shadow-md',
+  lg: 'shadow-lg',
+  xl: 'shadow-xl',
+  '2xl': 'shadow-2xl'
+};
+
+// Estados interactivos
+const interactiveStyles = interactive 
+  ? 'cursor-pointer transform hover:scale-[1.02] active:scale-[0.98]' 
+  : '';
+
+const hoverStyles = hover 
+  ? 'hover:shadow-lg hover:-translate-y-1' 
+  : '';
+
+// Compilar clases
+const cardClasses = [
+  baseStyles,
+  variants[variant],
+  paddings[padding],
+  roundedStyles[rounded],
+  shadows[shadow],
+  interactiveStyles,
+  hoverStyles,
+  className
+].filter(Boolean).join(' ');
+---
+
+<div
+  {id}
+  class={cardClasses}
+  {...rest}
+>
+  <slot />
+</div>
+
+<style>
+  /* Efectos adicionales para variante glass */
+  .glass-card {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  
+  /* Animación suave para estados hover */
+  .card-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  }
+  
+  /* Efectos de carga para skeleton */
+  .card-skeleton {
+    background: linear-gradient(90deg, 
+      rgba(156, 163, 175, 0.1) 25%, 
+      rgba(156, 163, 175, 0.2) 50%, 
+      rgba(156, 163, 175, 0.1) 75%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+  }
+  
+  @keyframes skeleton-loading {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+</style>

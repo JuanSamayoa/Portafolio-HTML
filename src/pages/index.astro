@@ -6,71 +6,21 @@ import Experience from "../components/Experience.astro";
 import Projects from "../components/Projects.astro";
 import AboutMe from "../components/AboutMe.astro";
 import Contact from "../components/Contact.astro";
-import SectionContainer from "../components/SectionContainer.astro";
+import SectionContainer from "../components/molecules/SectionContainer.astro";
 import Footer from "../components/Footer.astro";
 import Certifications from "../components/Certifications.astro";
+import Hero from "../components/Hero.astro";
+import ScrollToTop from "../components/ScrollToTop.astro";
+import { personalInfo, siteConfig } from "../data/portfolio.js";
 ---
 
 <Layout
-  title="Portafolio de Juan Samayoa - QA y Desarrollador / Programador Junior"
-  description="Portafolio de Juan Samayoa, QA y Desarrollador Junior. Con experiencia en pruebas de software y desarrollo web."
+  title={siteConfig.title}
+  description={siteConfig.description}
 >
   <main>
-    <!-- Sección Inicio -->
-    <SectionContainer
-      id="inicio"
-      class="min-h-[80vh] flex items-center justify-center"
-    >
-      <div
-        class="flex flex-col items-center text-center transition-colors duration-300"
-      >
-        <div class="mb-8">
-          <img
-            src="https://media.licdn.com/dms/image/v2/D4E03AQF0oMYx0M6HJw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1679975238128?e=1749686400&v=beta&t=ScwJg1Dh_wP15JsI1Kzcpel7hiQjO8ldXkb8rcxlmgY"
-            alt="Foto de Juan Samayoa"
-            class="h-28 w-28 md:h-36 md:w-36 rounded-full shadow-lg transition-transform duration-300 transform hover:scale-105 border-2 border-white dark:border-gray-800"
-            onerror="this.onerror=null;this.src='./assets/img/profile-fallback.webp';"
-          />
-        </div>
-
-        <div class="mb-6">
-          <h1
-            class="text-3xl md:text-4xl lg:text-5xl font-bold mb-2 text-gray-800 dark:text-white transition-colors duration-300"
-          >
-            Hola, soy Juan Samayoa
-          </h1>
-          <div class="mt-2 mb-4">
-            <Badge text="Ingeniero de Pruebas TI" variant="neutral" />
-          </div>
-        </div>
-
-        <p
-          class="text-base md:text-lg text-center mt-4 space-y-2 max-w-2xl mx-auto transition-colors duration-300 mb-8"
-        >
-          <span class="text-primary dark:text-red-500"
-            >3+ años de experiencia como QA.</span
-          >
-          <span class="text-emerald-700 dark:text-emerald-300"
-            >Desarrollador Web junior con conocimientos en HTML, CSS.</span
-          >
-          <span class="text-gray-700 dark:text-gray-200"
-            >Me apasiona obtener nuevos conocimientos y mejorar mis habilidades
-            en el desarrollo en general.</span
-          >
-          <span class="text-secondary">De Guatemala</span>
-        </p>
-
-        <!-- Componente de enlaces sociales -->
-        <SocialLinks
-          linkedInUrl="https://www.linkedin.com/in/juansamayoa/"
-          githubUrl="https://github.com/JuanSamayoa"
-          email="juancho1705@gmail.com"
-          cvEsUrl="https://www.canva.com/design/DAGkTn6eIWA/IP8w3uUPRTogz4RvNrW_lQ/edit?utm_content=DAGkTn6eIWA&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
-          cvEnUrl="https://www.canva.com/design/DAGmCqYKacg/H6FO200cPHFOn6r67tgKkQ/edit?utm_content=DAGmCqYKacg&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
-          showLabels={true}
-        />
-      </div>
-    </SectionContainer>
+    <!-- Sección Hero -->
+    <Hero />
 
     <!-- Sección Experiencia -->
     <SectionContainer id="experiencia" class="bg-gray-50 dark:bg-gray-900/30">
@@ -100,6 +50,9 @@ import Certifications from "../components/Certifications.astro";
 
   <!-- Footer agregado después del contenido principal -->
   <Footer />
+  
+  <!-- Botón scroll to top -->
+  <ScrollToTop />
 </Layout>
 
 <style>

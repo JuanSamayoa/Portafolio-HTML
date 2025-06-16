@@ -1,5 +1,21 @@
 {
-  "extends": "astro/tsconfigs/strict",
-  "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist"]
+  "compilerOptions": {
+    "strict": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "target": "esnext",
+    "jsx": "preserve",
+    "esModuleInterop": true,
+    "allowJs": true,
+    "skipLibCheck": true
+  },
+  "include": [".astro/types.d.ts", "src", "index.html"],
+  "exclude": [
+    "dist",
+    "docs",
+    "public",
+    ".astro",
+    "node_modules",
+    "src/components/Badge.astro"
+  ]
 }

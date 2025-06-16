@@ -1,63 +1,66 @@
 ---
 import UserIcon from "./icons/UserIcon.astro";
+import Heading from "./atoms/Heading.astro";
+import Text from "./atoms/Text.astro";
+import Card from "./atoms/Card.astro";
+import { personalInfo } from "../data/portfolio.js";
 ---
 
 <div class="w-full reveal-section">
-  <h2
-    class="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white mb-2 flex items-center gap-2 reveal-item"
+  <Heading 
+    level={2} 
+    class="mb-2 flex items-center gap-2 reveal-item"
   >
     <UserIcon class="inline-block w-7 h-7 md:w-8 md:h-8" />
     Sobre Mí
-  </h2>
-
-  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-    <!-- Foto e info personal -->
+  </Heading>
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">    <!-- Foto e info personal -->
     <div
       class="lg:col-span-4 flex flex-col items-center lg:items-start reveal-item"
     >
-      <div class="relative w-48 h-80 mb-6 rounded-lg overflow-hidden mx-auto">
-        <img
-          src="/assets/img/about.webp"
-          alt="Foto ampliada de Juan Samayoa"
-          class="w-full h-full object-cover"
-          onerror="this.src='/assets/img/fallback-profile.webp';"
-        />
-      </div>
-
-      <ul class="space-y-2 w-full max-w-xs">
-        <li class="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-          <span class="font-semibold min-w-24">Ubicación:</span>
-          <span>Guatemala</span>
-        </li>
-        <li class="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-          <span class="font-semibold min-w-24">Educación:</span>
-          <span
-            >Ing. en Sistemas de la Información y Ciencias de la Computación</span
-          >
-        </li>
-        <li class="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-          <span class="font-semibold min-w-24">Universidad:</span>
-          <span>Universidad Mariano Galvez de Guatemala</span>
-        </li>
-        <li class="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-          <span class="font-semibold min-w-24">Idiomas:</span>
-          <span>Español (Nativo), Inglés (B2)</span>
-        </li>
-        <li class="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-          <span class="font-semibold min-w-24">Stacks:</span>
-          <span>Java, Angular, Python</span>
-        </li>
-      </ul>
-    </div>
-
-    <!-- Biografía y habilidades -->
+      <Card class="p-0 overflow-hidden mb-6">
+        <div class="relative w-64 h-80 rounded-lg overflow-hidden mx-auto">
+          <img
+            src="/assets/img/profile-2.webp"
+            alt={`Foto de ${personalInfo.name}`}
+            class="w-full h-full object-cover"
+            onerror={`this.src='${personalInfo.profileImageFallback}';`}
+          />
+        </div>
+      </Card>
+      
+      <Card class="w-full max-w-sm p-4">
+        <ul class="space-y-3">
+          <li class="flex items-start gap-2">
+            <Text variant="body-sm" class="font-semibold min-w-20 text-secondary">Ubicación:</Text>
+            <Text variant="body-sm">{personalInfo.location}</Text>
+          </li>
+          <li class="flex items-start gap-2">
+            <Text variant="body-sm" class="font-semibold min-w-20 text-secondary">Educación:</Text>
+            <Text variant="body-sm">Ing. en Sistemas de la Información y Ciencias de la Computación</Text>
+          </li>
+          <li class="flex items-start gap-2">
+            <Text variant="body-sm" class="font-semibold min-w-20 text-secondary">Universidad:</Text>
+            <Text variant="body-sm">Universidad Mariano Galvez de Guatemala</Text>
+          </li>
+          <li class="flex items-start gap-2">
+            <Text variant="body-sm" class="font-semibold min-w-20 text-secondary">Idiomas:</Text>
+            <Text variant="body-sm">Español (Nativo), Inglés (B2)</Text>
+          </li>
+          <li class="flex items-start gap-2">
+            <Text variant="body-sm" class="font-semibold min-w-20 text-secondary">Stacks:</Text>
+            <Text variant="body-sm">Java, Angular, Python</Text>
+          </li>
+        </ul>
+      </Card>
+    </div>    <!-- Biografía y habilidades -->
     <div class="lg:col-span-8 space-y-6">
       <div class="reveal-item" style="--reveal-delay: 100ms">
-        <h3 class="text-xl font-bold mb-3 text-gray-800 dark:text-white">
+        <Heading level={3} class="mb-3">
           Mi Historia
-        </h3>
-        <div class="space-y-4 text-gray-600 dark:text-gray-300">
-          <p>
+        </Heading>
+        <div class="space-y-4">
+          <Text variant="body">
             Soy un Analista de QA con experiencia en pruebas manuales, caja
             negra, caja blanca y pruebas de humo. Además, cuento con
             conocimientos en desarrollo frontend utilizando Angular y una sólida
@@ -65,69 +68,102 @@ import UserIcon from "./icons/UserIcon.astro";
             software como su proceso de desarrollo. He participado en diversos
             proyectos, tanto personales como profesionales, adquiriendo
             experiencia en múltiples áreas de la tecnología.
-          </p>
+          </Text>
 
-          <p>
+          <Text variant="body">
             Desde temprana edad me he sentido atraído por el mundo de la
             informática, explorando tanto el hardware como el software a través
             de cursos y proyectos personales. Mi primer lenguaje de programación
             fue Java, y con el tiempo me he especializado en Angular y en
             aseguramiento de la calidad.
-          </p>
+          </Text>
 
-          <p>
+          <Text variant="body">
             Me apasionan la tecnología, la mejora continua y el aprendizaje
             constante. Me considero una persona proactiva, responsable y
             comprometida con mi trabajo. Siempre busco la excelencia en lo que
             hago y disfruto colaborar en equipo para alcanzar objetivos comunes.
-          </p>
+          </Text>
         </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
-        <div>
-          <h4 class="font-semibold mb-2 text-gray-700 dark:text-gray-200">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card class="p-6">
+          <Heading level={4} class="mb-3 text-secondary">
             QA & Testing
-          </h4>
-          <ul
-            class="list-disc list-inside text-sm text-gray-600 dark:text-gray-300"
-          >
-            <li>Pruebas funcionales (manuales y automatizadas)</li>
-            <li>Selenium WebDriver</li>
-            <li>Postman (APIs y Flows)</li>
-            <li>Jira y X-Ray para gestión de pruebas</li>
-            <li>Redacción de casos de prueba y documentación técnica</li>
-            <li>Análisis técnico y reportes de defectos</li>
+          </Heading>
+          <ul class="space-y-2">
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1">•</span>
+              <Text variant="body-sm">Pruebas funcionales (manuales y automatizadas)</Text>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1">•</span>
+              <Text variant="body-sm">Selenium WebDriver</Text>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1">•</span>
+              <Text variant="body-sm">Postman (APIs y Flows)</Text>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1">•</span>
+              <Text variant="body-sm">Jira y X-Ray para gestión de pruebas</Text>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1">•</span>
+              <Text variant="body-sm">Redacción de casos de prueba y documentación técnica</Text>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1">•</span>
+              <Text variant="body-sm">Análisis técnico y reportes de defectos</Text>
+            </li>
           </ul>
-        </div>
-        <div>
-          <h4 class="font-semibold mb-2 text-gray-700 dark:text-gray-200">
+        </Card>
+        
+        <Card class="p-6">
+          <Heading level={4} class="mb-3 text-secondary">
             Desarrollo
-          </h4>
-          <ul
-            class="list-disc list-inside text-sm text-gray-600 dark:text-gray-300"
-          >
-            <li>Automatización con Python</li>
-            <li>Desarrollo web con HTML, CSS y JavaScript</li>
-            <li>Angular & TypeScript (Frontend)</li>
-            <li>SQL para consultas y análisis de datos</li>
-            <li>Java y Swing (aplicaciones de escritorio)</li>
-            <li>VB.NET / ASP.NET (básico/intermedio)</li>
+          </Heading>
+          <ul class="space-y-2">
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1">•</span>
+              <Text variant="body-sm">Automatización con Python</Text>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1">•</span>
+              <Text variant="body-sm">Desarrollo web con HTML, CSS y JavaScript</Text>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1">•</span>
+              <Text variant="body-sm">Angular & TypeScript (Frontend)</Text>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1">•</span>
+              <Text variant="body-sm">SQL para consultas y análisis de datos</Text>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1">•</span>
+              <Text variant="body-sm">Java y Swing (aplicaciones de escritorio)</Text>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-accent mt-1">•</span>
+              <Text variant="body-sm">VB.NET / ASP.NET (básico/intermedio)</Text>
+            </li>
           </ul>
-        </div>
+        </Card>
       </div>
 
       <div class="reveal-item" style="--reveal-delay: 300ms">
-        <h3 class="text-xl font-bold mb-3 text-gray-800 dark:text-white">
+        <Heading level={3} class="mb-3">
           Intereses
-        </h3>
-        <p class="text-gray-600 dark:text-gray-300">
+        </Heading>
+        <Text variant="body">
           Fuera del trabajo, disfruto aprender sobre temas nuevos. Además, tengo
           una gran pasión por el fútbol; estuve muy cerca de convertirme en
           futbolista amateur en la liga nacional de Guatemala. Me gusta ver
           fútbol, explorar áreas en las que aún no soy experto para expandir mis
           horizontes, y conocer personas en todos los lugares posibles.
-        </p>
+        </Text>
       </div>
     </div>
   </div>

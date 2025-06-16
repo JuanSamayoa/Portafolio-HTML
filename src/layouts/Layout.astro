@@ -23,9 +23,38 @@ const {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/manifest.json" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
     <title>{title}</title>
+    
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- SEO mejorado -->
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Juan Samayoa">
+    <meta name="keywords" content="QA, Desarrollador, Frontend, Angular, TypeScript, Testing">
+    
+    <!-- Open Graph para redes sociales -->
+    <meta property="og:title" content={title}>
+    <meta property="og:description" content={description}>
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://juan-samayoa.is-a.dev">
+    <meta property="og:image" content="https://juan-samayoa.is-a.dev/assets/img/profile.webp">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content={title}>
+    <meta name="twitter:description" content={description}>
+    <meta name="twitter:image" content="https://juan-samayoa.is-a.dev/assets/img/profile.webp">
+    
+    <!-- PWA Meta tags -->
+    <meta name="theme-color" content="#3b82f6">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     
     <!-- Polyfill simplificado para IntersectionObserver -->
     <script is:inline>
@@ -60,6 +89,34 @@ const {
         console.warn("Error al establecer tema:", error);
         document.documentElement.classList.remove("dark");
       }
+      
+      // Registrar Service Worker para PWA
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+              console.log('SW registrado correctamente:', registration.scope);
+              
+              // Verificar si hay actualizaciones
+              registration.addEventListener('updatefound', () => {
+                const newWorker = registration.installing;
+                if (newWorker) {
+                  newWorker.addEventListener('statechange', () => {
+                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                      // Hay una nueva versión disponible
+                      if (confirm('Nueva versión disponible. ¿Recargar página?')) {
+                        window.location.reload();
+                      }
+                    }
+                  });
+                }
+              });
+            })
+            .catch(error => {
+              console.log('Error al registrar SW:', error);
+            });
+        });
+      }
     </script>
   </body>
 </html>
@@ -70,7 +127,11 @@ const {
   }
 
   html {
-    font-family: "Onest", sans-serif;
+    font-family: "Inter", "Onest", system-ui, sans-serif;
+    scroll-behavior: smooth;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   body {

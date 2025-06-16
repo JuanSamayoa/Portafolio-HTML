@@ -12,7 +12,7 @@ if [ -z "$commit_message" ]; then
 fi
 
 echo "🏗️  Construyendo proyecto..."
-npm run build
+npm run deploy
 
 if [ $? -ne 0 ]; then
     echo "Error: Fallo en build"
@@ -31,6 +31,7 @@ git add .
 
 # Remover solo carpetas específicas del staging area (NO docs/)
 echo "🗑️  Removiendo carpetas no deseadas del commit..."
+git rm --cached -r .astro/ .vscode/ node_modules/ 2>/dev/null || true
 git reset HEAD .astro/ .vscode/ node_modules/ 2>/dev/null || true
 
 echo "📝 Haciendo commit..."
@@ -38,6 +39,3 @@ git commit -m "$commit_message"
 
 echo "🚀 Subiendo cambios a GitHub..."
 git push
-
-echo "✅ Deploy completado exitosamente!"
-echo "Sitio disponible en: https://juan-samayoa.is-a.dev"

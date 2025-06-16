@@ -11,7 +11,7 @@ if ([string]::IsNullOrWhiteSpace($commitMessage)) {
 }
 
 Write-Host "🏗️  Construyendo proyecto..."
-npm run build
+npm run deploy
 
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Error: Fallo en build"
@@ -30,6 +30,7 @@ git add .
 
 # Remover solo carpetas específicas del staging area (NO docs/)
 Write-Host "🗑️  Removiendo carpetas no deseadas del commit..."
+git rm --cached -r .astro/ .vscode/ node_modules/ 2>$null
 git reset HEAD .astro/ .vscode/ node_modules/ 2>$null
 
 Write-Host "📝 Haciendo commit..."
@@ -37,6 +38,3 @@ git commit -m $commitMessage
 
 Write-Host "🚀 Subiendo cambios a GitHub..."
 git push
-
-Write-Host "✅ Deploy completado exitosamente!"
-Write-Host "Sitio disponible en: https://juan-samayoa.is-a.dev"

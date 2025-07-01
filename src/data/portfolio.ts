@@ -257,11 +257,12 @@ export const featuredCertifications: Certification[] = [
     link: "https://capacitateparaelempleo.org/verifica/5b432ce5-1d22-4d92-9bcb-15564ee310b6/0380b800-f5d2-4772-8eed-cae72d8bb8ed",
   },
   {
-    title: "Programación Orientada a Objetos con Java",
-    issuer: "Instituto Técnico de Capacitación (INTECAP)",
-    image: "/assets/certificates/intecap-oop-java.webp",
-    date: "2014",
-    link: "",  },
+    title: "Introduction to Software Development de Amazon",
+    issuer: "Coursera",
+    image: "/assets/certificates/intro-software-development-amazon.webp",
+    date: "2025",
+    link: "https://www.coursera.org/account/accomplishments/verify/4BPJ0MYHZ4CS",
+  },
 ];
 
 // Todas las demás certificaciones

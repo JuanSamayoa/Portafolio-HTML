@@ -222,6 +222,13 @@ export const featuredCertifications: Certification[] = [
     link: "https://www.coursera.org/account/accomplishments/verify/4BPJ0MYHZ4CS",
   },
   {
+    title: "Programming with Java de Amazon",
+    issuer: "Coursera",
+    image: "/assets/certificates/programming-with-java.webp",
+    date: "2025",
+    link: "https://www.coursera.org/account/accomplishments/verify/Y7NC7ONZC56K",
+  },
+  {
     title: "Desarrollador Back-end",
     issuer: "Capacitate para el Empleo / Fundación Carlos Slim",
     image: "/assets/certificates/backend-developer.webp",
@@ -250,24 +257,23 @@ export const featuredCertifications: Certification[] = [
     link: "",
   },
   {
-    title: "Entrenamiento Desarrollo Seguro",
-    issuer: "DEVEL Cybersecurity",
-    image: "/assets/certificates/secure-development.webp",
-    date: "2023",
-    link: "",
-  },
-  {
     title: "Programador en C#",
     issuer: "Capacitate para el Empleo / Fundación Carlos Slim",
     image: "/assets/certificates/csharp-developer.webp",
     date: "2025",
     link: "https://capacitateparaelempleo.org/verifica/5b432ce5-1d22-4d92-9bcb-15564ee310b6/0380b800-f5d2-4772-8eed-cae72d8bb8ed",
   },
-  
 ];
 
 // Todas las demás certificaciones
 export const additionalCertifications: Certification[] = [
+  {
+    title: "Entrenamiento Desarrollo Seguro",
+    issuer: "DEVEL Cybersecurity",
+    image: "/assets/certificates/secure-development.webp",
+    date: "2023",
+    link: "",
+  },
   {
     title: "Inglés Nivel 12 (Requerido técnico)",
     issuer: "Centro de Aprendizaje de Lenguas de la Universidad de San Carlos de Guatemala (CALUSAC)",

@@ -31,8 +31,8 @@ git add .
 
 # Remover solo carpetas específicas del staging area (NO docs/)
 echo "🗑️  Removiendo carpetas no deseadas del commit..."
-git rm --cached -r .astro/ .vscode/ node_modules/ 2>/dev/null || true
-git reset HEAD .astro/ .vscode/ node_modules/ 2>/dev/null || true
+git rm --cached -r .astro/ .vscode/ node_modules/ .git/ 2>/dev/null || true
+git reset HEAD .astro/ .vscode/ node_modules/ .git/ 2>/dev/null || true
 
 echo "📝 Haciendo commit..."
 git commit -m "$commit_message"

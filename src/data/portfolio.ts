@@ -61,8 +61,8 @@ export const personalInfo: PersonalInfo = {
   title: "Ingeniero de Pruebas TI",
   email: "juancho1705@gmail.com",
   location: "Ciudad de Guatemala, Guatemala",
-  profileImage: "/assets/img/profile.webp",
-  profileImageFallback: "/assets/img/profile-fallback.webp",
+  profileImage: "/assets/img/profile.jpg",
+  profileImageFallback: "/assets/img/profile-fallback.svg",
   linkedin: "https://www.linkedin.com/in/juansamayoa/",
   github: "https://github.com/JuanSamayoa",
   cvPathEs: "/assets/cv-juan-samayoa-es.pdf",
@@ -265,15 +265,9 @@ export const featuredCertifications: Certification[] = [
   },
 ];
 
-// Todas las demás certificaciones
+// Todas las demás certificaciones (ordenadas por fecha ascendente, luego alfabéticamente)
 export const additionalCertifications: Certification[] = [
-  {
-    title: "Entrenamiento Desarrollo Seguro",
-    issuer: "DEVEL Cybersecurity",
-    image: "/assets/certificates/secure-development.webp",
-    date: "2023",
-    link: "",
-  },
+  // 2020
   {
     title: "Inglés Nivel 12 (Requerido técnico)",
     issuer: "Centro de Aprendizaje de Lenguas de la Universidad de San Carlos de Guatemala (CALUSAC)",
@@ -295,6 +289,15 @@ export const additionalCertifications: Certification[] = [
     date: "2020",
     link: "https://capacitateparaelempleo.org/verifica/5b432ce5-1d22-4d92-9bcb-15564ee310b6/35ff7d58-16f7-42b7-a266-1085d60a6d2f",
   },
+  // 2023
+  {
+    title: "Entrenamiento Desarrollo Seguro",
+    issuer: "DEVEL Cybersecurity",
+    image: "/assets/certificates/secure-development.webp",
+    date: "2023",
+    link: "",
+  },
+  // 2025
   {
     title: "Administrador de Servidores",
     issuer: "Capacitate para el Empleo / Fundación Carlos Slim",
@@ -303,39 +306,11 @@ export const additionalCertifications: Certification[] = [
     link: "https://capacitateparaelempleo.org/verifica/5b432ce5-1d22-4d92-9bcb-15564ee310b6/c673879b-b843-4d7f-a224-54f69fd3e481",
   },
   {
-    title: "Preprocesadores de estilos",
+    title: "Cómputo básico",
     issuer: "Capacitate para el Empleo / Fundación Carlos Slim",
-    image: "/assets/certificates/styles-preprocessors.webp",
+    image: "/assets/certificates/basic-computing.webp",
     date: "2025",
-    link: "https://capacitateparaelempleo.org/verifica/5b432ce5-1d22-4d92-9bcb-15564ee310b6/b28ee1ba-fb77-4cb6-ba1a-036a30e58851",
-  },
-  {
-    title: "Postprocesadores de estilos",
-    issuer: "Capacitate para el Empleo / Fundación Carlos Slim",
-    image: "/assets/certificates/styles-postprocessor.webp",
-    date: "2025",
-    link: "https://capacitateparaelempleo.org/verifica/5b432ce5-1d22-4d92-9bcb-15564ee310b6/d55c5d3c-e9e1-4b70-b04c-05b0664648c3",
-  },
-  {
-    title: "Diseñador de experiencia de usuario (UX)",
-    issuer: "Capacitate para el Empleo / Fundación Carlos Slim",
-    image: "/assets/certificates/ux-designer.webp",
-    date: "2025",
-    link: "https://capacitateparaelempleo.org/verifica/5b432ce5-1d22-4d92-9bcb-15564ee310b6/65528ffe-22c1-4c2d-9768-0ec5b06516cf",
-  },
-  {
-    title: "Desarrollador de sitios web responsivos",
-    issuer: "Capacitate para el Empleo / Fundación Carlos Slim",
-    image: "/assets/certificates/responsive-developer.webp",
-    date: "2025",
-    link: "https://capacitateparaelempleo.org/verifica/5b432ce5-1d22-4d92-9bcb-15564ee310b6/edb7e15b-e5ab-40a4-8e6d-eaf12e45d7aa",
-  },
-  {
-    title: "Desarrollador de interfaces gráficas",
-    issuer: "Capacitate para el Empleo / Fundación Carlos Slim",
-    image: "/assets/certificates/ui-developer.webp",
-    date: "2025",
-    link: "https://capacitateparaelempleo.org/verifica/5b432ce5-1d22-4d92-9bcb-15564ee310b6/5516ffb6-2731-499b-9137-5053281840c9",
+    link: "https://capacitateparaelempleo.org/verifica/5b432ce5-1d22-4d92-9bcb-15564ee310b6/0380b800-f5d2-4772-8eed-cae72d8bb8ed",
   },
   {
     title: "Control de versiones (git)",
@@ -345,11 +320,39 @@ export const additionalCertifications: Certification[] = [
     link: "https://capacitateparaelempleo.org/verifica/5b432ce5-1d22-4d92-9bcb-15564ee310b6/aef99b6c-491a-4e01-841e-87513e10b1b6",
   },
   {
-    title: "Cómputo básico",
+    title: "Desarrollador de interfaces gráficas",
     issuer: "Capacitate para el Empleo / Fundación Carlos Slim",
-    image: "/assets/certificates/basic-computing.webp",
+    image: "/assets/certificates/ui-developer.webp",
     date: "2025",
-    link: "https://capacitateparaelempleo.org/verifica/5b432ce5-1d22-4d92-9bcb-15564ee310b6/0380b800-f5d2-4772-8eed-cae72d8bb8ed",
+    link: "https://capacitateparaelempleo.org/verifica/5b432ce5-1d22-4d92-9bcb-15564ee310b6/5516ffb6-2731-499b-9137-5053281840c9",
+  },
+  {
+    title: "Desarrollador de sitios web responsivos",
+    issuer: "Capacitate para el Empleo / Fundación Carlos Slim",
+    image: "/assets/certificates/responsive-developer.webp",
+    date: "2025",
+    link: "https://capacitateparaelempleo.org/verifica/5b432ce5-1d22-4d92-9bcb-15564ee310b6/edb7e15b-e5ab-40a4-8e6d-eaf12e45d7aa",
+  },
+  {
+    title: "Diseñador de experiencia de usuario (UX)",
+    issuer: "Capacitate para el Empleo / Fundación Carlos Slim",
+    image: "/assets/certificates/ux-designer.webp",
+    date: "2025",
+    link: "https://capacitateparaelempleo.org/verifica/5b432ce5-1d22-4d92-9bcb-15564ee310b6/65528ffe-22c1-4c2d-9768-0ec5b06516cf",
+  },
+  {
+    title: "Postprocesadores de estilos",
+    issuer: "Capacitate para el Empleo / Fundación Carlos Slim",
+    image: "/assets/certificates/styles-postprocessor.webp",
+    date: "2025",
+    link: "https://capacitateparaelempleo.org/verifica/5b432ce5-1d22-4d92-9bcb-15564ee310b6/d55c5d3c-e9e1-4b70-b04c-05b0664648c3",
+  },
+  {
+    title: "Preprocesadores de estilos",
+    issuer: "Capacitate para el Empleo / Fundación Carlos Slim",
+    image: "/assets/certificates/styles-preprocessors.webp",
+    date: "2025",
+    link: "https://capacitateparaelempleo.org/verifica/5b432ce5-1d22-4d92-9bcb-15564ee310b6/b28ee1ba-fb77-4cb6-ba1a-036a30e58851",
   },
 ];
 

@@ -122,8 +122,14 @@ async function cacheFirst(request) {
     
     const networkResponse = await fetch(request);
     if (networkResponse.ok) {
-      const cache = await caches.open(CACHE_NAME);
-      cache.put(request, networkResponse.clone());
+      try {
+        const cache = await caches.open(CACHE_NAME);
+        // Clonamos la respuesta antes de usarla
+        const responseClone = networkResponse.clone();
+        await cache.put(request, responseClone);
+      } catch (cacheError) {
+        console.warn('[SW] Error al guardar en cache:', cacheError);
+      }
     }
     
     return networkResponse;
@@ -144,8 +150,14 @@ async function networkFirst(request) {
   try {
     const networkResponse = await fetch(request);
     if (networkResponse.ok) {
-      const cache = await caches.open(CACHE_NAME);
-      cache.put(request, networkResponse.clone());
+      try {
+        const cache = await caches.open(CACHE_NAME);
+        // Clonamos la respuesta antes de usarla
+        const responseClone = networkResponse.clone();
+        await cache.put(request, responseClone);
+      } catch (cacheError) {
+        console.warn('[SW] Error al guardar en cache:', cacheError);
+      }
     }
     return networkResponse;
   } catch (error) {
@@ -197,12 +209,21 @@ async function networkFirst(request) {
 async function staleWhileRevalidate(request) {
   const cachedResponse = await caches.match(request);
   
-  const fetchPromise = fetch(request).then(response => {
+  const fetchPromise = fetch(request).then(async response => {
     if (response.ok) {
-      const cache = caches.open(CACHE_NAME);
-      cache.then(c => c.put(request, response.clone()));
+      try {
+        const cache = await caches.open(CACHE_NAME);
+        // Clonamos la respuesta antes de cualquier otra operación
+        const responseClone = response.clone();
+        await cache.put(request, responseClone);
+      } catch (error) {
+        console.warn('[SW] Error al actualizar cache en staleWhileRevalidate:', error);
+      }
     }
     return response;
+  }).catch(error => {
+    console.warn('[SW] Error en fetchPromise:', error);
+    return cachedResponse;
   });
   
   return cachedResponse || fetchPromise;

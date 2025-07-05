@@ -1,13 +1,16 @@
 {
   "name": "portafolio-dev",
   "type": "module",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "deploy": "astro build && copy /y public\\*.* docs\\ && echo.> docs\\.nojekyll && echo juan-samayoa.is-a.dev > docs\\CNAME"
+    "deploy": "astro build && copy /y public\\*.* docs\\ && echo.> docs\\.nojekyll && echo juan-samayoa.is-a.dev > docs\\CNAME",
+    "clean": "rmdir /s /q docs || true",
+    "build:production": "npm run clean && npm run deploy",
+    "check": "astro check"
   },
   "dependencies": {
     "@fontsource/inter": "^5.1.0",

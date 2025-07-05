@@ -1,5 +1,7 @@
 ---
 // CertificationCard.astro
+import { getOptimizedImageProps, getCertificateImageConfig } from '../utils/imageUtils';
+
 interface Props {
   title: string;
   issuer: string;
@@ -11,43 +13,86 @@ const { title, issuer, image, date, link } = Astro.props;
 
 // Generar un id único para el modal basado en el título
 const modalId = `modal-${title.replace(/\s+/g, "-").toLowerCase()}`;
+
+// Optimizar imagen para certificados con configuración inteligente
+const imageConfig = getCertificateImageConfig(image, title, {
+  width: 192,
+  height: 192,
+  lossless: true // Para certificados, preferir calidad máxima
+});
+
+const imageProps = getOptimizedImageProps(imageConfig);
 ---
-<div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 flex flex-col items-center text-center hover:shadow-2xl transition-shadow duration-300 w-72 md:w-80 h-96 md:h-[26rem] max-w-full mx-auto relative">
-  <img
-    src={image}
-    alt={title}
-    class="w-40 h-40 md:w-48 md:h-48 object-contain mb-3 rounded-lg cursor-pointer border-2 border-primary/30 hover:border-primary transition-all duration-300"
-    loading="lazy"
-    onclick={`document.getElementById('${modalId}').showModal();`}
-    tabindex="0"
-    aria-label={`Ver ${title} certificado en grande`}
-    role="button"
-  />
-  <h3 class="font-semibold text-lg md:text-xl text-gray-800 dark:text-white mb-1 line-clamp-2 leading-tight">{title}</h3>
-  <p class="text-sm md:text-base text-gray-500 dark:text-gray-300 line-clamp-1 mb-2">{issuer}</p>
-  {date && <p class="text-xs text-gray-400 mb-3">{date}</p>}
+<div class="certification-card bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 flex flex-col items-center text-center w-72 md:w-80 h-96 md:h-[26rem] max-w-full mx-auto relative overflow-hidden group">
+  <!-- Efecto de brillo animado -->
+  <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"></div>
   
-  <!-- Spacer para empujar el botón hacia abajo -->
-  <div class="flex-grow"></div>
+  <!-- Decoración superior -->
+  <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-primary/60 to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
   
-  <!-- Botón de certificado (solo si tiene link) -->
+  <!-- Contenedor de imagen con animaciones -->
+  <div class="relative mb-3 group/image">
+    <div class="absolute inset-0 bg-primary/20 rounded-lg blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform scale-110"></div>
+    <img
+      {...imageProps}
+      class="relative w-40 h-40 md:w-48 md:h-48 object-contain rounded-lg cursor-pointer border-2 border-primary/30 group-hover:border-primary transition-all duration-500 group-hover:scale-105 group-hover:rotate-1 z-10"
+      onclick={`document.getElementById('${modalId}').showModal();`}
+      tabindex="0"
+      aria-label={`Ver ${title} certificado en grande`}
+      role="button"
+    />
+    <!-- Indicador de clic -->
+    <div class="absolute inset-0 bg-primary/10 rounded-lg opacity-0 group-hover/image:opacity-100 transition-opacity duration-300 pointer-events-none flex items-center justify-center">
+      <svg class="w-8 h-8 text-primary animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"/>
+      </svg>
+    </div>
+  </div>
+  
+  <!-- Contenido de texto con animaciones -->
+  <div class="flex-grow flex flex-col justify-center text-center transform group-hover:translate-y-[-4px] transition-transform duration-300">
+    <h3 class="font-semibold text-lg md:text-xl text-gray-800 dark:text-white mb-1 line-clamp-2 leading-tight group-hover:text-primary transition-colors duration-300">{title}</h3>
+    <p class="text-sm md:text-base text-gray-500 dark:text-gray-300 line-clamp-1 mb-2 group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-colors duration-300">{issuer}</p>
+    {date && (
+      <div class="flex items-center justify-center gap-2 mb-3">
+        <svg class="w-4 h-4 text-gray-400 group-hover:text-primary transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+        </svg>
+        <p class="text-xs text-gray-400 group-hover:text-primary transition-colors duration-300 font-medium">{date}</p>
+      </div>
+    )}
+  </div>
+  
+  <!-- Botón de certificado con animaciones mejoradas -->
   {link && link.trim() !== "" && (
-    <div class="mt-auto mb-2">
+    <div class="mt-auto mb-2 transform group-hover:translate-y-[-2px] transition-transform duration-300">
       <a 
         href={link} 
         target="_blank" 
         rel="noopener noreferrer"
-        class="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-white font-medium rounded-full px-4 py-2 text-sm shadow-md transition-all duration-200 hover:shadow-lg hover:scale-105"
+        class="inline-flex items-center gap-2 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary text-white font-medium rounded-full px-6 py-3 text-sm shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-110 relative overflow-hidden group/btn"
         aria-label={`Verificar certificado: ${title}`}
       >
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <!-- Efecto de brillo en el botón -->
+        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-500"></div>
+        
+        <svg class="w-4 h-4 relative z-10 transform group-hover/btn:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
         </svg>
-        Ver certificado
+        <span class="relative z-10">Ver certificado</span>
       </a>
     </div>
   )}
 
+  <!-- Badge de verificación para certificados con link - MEJORADO -->
+  {link && link.trim() !== "" && (
+    <div class="absolute top-3 right-3 bg-green-500 text-white rounded-full p-2 shadow-lg z-20 transform group-hover:scale-110 transition-all duration-300 border-2 border-white dark:border-gray-800">
+      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+      </svg>
+    </div>
+  )}
+</div>
   <dialog id={modalId} class="z-50 rounded-xl p-0 bg-transparent w-[95vw] max-w-none md:w-[80vw] lg:w-[60vw]">
     <div class="relative flex flex-col items-center bg-black/80 backdrop-blur-sm rounded-xl p-2 md:p-4">
       <button type="button" class="absolute top-2 right-2 text-white text-3xl font-bold bg-black/60 rounded-full w-10 h-10 flex items-center justify-center hover:bg-primary/80 transition" onclick={`document.getElementById('${modalId}').close();`} aria-label="Close fullscreen certificate">&times;</button>

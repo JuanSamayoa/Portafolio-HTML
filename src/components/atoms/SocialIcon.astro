@@ -1,0 +1,52 @@
+---
+/**
+ * SOCIAL ICON ATOM - Icono unificado para redes sociales
+ * =====================================================
+ * Componente centralizado que elimina duplicación de SVGs
+ * Siguiendo principios DRY y mantenibilidad
+ */
+
+import LinkedInIcon from "../icons/LinkedInIcon.astro";
+import GitHubIcon from "../icons/GitHubIcon.astro";
+import EmailIcon from "../icons/EmailIcon.astro";
+
+export interface Props {
+  icon: 'linkedin' | 'github' | 'email';
+  href: string;
+  label: string;
+  class?: string;
+  size?: 'sm' | 'md' | 'lg';
+  target?: '_blank' | '_self';
+  rel?: string;
+}
+
+const {
+  icon,
+  href,
+  label,
+  class: className = '',
+  size = 'md',
+  target = '_blank',
+  rel = 'noopener noreferrer'
+} = Astro.props;
+
+const sizeClasses = {
+  sm: 'w-5 h-5',
+  md: 'w-6 h-6',
+  lg: 'w-7 h-7'
+};
+
+const iconSize = sizeClasses[size];
+---
+
+<a 
+  href={href}
+  target={target}
+  rel={rel}
+  class={`text-muted hover:text-primary transition-colors p-2 rounded-full hover:bg-primary/10 ${className}`}
+  aria-label={label}
+>
+  {icon === 'linkedin' && <LinkedInIcon class={iconSize} />}
+  {icon === 'github' && <GitHubIcon class={iconSize} />}
+  {icon === 'email' && <EmailIcon class={iconSize} />}
+</a>

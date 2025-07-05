@@ -1,5 +1,6 @@
 ---
-import { getTechColor } from "../utils/getTechColor";
+import { getBadgeClasses } from "../utils/badgeUtils";
+import { getOptimizedImageProps, getProjectImageConfig } from '../utils/imageUtils';
 
 interface Props {
   title: string;
@@ -21,61 +22,22 @@ const {
   featured = false
 } = Astro.props;
 
-/**
- * Genera las clases CSS para los badges basado en el color especificado
- */
-function getBadgeClass(color = "neutral", text = "") {
-  // Verificar si hay un color específico para la tecnología
-  const techColor = getTechColor(text);
-  
-  // Constantes de clases base para todos los badges
-  const BASE_CLASSES = "text-xs font-medium px-2 py-0.5 rounded transition-all duration-300";
-  
-  // Colores específicos de tecnologías
-  const TECH_COLORS = {
-    "python": "bg-[#3776AB]/10 text-[#3776AB] dark:bg-[#3776AB]/20 dark:text-[#3776AB] border border-[#3776AB]/30",
-    "typescript": "bg-[#3178C6]/10 text-[#3178C6] dark:bg-[#3178C6]/20 dark:text-[#3178C6] border border-[#3178C6]/30",
-    "javascript": "bg-[#F7DF1E]/10 text-[#746A00] dark:bg-[#F7DF1E]/20 dark:text-[#F7DF1E] border border-[#F7DF1E]/30",
-    "angular": "bg-[#DD0031]/10 text-[#DD0031] dark:bg-[#DD0031]/20 dark:text-[#DD0031] border border-[#DD0031]/30",
-    "react": "bg-[#61DAFB]/10 text-[#149ECA] dark:bg-[#61DAFB]/20 dark:text-[#61DAFB] border border-[#61DAFB]/30",
-    "vue": "bg-[#4FC08D]/10 text-[#4FC08D] dark:bg-[#4FC08D]/20 dark:text-[#4FC08D] border border-[#4FC08D]/30",
-    "html": "bg-[#E34F26]/10 text-[#E34F26] dark:bg-[#E34F26]/20 dark:text-[#E34F26] border border-[#E34F26]/30",
-    "css": "bg-[#1572B6]/10 text-[#1572B6] dark:bg-[#1572B6]/20 dark:text-[#1572B6] border border-[#1572B6]/30",
-    "tailwind": "bg-[#06B6D4]/10 text-[#06B6D4] dark:bg-[#06B6D4]/20 dark:text-[#06B6D4] border border-[#06B6D4]/30",
-    "postman": "bg-[#FF6C37]/10 text-[#FF6C37] dark:bg-[#FF6C37]/20 dark:text-[#FF6C37] border border-[#FF6C37]/30",
-    "jira": "bg-[#0052CC]/10 text-[#0052CC] dark:bg-[#0052CC]/20 dark:text-[#0052CC] border border-[#0052CC]/30",
-    "selenium": "bg-[#43B02A]/10 text-[#43B02A] dark:bg-[#43B02A]/20 dark:text-[#43B02A] border border-[#43B02A]/30",
-    "powerbi": "bg-[#F2C811]/10 text-[#7F6A00] dark:bg-[#F2C811]/20 dark:text-[#F2C811] border border-[#F2C811]/30",
-    "neutral": "bg-gray-100 text-gray-800 dark:bg-gray-700/70 dark:text-gray-300",
-    
-    // Nuevos colores añadidos
-    "java": "bg-[#007396]/10 text-[#007396] dark:bg-[#007396]/20 dark:text-[#007396] border border-[#007396]/30",
-    "sqlserver": "bg-[#CC2927]/10 text-[#CC2927] dark:bg-[#CC2927]/20 dark:text-[#CC2927] border border-[#CC2927]/30",
-    "postgresql": "bg-[#336791]/10 text-[#336791] dark:bg-[#336791]/20 dark:text-[#336791] border border-[#336791]/30",
-    "express": "bg-[#000000]/10 text-[#000000] dark:bg-[#ffffff]/20 dark:text-[#ffffff] border border-[#000000]/30 dark:border-[#ffffff]/30",
-    "nodejs": "bg-[#339933]/10 text-[#339933] dark:bg-[#339933]/20 dark:text-[#339933] border border-[#339933]/30",
-  };
-  
-  // Usar el color específico de la tecnología o el color genérico proporcionado
-  const finalColor = techColor !== "neutral" ? techColor : color;
-  
-  // Si hay un color específico para la tecnología, usarlo
-  if (finalColor in TECH_COLORS) {
-    return `${BASE_CLASSES} ${TECH_COLORS[finalColor as keyof typeof TECH_COLORS]}`;
-  }
-  
-  return `${BASE_CLASSES} ${TECH_COLORS.neutral}`;
-}
+// Optimizar imagen si existe usando configuración para proyectos
+const imageProps = image ? getOptimizedImageProps(
+  getProjectImageConfig(image, title, {
+    width: 400,
+    height: 225,
+    lossless: false // Para proyectos, balance entre calidad y tamaño
+  })
+) : null;
 ---
 
 <article class={`relative rounded-lg overflow-hidden border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800/50 shadow-sm hover:shadow-md transition-all duration-300 h-full flex flex-col ${featured ? 'border-primary/20 dark:border-primary/30 ring-1 ring-primary/10' : ''}`}>
-  {image && (
+  {image && imageProps && (
     <div class="aspect-video w-full overflow-hidden">
       <img 
-        src={image} 
-        alt={`Imagen del proyecto ${title}`} 
-        class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-        loading="lazy"
+        {...imageProps}
+        class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
       />
     </div>
   )}
@@ -97,7 +59,7 @@ function getBadgeClass(color = "neutral", text = "") {
     {tags.length > 0 && (
       <div class="flex flex-wrap gap-2 mb-4">
         {tags.map(tag => (
-          <span class={getBadgeClass(tag.color, tag.text)}>
+          <span class={getBadgeClasses(tag.text)}>
             {tag.text}
           </span>
         ))}

@@ -102,6 +102,12 @@ src/
 - **Navegación por teclado**: Accesibilidad completa sin mouse
 - **Contraste WCAG**: Cumplimiento de estándares de accesibilidad
 
+#### Seguridad Web
+- **Content Security Policy**: Protección contra XSS y injection de scripts
+- **Security Headers**: X-Content-Type-Options, X-Frame-Options, Referrer-Policy
+- **Security.txt**: Política de divulgación responsable de vulnerabilidades
+- **HTTPS Enforcement**: Strict Transport Security habilitado
+
 ## 🌐 Sitio en vivo
 
 **URL**: [https://juan-samayoa.is-a.dev](https://juan-samayoa.is-a.dev)

@@ -1,0 +1,35 @@
+Contact: mailto:juan.samayoa97@gmail.com
+Contact: https://juan-samayoa.is-a.dev/#contacto
+Expires: 2026-07-09T23:59:59.000Z
+Acknowledgments: https://juan-samayoa.is-a.dev/#about
+Preferred-Languages: es, en
+Canonical: https://juan-samayoa.is-a.dev/.well-known/security.txt
+
+# Política de Divulgación de Vulnerabilidades
+
+Si encuentras una vulnerabilidad de seguridad en este portafolio, por favor:
+
+1. Envía un email a juan.samayoa97@gmail.com con los detalles
+2. Include pasos para reproducir la vulnerabilidad
+3. Proporciona información sobre el impacto potencial
+4. Permite tiempo razonable para la corrección antes de la divulgación pública
+
+Agradecemos a los investigadores de seguridad que reportan vulnerabilidades de manera responsable.
+
+# Alcance
+
+Este archivo de seguridad cubre:
+- El sitio web principal: https://juan-samayoa.is-a.dev
+- Todos los subdominios asociados
+
+# Fuera de Alcance
+
+- Ataques de ingeniería social
+- Ataques de denegación de servicio (DoS/DDoS)
+- Vulnerabilidades que requieren acceso físico
+- Vulnerabilidades en servicios de terceros (GitHub Pages, CDNs)
+
+# Reconocimientos
+
+Agradecemos a todos los investigadores de seguridad que han contribuido 
+a mejorar la seguridad de este proyecto.

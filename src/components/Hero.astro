@@ -5,17 +5,20 @@ import Button from "./atoms/Button.astro";
 import Card from "./atoms/Card.astro";
 import CVSelector from "./atoms/CVSelector.astro";
 import SocialIcon from "./atoms/SocialIcon.astro";
-import { getOptimizedImageProps, getProfileImageConfig } from "../utils/imageUtils";
+import {
+  getOptimizedImageProps,
+  getProfileImageConfig,
+} from "../utils/imageUtils";
 import { personalInfo } from "../data/portfolio.js";
 
 // Optimizar imagen de perfil con configuración de máxima calidad (imagen cuadrada)
 const profileImageConfig = getProfileImageConfig(
-  personalInfo.profileImage, 
+  personalInfo.profileImage,
   personalInfo.name,
   {
-    width: 600,   // Resolución cuadrada alta para pantallas retina
-    height: 600,  // Proporción 1:1 (cuadrada)
-    lossless: true // Sin pérdida de calidad
+    width: 600, // Resolución cuadrada alta para pantallas retina
+    height: 600, // Proporción 1:1 (cuadrada)
+    lossless: true, // Sin pérdida de calidad
   }
 );
 
@@ -28,6 +31,33 @@ const profileImageProps = getOptimizedImageProps(profileImageConfig);
 >
   <!-- Fondo limpio y minimalista -->
   <div class="absolute inset-0 bg-white dark:bg-gray-900"></div>
+
+  <!-- Fondo con gradientes animados (no interactivo) -->
+  <div
+    class="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 pointer-events-none -z-10"
+    aria-hidden="true"
+  >
+  </div>
+
+  <!-- Partículas flotantes animadas (no interactivo) -->
+  <div
+    class="absolute inset-0 overflow-hidden pointer-events-none -z-10"
+    aria-hidden="true"
+  >
+    <div class="particle particle-1"></div>
+    <div class="particle particle-2"></div>
+    <div class="particle particle-3"></div>
+    <div class="particle particle-4"></div>
+    <div class="particle particle-5"></div>
+    <div class="particle particle-6"></div>
+  </div>
+
+  <!-- Gradiente animado de fondo (no interactivo) -->
+  <div
+    class="absolute inset-0 bg-gradient-to-r from-blue-600/5 via-purple-600/5 to-pink-600/5 animate-gradient-x pointer-events-none -z-10 opacity-60"
+    aria-hidden="true"
+  >
+  </div>
 
   <div class="container mx-auto px-4 relative z-10">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -42,24 +72,28 @@ const profileImageProps = getOptimizedImageProps(profileImageConfig);
           </div>
           <Heading
             level={1}
-            class="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight"
+            class="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight relative"
           >
-            Hola, soy
-            <span class="hero-name font-extrabold">
+            <span class="block text-secondary mb-2 animate-fade-in-up"
+              >Hola, soy</span
+            >
+            <span
+              class="hero-name font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent animate-gradient-text"
+            >
               {personalInfo.name}
             </span>
           </Heading>
 
           <Heading
             level={2}
-            class="text-xl md:text-2xl lg:text-3xl text-secondary font-normal"
+            class="text-xl md:text-2xl lg:text-3xl text-secondary font-normal animate-fade-in-up animation-delay-200"
           >
             {personalInfo.title}
           </Heading>
 
           <Text
             variant="body-lg"
-            class="max-w-2xl mx-auto lg:mx-0 leading-relaxed"
+            class="max-w-2xl mx-auto lg:mx-0 leading-relaxed animate-fade-in-up animation-delay-400 text-muted"
           >
             Especialista en QA con experiencia en desarrollo frontend. Me
             apasiona crear software de calidad y optimizar procesos de testing
@@ -68,42 +102,52 @@ const profileImageProps = getOptimizedImageProps(profileImageConfig);
         </div>
         <!-- CTAs -->
         <div
-          class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
+          class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fade-in-up animation-delay-600"
         >
-          <Button variant="primary" size="lg" href="#contacto" class="group">
-            Contactar
-            <svg
-              class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+          <Button
+            variant="primary"
+            size="lg"
+            href="#contacto"
+            class="group relative overflow-hidden"
+          >
+            <span class="relative z-10 flex items-center">
+              Contactar
+              <svg
+                class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+              </svg>
+            </span>
+            <div
+              class="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-            </svg>
+            </div>
           </Button>
 
-          <CVSelector size="lg" />
+          <CVSelector
+            size="lg"
+            class="animate-fade-in-up animation-delay-800"
+          />
         </div>
 
         <!-- Social Links -->
         <div class="flex gap-6 justify-center lg:justify-start">
-          <SocialIcon 
+          <SocialIcon
             icon="linkedin"
             href={personalInfo.linkedin}
             label="LinkedIn"
           />
-          
-          <SocialIcon 
-            icon="github"
-            href={personalInfo.github}
-            label="GitHub"
-          />
-          
-          <SocialIcon 
+
+          <SocialIcon icon="github" href={personalInfo.github} label="GitHub" />
+
+          <SocialIcon
             icon="email"
             href={`mailto:${personalInfo.email}`}
             label="Email"
@@ -114,34 +158,39 @@ const profileImageProps = getOptimizedImageProps(profileImageConfig);
       <!-- Profile Image -->
       <div class="lg:col-span-5 flex justify-center lg:justify-end">
         <Card
-          class="p-8 bg-gradient-to-br from-white/80 to-white/60 dark:from-gray-800/80 dark:to-gray-900/60 backdrop-blur-sm border-2 border-white/20 dark:border-gray-700/30"
+          class="p-8 bg-gradient-to-br from-white/90 to-white/70 dark:from-gray-800/90 dark:to-gray-900/70 backdrop-blur-lg border-2 border-white/30 dark:border-gray-700/50 shadow-2xl hover:shadow-3xl transition-all duration-500 animate-fade-in-up animation-delay-1000 group"
         >
           <div class="relative">
-            <!-- Decorative elements -->
+            <!-- Decorative elements mejorados -->
             <div
-              class="absolute -inset-4 bg-gradient-to-r from-primary/20 to-accent/20 rounded-2xl blur-xl"
+              class="absolute -inset-6 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 rounded-3xl blur-2xl group-hover:blur-3xl transition-all duration-500 animate-pulse-slow"
             >
             </div>
             <div
-              class="absolute -top-2 -right-2 w-24 h-24 bg-gradient-to-br from-accent/30 to-primary/30 rounded-full blur-2xl"
+              class="absolute -top-3 -right-3 w-28 h-28 bg-gradient-to-br from-purple-400/30 to-blue-400/30 rounded-full blur-3xl animate-float"
             >
             </div>
             <div
-              class="absolute -bottom-2 -left-2 w-32 h-32 bg-gradient-to-tr from-primary/20 to-secondary/20 rounded-full blur-2xl"
+              class="absolute -bottom-3 -left-3 w-36 h-36 bg-gradient-to-tr from-pink-400/20 to-purple-400/20 rounded-full blur-3xl animate-float animation-delay-2000"
             >
             </div>
 
-            <!-- Profile image -->
+            <!-- Profile image con efectos mejorados -->
             <div
-              class="relative w-64 h-64 lg:w-80 lg:h-80 rounded-2xl overflow-hidden shadow-2xl"
+              class="relative w-64 h-64 lg:w-80 lg:h-80 rounded-2xl overflow-hidden shadow-2xl group-hover:shadow-3xl transition-all duration-500 transform group-hover:scale-105"
             >
               <img
                 {...profileImageProps}
-                class="w-full h-full object-cover image-rendering-crisp"
+                class="w-full h-full object-cover image-rendering-crisp transition-transform duration-700 group-hover:scale-110"
                 style="image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;"
               />
               <div
-                class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"
+                class="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-white/5 group-hover:from-black/20 transition-all duration-500"
+              >
+              </div>
+              <!-- Overlay con gradiente animado -->
+              <div
+                class="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
               >
               </div>
             </div>
@@ -150,13 +199,16 @@ const profileImageProps = getOptimizedImageProps(profileImageConfig);
       </div>
     </div>
 
-    <!-- Scroll indicator -->
+    <!-- Scroll indicator mejorado -->
     <div
-      class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce"
+      class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce hover:animate-none transition-all duration-300"
     >
-      <a href="#about" class="text-muted hover:text-primary transition-colors">
+      <a
+        href="#about"
+        class="text-muted hover:text-primary transition-all duration-300 p-3 rounded-full hover:bg-white/10 dark:hover:bg-gray-800/50 backdrop-blur-sm group"
+      >
         <svg
-          class="w-6 h-6"
+          class="w-6 h-6 group-hover:translate-y-1 transition-transform duration-300"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -173,51 +225,186 @@ const profileImageProps = getOptimizedImageProps(profileImageConfig);
 </section>
 
 <style>
-  #hero {
-    background: radial-gradient(
-        circle at 25% 25%,
-        rgba(59, 130, 246, 0.1) 0%,
-        transparent 50%
-      ),
-      radial-gradient(
-        circle at 75% 75%,
-        rgba(168, 85, 247, 0.1) 0%,
-        transparent 50%
-      );
-  }
-  @keyframes float {
+  /* Animaciones de gradientes */
+  @keyframes gradient-x {
     0%,
     100% {
-      transform: translateY(0px);
+      background-size: 200% 200%;
+      background-position: left center;
     }
     50% {
-      transform: translateY(-20px);
+      background-size: 200% 200%;
+      background-position: right center;
     }
+  }
+
+  @keyframes gradient-text {
+    0%,
+    100% {
+      background-size: 200% 200%;
+      background-position: left center;
+    }
+    50% {
+      background-size: 200% 200%;
+      background-position: right center;
+    }
+  }
+
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes pulse-slow {
+    0%,
+    100% {
+      opacity: 0.5;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  /* Partículas flotantes */
+  .particle {
+    position: absolute;
+    background: linear-gradient(
+      45deg,
+      rgba(59, 130, 246, 0.1),
+      rgba(168, 85, 247, 0.1)
+    );
+    border-radius: 50%;
+    animation: float-particle 20s infinite linear;
+  }
+
+  .particle-1 {
+    width: 4px;
+    height: 4px;
+    top: 20%;
+    left: 10%;
+    animation-delay: 0s;
+  }
+
+  .particle-2 {
+    width: 6px;
+    height: 6px;
+    top: 60%;
+    left: 80%;
+    animation-delay: 5s;
+  }
+
+  .particle-3 {
+    width: 3px;
+    height: 3px;
+    top: 40%;
+    left: 60%;
+    animation-delay: 10s;
+  }
+
+  .particle-4 {
+    width: 5px;
+    height: 5px;
+    top: 80%;
+    left: 30%;
+    animation-delay: 15s;
+  }
+
+  .particle-5 {
+    width: 4px;
+    height: 4px;
+    top: 10%;
+    left: 70%;
+    animation-delay: 8s;
+  }
+
+  .particle-6 {
+    width: 7px;
+    height: 7px;
+    top: 70%;
+    left: 20%;
+    animation-delay: 12s;
+  }
+
+  @keyframes float-particle {
+    0% {
+      transform: translateY(0px) rotate(0deg);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-100vh) rotate(360deg);
+      opacity: 0;
+    }
+  }
+
+  /* Clases de animación */
+  .animate-gradient-x {
+    animation: gradient-x 15s ease infinite;
+    background-size: 200% 200%;
+  }
+
+  .animate-gradient-text {
+    animation: gradient-text 3s ease infinite;
+    background-size: 200% 200%;
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.8s ease-out forwards;
+    opacity: 0;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse-slow 4s ease-in-out infinite;
   }
 
   .animate-float {
     animation: float 6s ease-in-out infinite;
   }
 
-  /* Estilo para el nombre del Hero - más confiable que Tailwind */
+  /* Retrasos de animación */
+  .animation-delay-200 {
+    animation-delay: 0.2s;
+  }
+
+  .animation-delay-400 {
+    animation-delay: 0.4s;
+  }
+
+  .animation-delay-600 {
+    animation-delay: 0.6s;
+  }
+
+  .animation-delay-800 {
+    animation-delay: 0.8s;
+  }
+
+  .animation-delay-1000 {
+    animation-delay: 1s;
+  }
+
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+
+  /* Sombras mejoradas */
+  .shadow-3xl {
+    box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.25);
+  }
+
+  /* Estilo para el nombre del Hero */
   .hero-name {
-    color: #2563eb !important; /* blue-600 */
-    transition: color 0.3s ease !important;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    .hero-name {
-      color: #60a5fa !important; /* blue-400 */
-    }
-  }
-
-  /* Soporte para toggle manual de tema */
-  :global(.dark) .hero-name {
-    color: #60a5fa !important; /* blue-400 */
-  }
-
-  :global(.light) .hero-name {
-    color: #2563eb !important; /* blue-600 */
+    transition: all 0.3s ease;
   }
 
   /* Optimización para imágenes de alta resolución */
@@ -229,29 +416,30 @@ const profileImageProps = getOptimizedImageProps(profileImageConfig);
     -webkit-backface-visibility: hidden;
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
-    /* Asegurar que la imagen cuadrada se centre perfectamente */
-    object-position: center center;
+    transition: transform 0.7s ease;
   }
 
   /* Mejoras para imágenes en pantallas retina */
   @media only screen and (-webkit-min-device-pixel-ratio: 2),
-         only screen and (min--moz-device-pixel-ratio: 2),
-         only screen and (-o-min-device-pixel-ratio: 2/1),
-         only screen and (min-device-pixel-ratio: 2),
-         only screen and (min-resolution: 192dpi),
-         only screen and (min-resolution: 2dppx) {
+    only screen and (min--moz-device-pixel-ratio: 2),
+    only screen and (-o-min-device-pixel-ratio: 2/1),
+    only screen and (min-device-pixel-ratio: 2),
+    only screen and (min-resolution: 192dpi),
+    only screen and (min-resolution: 2dppx) {
     .image-rendering-crisp {
       image-rendering: auto;
       image-rendering: -webkit-optimize-contrast;
     }
   }
 
-  /* Efecto hover suave para la imagen de perfil */
-  .image-rendering-crisp {
-    transition: transform 0.3s ease;
-  }
-  
-  .image-rendering-crisp:hover {
-    transform: translateZ(0) scale(1.02);
+  /* Responsive improvements */
+  @media (max-width: 768px) {
+    .particle {
+      display: none; /* Ocultar partículas en móviles para mejor rendimiento */
+    }
+
+    .animate-fade-in-up {
+      animation-duration: 0.6s; /* Animaciones más rápidas en móviles */
+    }
   }
 </style>

@@ -4,12 +4,24 @@ import BriefcaseIcon from "../components/icons/BrierfcaseIcon.astro";
 import { experienceData } from "../data/portfolio";
 ---
 
-<div class="w-full reveal-section">
-  <h2 class="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white mb-2 flex items-center gap-2 reveal-item">
+<div class="w-full reveal-section relative">
+  <!-- Elementos decorativos de fondo -->
+  <div
+    class="absolute top-0 left-0 w-24 h-24 bg-gradient-to-br from-primary/5 to-transparent rounded-full blur-2xl"
+  >
+  </div>
+  <div
+    class="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-tl from-accent/5 to-transparent rounded-full blur-2xl"
+  >
+  </div>
+
+  <h2
+    class="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white mb-2 flex items-center gap-2 reveal-item"
+  >
     <BriefcaseIcon class="inline-block w-7 h-7 md:w-8 md:h-8" />
     Experiencia Profesional
   </h2>
-  
+
   <p class="text-gray-600 dark:text-gray-400 mb-8 reveal-item">
     Mi recorrido profesional hasta la fecha
   </p>
@@ -17,8 +29,14 @@ import { experienceData } from "../data/portfolio";
   <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
     <!-- Línea de tiempo en tablet/desktop -->
     <ol
-      class="col-span-full md:col-span-12 lg:col-span-10 lg:col-start-2 relative border-s border-gray-200 dark:border-gray-700 transition-colors duration-500 hover:border-primary/30 dark:hover:border-primary/30"
+      class="col-span-full md:col-span-12 lg:col-span-10 lg:col-start-2 relative border-s-2 border-gradient-to-b from-primary/50 via-primary/30 to-accent/50 dark:from-primary/60 dark:via-primary/40 dark:to-accent/60 transition-all duration-500 hover:border-primary/70 dark:hover:border-primary/80 group"
     >
+      <!-- Elemento decorativo de línea animada -->
+      <div
+        class="absolute left-0 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-primary/50 to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+      >
+      </div>
+
       {
         experienceData.map((item, index) => (
           <div class="reveal-item" style={`--reveal-delay: ${index * 150}ms`}>
@@ -43,14 +61,16 @@ import { experienceData } from "../data/portfolio";
     opacity: 1;
     visibility: visible;
   }
-  
+
   .reveal-item {
     opacity: 0;
     transform: translateY(30px);
-    transition: opacity 0.6s ease-out, transform 0.8s ease-out;
+    transition:
+      opacity 0.6s ease-out,
+      transform 0.8s ease-out;
     transition-delay: var(--reveal-delay, 0ms);
   }
-  
+
   .reveal-item.is-revealed {
     opacity: 1;
     transform: translateY(0);
@@ -59,29 +79,32 @@ import { experienceData } from "../data/portfolio";
 
 <script>
   // Configuración de las animaciones de revelación al hacer scroll
-  document.addEventListener('DOMContentLoaded', () => {
-    const revealItems = document.querySelectorAll('.reveal-item');
-    
-    if ('IntersectionObserver' in window) {
-      const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-revealed');
-            revealObserver.unobserve(entry.target); // Solo animar una vez
-          }
-        });
-      }, {
-        threshold: 0.1, // 10% del elemento visible
-        rootMargin: '0px 0px -50px 0px' // Trigger un poco antes
-      });
-      
-      revealItems.forEach(item => {
+  document.addEventListener("DOMContentLoaded", () => {
+    const revealItems = document.querySelectorAll(".reveal-item");
+
+    if ("IntersectionObserver" in window) {
+      const revealObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-revealed");
+              revealObserver.unobserve(entry.target); // Solo animar una vez
+            }
+          });
+        },
+        {
+          threshold: 0.1, // 10% del elemento visible
+          rootMargin: "0px 0px -50px 0px", // Trigger un poco antes
+        }
+      );
+
+      revealItems.forEach((item) => {
         revealObserver.observe(item);
       });
     } else {
       // Fallback para navegadores sin soporte
-      revealItems.forEach(item => {
-        item.classList.add('is-revealed');
+      revealItems.forEach((item) => {
+        item.classList.add("is-revealed");
       });
     }
   });

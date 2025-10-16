@@ -36,5 +36,5 @@ git reset HEAD .astro/ .vscode/ node_modules/ 2>$null
 Write-Host "📝 Haciendo commit..."
 git commit -m $commitMessage
 
-Write-Host "🚀 Subiendo cambios a GitHub..."
+Write-Host "Subiendo cambios a GitHub..."
 git push

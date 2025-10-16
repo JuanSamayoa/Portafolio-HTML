@@ -1,7 +1,5 @@
 ---
-import Badge from "../components/Badge.astro";
 import Layout from "../layouts/Layout.astro";
-import SocialLinks from "../components/SocialLinks.astro";
 import Experience from "../components/Experience.astro";
 import Projects from "../components/Projects.astro";
 import AboutMe from "../components/AboutMe.astro";
@@ -11,7 +9,7 @@ import Footer from "../components/Footer.astro";
 import Certifications from "../components/Certifications.astro";
 import Hero from "../components/Hero.astro";
 import ScrollToTop from "../components/ScrollToTop.astro";
-import { personalInfo, siteConfig } from "../data/portfolio.js";
+import { siteConfig } from "../data/portfolio.js";
 ---
 
 <Layout
@@ -50,7 +48,7 @@ import { personalInfo, siteConfig } from "../data/portfolio.js";
 
   <!-- Footer agregado después del contenido principal -->
   <Footer />
-  
+
   <!-- Botón scroll to top -->
   <ScrollToTop />
 </Layout>

@@ -1,0 +1,57 @@
+---
+// ==============================================
+// SKILLS SECTION - Sección de habilidades técnicas
+// ==============================================
+
+import Section from "../../shared/ui/Section.astro";
+import SkillCard from "./SkillCard.astro";
+import { skillsData } from "../../data/skills";
+
+const totalTechnologies = skillsData.reduce(
+  (acc, skill) => acc + skill.technologies.length,
+  0
+);
+---
+
+<Section id="skills">
+  <!-- Título de la sección -->
+  <div class="text-center mb-12 animate-on-scroll">
+    <h2
+      class="text-4xl md:text-5xl font-bold text-foreground mb-4 bg-gradient-to-r from-brand to-brand-600 bg-clip-text text-transparent"
+    >
+      Habilidades Técnicas
+    </h2>
+    <p class="text-foreground-secondary text-lg max-w-2xl mx-auto">
+      Tecnologías y herramientas que domino para desarrollo y testing
+    </p>
+  </div>
+
+  <!-- Stats generales -->
+  <div class="mb-8 text-center animate-on-scroll">
+    <p class="text-foreground-secondary text-lg">
+      <span class="text-brand font-bold text-2xl">{skillsData.length}</span> categorías
+      •
+      <span class="text-brand font-bold text-2xl">{totalTechnologies}</span> tecnologías
+    </p>
+  </div>
+
+  <!-- Grid de skills -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    {
+      skillsData.map((skill) => (
+        <SkillCard
+          category={skill.category}
+          technologies={skill.technologies}
+          icon={skill.icon}
+        />
+      ))
+    }
+  </div>
+
+  <!-- Nota al pie -->
+  <div class="mt-8 text-center animate-on-scroll">
+    <p class="text-foreground-secondary text-sm">
+      En constante aprendizaje y mejora continua
+    </p>
+  </div>
+</Section>

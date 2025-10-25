@@ -1,0 +1,60 @@
+---
+// ==============================================
+// SKILL CARD - Tarjeta individual de categoría de habilidades
+// ==============================================
+
+import Card from "../../shared/ui/Card.astro";
+import Badge from "../../shared/ui/Badge.astro";
+
+interface Props {
+  category: string;
+  technologies: string[];
+  icon?: string;
+}
+
+const { category, technologies, icon } = Astro.props;
+---
+
+<Card
+  class="group hover:scale-[1.02] transition-all duration-300 animate-on-scroll"
+  hover={true}
+>
+  <div class="flex flex-col gap-4">
+    <!-- Header con icono y categoría -->
+    <div class="flex items-center gap-3">
+      {
+        icon && (
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-brand/10 to-brand/5 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform duration-300">
+            {icon}
+          </div>
+        )
+      }
+      <h3
+        class="text-xl font-bold text-foreground group-hover:text-brand transition-colors duration-300"
+      >
+        {category}
+      </h3>
+    </div>
+
+    <!-- Grid de tecnologías -->
+    <div class="flex flex-wrap gap-2">
+      {
+        technologies.map((tech) => (
+          <Badge
+            text={tech}
+            variant="skill"
+            class="hover:bg-brand/20 hover:border-brand/40 transition-all duration-300"
+          />
+        ))
+      }
+    </div>
+
+    <!-- Contador de tecnologías -->
+    <div class="pt-2 border-t border-border/50">
+      <p class="text-sm text-foreground-secondary font-medium">
+        {technologies.length}
+        {technologies.length === 1 ? "tecnología" : "tecnologías"}
+      </p>
+    </div>
+  </div>
+</Card>

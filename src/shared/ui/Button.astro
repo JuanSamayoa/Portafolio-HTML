@@ -1,0 +1,79 @@
+---
+/**
+ * BUTTON COMPONENT - Botón reutilizable con variantes
+ * Optimizado para accesibilidad y animaciones fluidas
+ */
+
+interface Props {
+  variant?: "primary" | "secondary" | "outline" | "ghost";
+  size?: "sm" | "md" | "lg";
+  href?: string;
+  type?: "button" | "submit" | "reset";
+  disabled?: boolean;
+  class?: string;
+  [key: string]: any;
+}
+
+const {
+  variant = "primary",
+  size = "md",
+  href,
+  type = "button",
+  disabled = false,
+  class: className = "",
+  ...rest
+} = Astro.props;
+
+// Variantes de estilo
+const variants = {
+  primary:
+    "bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 text-white shadow-lg hover:shadow-xl hover:scale-105",
+  secondary:
+    "bg-gradient-to-r from-success-500 to-success-600 hover:from-success-600 hover:to-success-700 text-white shadow-lg hover:shadow-xl hover:scale-105",
+  outline:
+    "border-2 border-brand-500 text-brand-500 hover:bg-brand-500 hover:text-white hover:scale-105 hover:shadow-lg",
+  ghost:
+    "bg-glass-light hover:bg-glass-medium text-foreground-primary hover:scale-105",
+};
+
+// Tamaños
+const sizes = {
+  sm: "px-4 py-2 text-sm",
+  md: "px-6 py-3 text-base",
+  lg: "px-8 py-4 text-lg",
+};
+
+const baseClasses =
+  "inline-flex items-center justify-center gap-2 font-semibold rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed";
+
+const classes = `${baseClasses} ${variants[variant]} ${sizes[size]} ${className}`;
+
+const Tag = href ? "a" : "button";
+---
+
+<Tag
+  class={classes}
+  href={href}
+  type={!href ? type : undefined}
+  disabled={disabled}
+  {...rest}
+>
+  <slot />
+</Tag>
+
+<style>
+  button,
+  a {
+    transform: translateY(0);
+  }
+
+  button:hover:not(:disabled),
+  a:hover {
+    transform: translateY(-2px);
+  }
+
+  button:active:not(:disabled),
+  a:active {
+    transform: translateY(0);
+  }
+</style>

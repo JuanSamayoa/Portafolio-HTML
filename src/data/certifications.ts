@@ -4,7 +4,7 @@
 
 import type { Certification } from "../types/portfolio";
 
-// Certificaciones más importantes (mostrar por defecto)
+// Certificaciones destacadas
 export const featuredCertifications: Certification[] = [
   {
     title: "Google Cloud Big Data and Machine Learning Fundamentals",
@@ -64,7 +64,7 @@ export const featuredCertifications: Certification[] = [
   },
 ];
 
-// Todas las demás certificaciones (ordenadas por fecha ascendente, luego alfabéticamente)
+// Certificaciones adicionales
 export const additionalCertifications: Certification[] = [
   // 2020
   {

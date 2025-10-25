@@ -1,0 +1,384 @@
+---
+/**
+ * LAYOUT PRINCIPAL - Base del sitio
+ * Configuración global, meta tags, y estructura HTML
+ */
+
+import Header from "../shared/ui/Header.astro";
+import Footer from "../shared/ui/Footer.astro";
+import { keyframes } from "../shared/animations/config";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Juan Samayoa | QA Engineer & Frontend Developer",
+  description = "Portafolio profesional de Juan Samayoa. Ingeniero de Pruebas TI especializado en automatización y desarrollo frontend.",
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Primary Meta Tags -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+    <meta name="author" content="Juan Samayoa" />
+    <meta
+      name="keywords"
+      content="QA Engineer, Frontend Developer, Selenium, Postman, Angular, TypeScript, Testing, Automatización, Desarrollo Web, Guatemala"
+    />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/assets/icon/apple-touch-icon.png"
+    />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#0066ff" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta
+      property="og:image"
+      content={new URL("/assets/img/profile.jpg", Astro.site)}
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Juan Samayoa Portfolio" />
+    <meta property="og:locale" content="es_GT" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={Astro.url} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta
+      property="twitter:image"
+      content={new URL("/assets/img/profile.jpg", Astro.site)}
+    />
+    <meta property="twitter:creator" content="@juansamayoa" />
+
+    <!-- Preload critical resources -->
+    <link
+      rel="preload"
+      href="/assets/img/profile.jpg"
+      as="image"
+      type="image/jpeg"
+    />
+
+    <!-- DNS Prefetch for external resources -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+
+    <!-- Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Keyframes globales -->
+    <style set:html={keyframes} is:inline></style>
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Juan Samayoa",
+        "jobTitle": "QA Engineer & Frontend Developer",
+        "description": "Ingeniero de Pruebas TI especializado en automatización y desarrollo frontend",
+        "url": "https://juan-samayoa.is-a.dev",
+        "image": "https://juan-samayoa.is-a.dev/assets/img/profile.jpg",
+        "sameAs": [
+          "https://www.linkedin.com/in/juansamayoa/",
+          "https://github.com/JuanSamayoa"
+        ],
+        "email": "juancho1705@gmail.com",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Ciudad de Guatemala",
+          "addressCountry": "Guatemala"
+        },
+        "knowsAbout": [
+          "Quality Assurance",
+          "Test Automation",
+          "Selenium WebDriver",
+          "Frontend Development",
+          "Angular",
+          "TypeScript",
+          "Testing"
+        ]
+      }
+    </script>
+
+    <!-- Theme script - Load early to prevent flash -->
+    <script is:inline>
+      // Cargar tema antes del render para prevenir flash
+      (function () {
+        const theme = localStorage.getItem("theme") || "dark";
+        document.documentElement.setAttribute("data-theme", theme);
+        document.documentElement.classList.toggle(
+          "light-theme",
+          theme === "light"
+        );
+      })();
+    </script>
+  </head>
+
+  <body class="bg-background-primary text-foreground-primary antialiased">
+    <!-- Header -->
+    <Header />
+
+    <!-- Main Content -->
+    <main>
+      <slot />
+    </main>
+
+    <!-- Footer -->
+    <Footer />
+
+    <!-- Global styles -->
+    <style is:global>
+      /* CSS Variables basadas en tokens */
+      :root,
+      :root[data-theme="dark"] {
+        /* Backgrounds */
+        --bg-primary: #000000;
+        --bg-secondary: #0a0a0b;
+        --bg-tertiary: #111113;
+        --bg-elevated: #1a1a1d;
+
+        /* Foregrounds */
+        --fg-primary: #ffffff;
+        --fg-secondary: #d1d1d6;
+        --fg-tertiary: #8e8e93;
+        --fg-muted: #636366;
+
+        /* Brand colors */
+        --color-brand-400: #1a8cff;
+        --color-brand-500: #0066ff;
+        --color-brand-600: #0052cc;
+
+        /* Success colors */
+        --color-success-400: #1ad580;
+        --color-success-500: #00cc66;
+        --color-success-600: #00a352;
+
+        /* Glass effects */
+        --glass-light: rgba(255, 255, 255, 0.05);
+        --glass-medium: rgba(255, 255, 255, 0.1);
+        --glass-heavy: rgba(255, 255, 255, 0.15);
+      }
+
+      /* Light theme */
+      :root[data-theme="light"],
+      .light-theme {
+        /* Backgrounds */
+        --bg-primary: #ffffff;
+        --bg-secondary: #f5f5f7;
+        --bg-tertiary: #e8e8ed;
+        --bg-elevated: #ffffff;
+
+        /* Foregrounds */
+        --fg-primary: #1d1d1f;
+        --fg-secondary: #6e6e73;
+        --fg-tertiary: #86868b;
+        --fg-muted: #aeaeb2;
+
+        /* Brand colors (más oscuros para mejor contraste en light) */
+        --color-brand-400: #0052cc;
+        --color-brand-500: #0066ff;
+        --color-brand-600: #1a8cff;
+
+        /* Success colors */
+        --color-success-400: #00a352;
+        --color-success-500: #00cc66;
+        --color-success-600: #1ad580;
+
+        /* Glass effects (más oscuros para light theme) */
+        --glass-light: rgba(0, 0, 0, 0.05);
+        --glass-medium: rgba(0, 0, 0, 0.08);
+        --glass-heavy: rgba(0, 0, 0, 0.12);
+      }
+
+      /* Reset y base */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        font-family:
+          "Inter",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        scroll-behavior: smooth;
+      }
+
+      body {
+        min-height: 100vh;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      /* Utility classes globales */
+      .bg-background-primary {
+        background-color: var(--bg-primary);
+      }
+
+      .bg-background-secondary {
+        background-color: var(--bg-secondary);
+      }
+
+      .bg-background-elevated {
+        background-color: var(--bg-elevated);
+      }
+
+      .text-foreground-primary {
+        color: var(--fg-primary);
+      }
+
+      .text-foreground-secondary {
+        color: var(--fg-secondary);
+      }
+
+      .text-foreground-tertiary {
+        color: var(--fg-tertiary);
+      }
+
+      .text-foreground-muted {
+        color: var(--fg-muted);
+      }
+
+      .bg-glass-light {
+        background-color: var(--glass-light);
+      }
+
+      .bg-glass-medium {
+        background-color: var(--glass-medium);
+      }
+
+      .bg-glass-heavy {
+        background-color: var(--glass-heavy);
+      }
+
+      .text-brand-400 {
+        color: var(--color-brand-400);
+      }
+
+      .bg-brand-500 {
+        background-color: var(--color-brand-500);
+      }
+
+      .bg-brand-600 {
+        background-color: var(--color-brand-600);
+      }
+
+      .hover\:bg-brand-500:hover {
+        background-color: var(--color-brand-500);
+      }
+
+      .hover\:bg-brand-600:hover {
+        background-color: var(--color-brand-600);
+      }
+
+      .text-success-400 {
+        color: var(--color-success-400);
+      }
+
+      .bg-success-500 {
+        background-color: var(--color-success-500);
+      }
+
+      .hover\:bg-success-600:hover {
+        background-color: var(--color-success-600);
+      }
+
+      .shadow-glow {
+        box-shadow: 0 0 20px rgba(0, 102, 255, 0.4);
+      }
+
+      .shadow-glowSuccess {
+        box-shadow: 0 0 20px rgba(0, 204, 102, 0.4);
+      }
+
+      /* Scrollbar personalizado */
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: var(--bg-secondary);
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: var(--color-brand-500);
+        border-radius: 5px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--color-brand-600);
+      }
+
+      /* Selection */
+      ::selection {
+        background-color: var(--color-brand-500);
+        color: white;
+      }
+
+      /* Focus visible para accesibilidad */
+      *:focus-visible {
+        outline: 2px solid var(--color-brand-500);
+        outline-offset: 2px;
+      }
+
+      /* Animaciones de scroll reveal */
+      .animate-on-scroll {
+        opacity: 0;
+        transform: translateY(30px);
+        transition:
+          opacity 0.6s ease-out,
+          transform 0.6s ease-out;
+      }
+
+      .animate-on-scroll.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Reduced motion para accesibilidad */
+      @media (prefers-reduced-motion: reduce) {
+        .animate-on-scroll {
+          opacity: 1;
+          transform: none;
+          transition: none;
+        }
+      }
+    </style>
+
+    <!-- Scroll reveal script -->
+    <script src="/scripts/scroll-reveal.js" is:inline></script>
+  </body>
+</html>

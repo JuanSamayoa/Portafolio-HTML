@@ -44,6 +44,7 @@ export interface Project {
 export interface Skill {
   category: string;
   technologies: string[];
+  icon?: string;
 }
 
 export interface Certification {

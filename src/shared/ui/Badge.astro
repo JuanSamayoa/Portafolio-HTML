@@ -1,0 +1,92 @@
+---
+/**
+ * BADGE COMPONENT - Etiquetas para tecnologías y tags
+ * Colores dinámicos basados en el tipo de tecnología
+ */
+
+interface Props {
+  text: string;
+  variant?: "tech" | "skill" | "status";
+  color?: string;
+  class?: string;
+}
+
+const { text, variant = "tech", color, class: className = "" } = Astro.props;
+
+// Mapeo de colores por tecnología
+const techColors: Record<string, string> = {
+  // Lenguajes
+  JavaScript: "from-yellow-400 to-yellow-600",
+  TypeScript: "from-blue-500 to-blue-700",
+  Python: "from-blue-400 to-yellow-400",
+  Java: "from-red-500 to-orange-600",
+
+  // Frameworks/Libraries
+  Angular: "from-red-600 to-red-800",
+  React: "from-cyan-400 to-blue-500",
+  Vue: "from-green-400 to-green-600",
+  NextJS: "from-gray-800 to-black",
+  Astro: "from-orange-500 to-pink-500",
+
+  // Testing
+  Cypress: "from-green-500 to-teal-600",
+  Playwright: "from-green-600 to-emerald-700",
+  Jest: "from-red-500 to-pink-600",
+  Selenium: "from-green-600 to-green-800",
+
+  // Databases
+  PostgreSQL: "from-blue-600 to-blue-800",
+  MongoDB: "from-green-600 to-green-800",
+  MySQL: "from-orange-500 to-blue-600",
+
+  // Styling
+  Tailwind: "from-cyan-400 to-blue-500",
+  CSS: "from-blue-500 to-purple-600",
+  SASS: "from-pink-500 to-pink-700",
+
+  // Default
+  default: "from-brand-400 to-brand-600",
+};
+
+const getGradient = () => {
+  if (color) return color;
+  return techColors[text] || techColors.default;
+};
+
+const variants = {
+  tech: `bg-gradient-to-r ${getGradient()} text-white shadow-md hover:shadow-lg hover:scale-105`,
+  skill:
+    "bg-glass-heavy text-foreground-primary border border-white/20 hover:border-brand-400/50 hover:scale-105",
+  status:
+    "bg-success-500/20 text-success-400 border border-success-500/40 shadow-sm shadow-success-500/20 hover:scale-105 animate-pulse",
+};
+
+const baseClasses =
+  "inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold backdrop-blur-md transition-all duration-300 cursor-default";
+const classes = `${baseClasses} ${variants[variant]} ${className}`;
+---
+
+<span class={classes}>
+  {text}
+</span>
+
+<style>
+  span {
+    animation: slide-up 0.5s ease-out;
+  }
+
+  span:hover {
+    transform: scale(1.05);
+  }
+
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

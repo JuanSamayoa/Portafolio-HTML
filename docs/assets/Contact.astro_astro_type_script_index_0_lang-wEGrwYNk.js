@@ -1,0 +1,1 @@
+document.addEventListener("DOMContentLoaded",()=>{const t=document.getElementById("contact-form");t&&t.addEventListener("submit",async e=>{e.preventDefault();const n=new FormData(t),o=Object.fromEntries(n.entries());console.log("Form submitted:",o),alert("¡Gracias por tu mensaje! Te contactaré pronto."),t.reset()})});

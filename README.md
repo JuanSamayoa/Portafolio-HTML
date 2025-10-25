@@ -1,59 +1,94 @@
-# Portafolio de Juan Samayoa | QA & Desarrollo Web
+# Portafolio v2.0.0 | Juan Samayoa
 
 ## Acerca de este proyecto
 
-Este portafolio profesional ha sido desarrollado utilizando **Astro** y **Tailwind CSS**, con el objetivo de mostrar mi experiencia como Especialista en QA y desarrollador web. El sitio está diseñado con una arquitectura moderna, optimizada para el rendimiento y la escalabilidad.
+Portafolio web personal desarrollado con Astro y TypeScript, enfocado en rendimiento y experiencia de usuario. Presenta una arquitectura limpia basada en features, sistema de temas dark/light, y efectos visuales modernos con glassmorphism.
 
-### Características principales
-
-- **Framework**: Astro 5.x para generación estática de alta eficiencia.
-- **Estilos**: Tailwind CSS con un sistema de diseño personalizado.
-- **Tipado**: TypeScript estricto para mayor seguridad y mantenibilidad.
-- **Responsive Design**: Diseño adaptable para diferentes dispositivos.
-- **Modo claro/oscuro**: Implementación nativa con persistencia local.
-- **SEO**: Optimización para motores de búsqueda con meta tags y estructura semántica.
-- **Accesibilidad**: Cumple con estándares WCAG para garantizar una experiencia inclusiva.
-
-### Arquitectura del proyecto
+## Estructura del Proyecto
 
 ```
 src/
-├── components/
-│   ├── atoms/              # Componentes básicos reutilizables
-│   ├── molecules/          # Componentes compuestos
-│   └── organisms/          # Secciones completas optimizadas
-├── data/
-├── layouts/
-├── pages/
-├── utils/
-└── styles/
+├── core/              # Configuración central (theme tokens)
+├── data/              # Datos del portafolio (personal, projects, experience)
+├── features/          # Componentes por funcionalidad
+│   ├── about/
+│   ├── contact/
+│   ├── experience/
+│   ├── hero/
+│   └── projects/
+├── layouts/           # Layout principal
+├── pages/             # Páginas de Astro
+├── shared/            # Componentes compartidos (UI, animations)
+└── types/             # Definiciones TypeScript
 ```
 
-### Tecnologías y herramientas
+## Stack Tecnológico
 
-- **Astro**: Framework para generación de sitios estáticos.
-- **Tailwind CSS**: Framework de utilidades para estilos consistentes.
-- **TypeScript**: Lenguaje con tipado estático para mayor robustez.
-- **Optimización de imágenes**: Soporte para formatos modernos como WebP.
-- **Deployment**: Configuración para GitHub Pages con dominio personalizado.
+- Astro 5.15.1
+- TypeScript 5.9.3
+- Tailwind CSS 3.4.1
+- pnpm 10.19.0
 
-### Contenido del portafolio
+### Características Técnicas
 
-- **Secciones**: Sobre mí, Experiencia, Proyectos, Certificaciones, Contacto.
-- **Certificaciones**: Sistema dinámico para mostrar logros destacados.
-- **Proyectos**: Cards interactivas con detalles técnicos y enlaces.
-- **Formulario de contacto**: Validación avanzada y enlaces a redes sociales.
+- Static site generation (SSG)
+- Sistema de temas dark/light con CSS variables
+- Glassmorphism y efectos visuales modernos
+- Animaciones optimizadas con Intersection Observer
+- Diseño responsive mobile-first
+- TypeScript strict mode
+- SEO optimizado
 
-### Optimizaciones implementadas
+## Características del Diseño
 
-- **Rendimiento**: Carga diferida de imágenes y componentes.
-- **Accesibilidad**: Navegación por teclado y contraste adecuado.
-- **Seguridad**: Configuración de headers y políticas de contenido.
+### Sistema de Colores
 
-## Sitio en vivo
+- Brand: #0066ff (azul principal)
+- Success: #00cc66 (verde acento)
+- Backgrounds: Oscuros en dark mode, claros en light mode
+- Glass effects: Transparencias con backdrop-blur
 
-El portafolio está disponible en el siguiente enlace: [https://juan-samayoa.is-a.dev](https://juan-samayoa.is-a.dev)
+### Componentes Principales
 
----
+- Header: Navegación fixed con glassmorphism
+- Hero: Sección de introducción con gradientes
+- Experience: Timeline de experiencia laboral
+- Projects: Grid de proyectos con tecnologías
+- Contact: Formulario y datos de contacto
 
-Desarrollado por Juan Samayoa | Especialista en QA y Desarrollo Web.
+### Animaciones
+
+- Smooth scroll
+- Fade in on scroll
+- Pulse effects
+- Gradient animations
+- Scale transforms
+
+## Configuración
+
+Los datos del portafolio se encuentran en `src/data/`:
+
+- `personal.ts`: Información personal y contacto
+- `experience.ts`: Historial laboral
+- `projects.ts`: Proyectos destacados
+- `skills.ts`: Habilidades técnicas
+- `certifications.ts`: Certificaciones
+
+## Deployment
+
+El sitio se construye automáticamente en la carpeta `docs/` y se despliega via GitHub Pages.
+
+URL del sitio: https://juan-samayoa.is-a.dev
+
+## Performance
+
+Métricas objetivo:
+
+- LCP: < 2.5s
+- FID: < 100ms
+- CLS: < 0.1
+- Build time: ~2s
+
+## Licencia
+
+Todos los derechos reservados - Juan Samayoa 2025

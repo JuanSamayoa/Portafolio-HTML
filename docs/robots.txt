@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+# Archivos y directorios a bloquear
+Disallow: /assets/cv/
+Disallow: /*.json$
+Disallow: /*_headers$
+
+# Sitemap
+Sitemap: https://juan-samayoa.is-a.dev/sitemap.xml
+
+# Tiempo de rastreo (crawl-delay)
+Crawl-delay: 1

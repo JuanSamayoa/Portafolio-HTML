@@ -1,0 +1,168 @@
+---
+/**
+ * CERTIFICATIONS SECTION - Sección de certificaciones
+ * Grid responsive con certificados destacados y adicionales
+ */
+
+import Section from "../../shared/ui/Section.astro";
+import Button from "../../shared/ui/Button.astro";
+import CertificationCard from "./CertificationCard.astro";
+import { certificationsData } from "../../data/certifications";
+
+// Dividir en destacadas (primeras 8) y adicionales
+const featuredCerts = certificationsData.slice(0, 8);
+const additionalCerts = certificationsData.slice(8);
+const hasMoreCerts = additionalCerts.length > 0;
+---
+
+<Section id="certifications" background="secondary">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="text-center mb-12">
+      <div class="inline-flex items-center gap-3 mb-4">
+        <div class="w-12 h-12 bg-gradient-to-br from-brand-500/20 to-success-500/20 rounded-xl flex items-center justify-center">
+          <svg class="w-6 h-6 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+          </svg>
+        </div>
+      </div>
+
+      <h2 class="text-3xl md:text-4xl font-bold text-foreground-primary mb-4">
+        Certificaciones
+      </h2>
+      <p class="text-lg text-foreground-tertiary max-w-2xl mx-auto">
+        Validación continua de conocimientos en desarrollo y testing
+      </p>
+    </div>
+
+    <!-- Grid de certificaciones destacadas -->
+    <div
+      id="featured-certs"
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8"
+    >
+      {featuredCerts.map((cert) => (
+        <div class="animate-fade-in">
+          <CertificationCard
+            title={cert.title}
+            issuer={cert.issuer}
+            image={cert.image}
+            date={cert.date}
+            link={cert.link}
+          />
+        </div>
+      ))}
+    </div>
+
+    <!-- Certificaciones adicionales (ocultas por defecto) -->
+    {hasMoreCerts && (
+      <div
+        id="additional-certs"
+        class="additional-certs-grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8"
+      >
+        {additionalCerts.map((cert) => (
+          <div class="animate-fade-in">
+            <CertificationCard
+              title={cert.title}
+              issuer={cert.issuer}
+              image={cert.image}
+              date={cert.date}
+              link={cert.link}
+            />
+          </div>
+        ))}
+      </div>
+
+      <!-- Botón para mostrar más -->
+      <div class="text-center">
+        <Button
+          id="toggle-certs-btn"
+          variant="outline"
+          size="lg"
+          class="group"
+        >
+          <span id="btn-text">Ver todas las certificaciones</span>
+          <svg
+            id="btn-icon"
+            class="w-5 h-5 transition-transform duration-300"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </Button>
+      </div>
+    )}
+  </div>
+</Section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const toggleBtn = document.getElementById("toggle-certs-btn");
+    const additionalCerts = document.getElementById("additional-certs");
+    const btnText = document.getElementById("btn-text");
+    const btnIcon = document.getElementById("btn-icon");
+
+    if (!toggleBtn || !additionalCerts || !btnText || !btnIcon) return;
+
+    let isExpanded = false;
+
+    toggleBtn.addEventListener("click", () => {
+      isExpanded = !isExpanded;
+
+      if (isExpanded) {
+        // Mostrar certificaciones adicionales
+        additionalCerts.classList.add("show");
+        btnText.textContent = "Ver menos certificaciones";
+        btnIcon.style.transform = "rotate(180deg)";
+
+        // Scroll suave a las certificaciones adicionales
+        setTimeout(() => {
+          additionalCerts.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }, 100);
+      } else {
+        // Ocultar certificaciones adicionales
+        additionalCerts.classList.remove("show");
+        btnText.textContent = "Ver todas las certificaciones";
+        btnIcon.style.transform = "rotate(0deg)";        // Scroll de vuelta al botón
+        toggleBtn.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    });
+  });
+</script>
+
+<style>
+  /* Grid adicional oculto por defecto */
+  .additional-certs-grid {
+    display: none;
+  }
+
+  .additional-certs-grid.show {
+    display: grid;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Delay escalonado para las cards */
+  .animate-fade-in:nth-child(1) { animation-delay: 0ms; }
+  .animate-fade-in:nth-child(2) { animation-delay: 50ms; }
+  .animate-fade-in:nth-child(3) { animation-delay: 100ms; }
+  .animate-fade-in:nth-child(4) { animation-delay: 150ms; }
+  .animate-fade-in:nth-child(5) { animation-delay: 200ms; }
+  .animate-fade-in:nth-child(6) { animation-delay: 250ms; }
+  .animate-fade-in:nth-child(7) { animation-delay: 300ms; }
+  .animate-fade-in:nth-child(8) { animation-delay: 350ms; }
+</style>

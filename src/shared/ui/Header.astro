@@ -1,0 +1,337 @@
+---
+/**
+ * HEADER - Navegación principal con glassmorphism
+ * Responsive con menú mobile y scroll effects
+ */
+
+const navLinks = [
+  { href: "#hero", label: "Inicio" },
+  { href: "#about", label: "Sobre Mí" },
+  { href: "#experience", label: "Experiencia" },
+  { href: "#projects", label: "Proyectos" },
+  { href: "#skills", label: "Habilidades" },
+  { href: "#certifications", label: "Certificaciones" },
+  { href: "#contact", label: "Contacto" },
+];
+---
+
+<header
+  id="main-header"
+  class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+>
+  <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div
+      class="flex items-center justify-between h-16 md:h-20 backdrop-blur-2xl rounded-full mt-4 px-6 header-container"
+    >
+      <!-- Logo -->
+      <a
+        href="#hero"
+        class="text-xl md:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-success-400 hover:scale-110 transition-transform duration-300"
+      >
+        JS
+      </a>
+
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center gap-2">
+        {
+          navLinks.map((link) => (
+            <a
+              href={link.href}
+              class="nav-link px-4 py-2 rounded-lg text-foreground-secondary hover:text-foreground-primary transition-all duration-300 font-medium relative"
+            >
+              {link.label}
+            </a>
+          ))
+        }
+      </div>
+
+      <!-- Theme Toggle & Mobile Menu Button -->
+      <div class="flex items-center gap-3">
+        <!-- Theme Toggle -->
+        <button
+          id="theme-toggle"
+          aria-label="Toggle theme"
+          class="p-2 rounded-lg bg-glass-light hover:bg-glass-medium transition-all duration-300"
+        >
+          <svg
+            id="theme-icon-light"
+            class="w-5 h-5 hidden"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+            ></path>
+          </svg>
+          <svg
+            id="theme-icon-dark"
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+            ></path>
+          </svg>
+        </button>
+
+        <!-- Mobile Menu Button -->
+        <button
+          id="mobile-menu-button"
+          aria-label="Toggle mobile menu"
+          class="md:hidden p-2 rounded-lg bg-glass-light hover:bg-glass-medium transition-all duration-300"
+        >
+          <svg
+            id="menu-icon-open"
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+          <svg
+            id="menu-icon-close"
+            class="w-6 h-6 hidden"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div
+      id="mobile-menu"
+      class="md:hidden mt-2 p-4 backdrop-blur-xl bg-background-elevated/95 rounded-2xl border border-white/10 shadow-lg hidden opacity-0 transform scale-95 transition-all duration-300"
+    >
+      <div class="flex flex-col gap-2">
+        {
+          navLinks.map((link) => (
+            <a
+              href={link.href}
+              class="mobile-nav-link px-4 py-3 rounded-lg text-foreground-secondary hover:text-foreground-primary hover:bg-glass-light transition-all duration-300 font-medium"
+            >
+              {link.label}
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </nav>
+</header>
+
+<style>
+  /* Active link indicator */
+  .nav-link.active {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--color-brand-400);
+  }
+
+  /* Header scroll effect */
+  #main-header.scrolled nav > div {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const header = document.getElementById("main-header");
+    const mobileMenuButton = document.getElementById("mobile-menu-button");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const menuIconOpen = document.getElementById("menu-icon-open");
+    const menuIconClose = document.getElementById("menu-icon-close");
+    const themeToggle = document.getElementById("theme-toggle");
+    const themeIconLight = document.getElementById("theme-icon-light");
+    const themeIconDark = document.getElementById("theme-icon-dark");
+
+    // Scroll effect
+    let lastScroll = 0;
+    window.addEventListener("scroll", () => {
+      const currentScroll = window.pageYOffset;
+
+      if (currentScroll > 50) {
+        header?.classList.add("scrolled");
+      } else {
+        header?.classList.remove("scrolled");
+      }
+
+      lastScroll = currentScroll;
+    });
+
+    // Mobile menu toggle
+    mobileMenuButton?.addEventListener("click", () => {
+      const isOpen = mobileMenu?.classList.contains("hidden");
+
+      if (isOpen) {
+        mobileMenu?.classList.remove("hidden");
+        setTimeout(() => {
+          mobileMenu?.classList.remove("opacity-0", "scale-95");
+          mobileMenu?.classList.add("opacity-100", "scale-100");
+        }, 10);
+        menuIconOpen?.classList.add("hidden");
+        menuIconClose?.classList.remove("hidden");
+      } else {
+        mobileMenu?.classList.add("opacity-0", "scale-95");
+        mobileMenu?.classList.remove("opacity-100", "scale-100");
+        setTimeout(() => {
+          mobileMenu?.classList.add("hidden");
+        }, 300);
+        menuIconOpen?.classList.remove("hidden");
+        menuIconClose?.classList.add("hidden");
+      }
+    });
+
+    // Close mobile menu when clicking links
+    document.querySelectorAll(".mobile-nav-link").forEach((link) => {
+      link.addEventListener("click", () => {
+        mobileMenu?.classList.add("opacity-0", "scale-95");
+        mobileMenu?.classList.remove("opacity-100", "scale-100");
+        setTimeout(() => {
+          mobileMenu?.classList.add("hidden");
+        }, 300);
+        menuIconOpen?.classList.remove("hidden");
+        menuIconClose?.classList.add("hidden");
+      });
+    });
+
+    // Active link detection
+    const sections = document.querySelectorAll("section[id]");
+    const navLinks = document.querySelectorAll(".nav-link");
+
+    const observerOptions = {
+      rootMargin: "-50% 0px -50% 0px",
+      threshold: 0,
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute("id");
+          navLinks.forEach((link) => {
+            link.classList.remove("active");
+            if (link.getAttribute("href") === `#${id}`) {
+              link.classList.add("active");
+            }
+          });
+        }
+      });
+    }, observerOptions);
+
+    sections.forEach((section) => observer.observe(section));
+
+    // Theme toggle
+    function updateThemeIcons(theme: string) {
+      if (theme === "light") {
+        themeIconLight?.classList.remove("hidden");
+        themeIconDark?.classList.add("hidden");
+      } else {
+        themeIconLight?.classList.add("hidden");
+        themeIconDark?.classList.remove("hidden");
+      }
+    }
+
+    // Inicializar tema
+    const currentTheme = localStorage.getItem("theme") || "dark";
+    document.documentElement.setAttribute("data-theme", currentTheme);
+    document.documentElement.classList.toggle(
+      "light-theme",
+      currentTheme === "light"
+    );
+    updateThemeIcons(currentTheme);
+
+    // Toggle theme al hacer click
+    themeToggle?.addEventListener("click", () => {
+      const currentTheme = localStorage.getItem("theme") || "dark";
+      const newTheme = currentTheme === "dark" ? "light" : "dark";
+
+      // Actualizar localStorage
+      localStorage.setItem("theme", newTheme);
+
+      // Actualizar HTML
+      document.documentElement.setAttribute("data-theme", newTheme);
+      document.documentElement.classList.toggle(
+        "light-theme",
+        newTheme === "light"
+      );
+
+      // Actualizar iconos
+      updateThemeIcons(newTheme);
+    });
+  });
+</script>
+
+<style>
+  /* Header container con fondo más oscuro y mejor contraste */
+  .header-container {
+    background: rgba(10, 10, 11, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  }
+
+  :global([data-theme="light"]) .header-container {
+    background: rgba(255, 255, 255, 0.85);
+    border-color: rgba(0, 0, 0, 0.12);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Efecto hover en nav links */
+  .nav-link::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) scaleX(0);
+    width: 80%;
+    height: 2px;
+    background: linear-gradient(
+      to right,
+      var(--color-brand-400),
+      var(--color-success-400)
+    );
+    transition: transform 0.3s ease;
+    border-radius: 2px;
+  }
+
+  .nav-link:hover::before,
+  .nav-link.active::before {
+    transform: translateX(-50%) scaleX(1);
+  }
+
+  .nav-link:hover {
+    background: var(--glass-light);
+  }
+
+  .nav-link.active {
+    color: var(--color-brand-400);
+    background: var(--glass-medium);
+  }
+
+  /* Scroll effect - header más pequeño y con más sombra */
+  .scrolled .header-container {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+  }
+
+  :global([data-theme="light"]) .scrolled .header-container {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  }
+</style>

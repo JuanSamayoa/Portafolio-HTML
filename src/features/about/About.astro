@@ -1,0 +1,191 @@
+---
+/**
+ * ABOUT SECTION - Sobre mí con enfoque QA/Dev
+ * Layout moderno con stats y habilidades destacadas
+ */
+
+import Section from "../../shared/ui/Section.astro";
+import Card from "../../shared/ui/Card.astro";
+import Badge from "../../shared/ui/Badge.astro";
+
+const stats = [
+  { value: "3+", label: "Años de Experiencia" },
+  { value: "20+", label: "Proyectos Completados" },
+  { value: "95%", label: "Coverage en Tests" },
+  { value: "100%", label: "Satisfacción Cliente" },
+];
+
+const mainSkills = [
+  {
+    category: "QA & Testing",
+    items: ["Selenium", "Cypress", "Playwright", "Jest", "Test Strategy"],
+  },
+  {
+    category: "Frontend",
+    items: ["Angular", "TypeScript", "React", "Tailwind", "Astro"],
+  },
+  {
+    category: "Backend",
+    items: ["Node.js", "Express", "PostgreSQL", "REST APIs"],
+  },
+  { category: "DevOps", items: ["Git", "CI/CD", "Docker", "GitHub Actions"] },
+];
+---
+
+<Section id="about" background="secondary">
+  <div class="space-y-16">
+    <!-- Header -->
+    <div class="text-center space-y-4">
+      <h2
+        class="text-3xl sm:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-success-400"
+      >
+        Sobre Mí
+      </h2>
+      <p class="text-lg text-foreground-secondary max-w-3xl mx-auto">
+        Ingeniero de pruebas con pasión por el desarrollo frontend y la calidad
+        del software
+      </p>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+      {
+        stats.map((stat) => (
+          <Card variant="glass" padding="md" hover>
+            <div class="text-center space-y-2">
+              <div class="text-3xl lg:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-brand-400 to-success-400">
+                {stat.value}
+              </div>
+              <div class="text-sm text-foreground-tertiary">{stat.label}</div>
+            </div>
+          </Card>
+        ))
+      }
+    </div>
+
+    <!-- About content -->
+    <div class="grid lg:grid-cols-2 gap-12 items-start">
+      <!-- Columna izquierda - Descripción -->
+      <Card variant="glass" padding="lg">
+        <div class="space-y-6">
+          <h3 class="text-2xl font-bold text-foreground-primary">
+            Mi Trayectoria
+          </h3>
+
+          <div class="space-y-4 text-foreground-secondary leading-relaxed">
+            <p>
+              Soy un <strong class="text-brand-400"
+                >Ingeniero de Pruebas de Software</strong
+              > con amplia experiencia en automatización de pruebas y desarrollo
+              frontend. Mi enfoque combina la rigurosidad del QA con la creatividad
+              del desarrollo.
+            </p>
+
+            <p>
+              A lo largo de mi carrera, he trabajado en proyectos que van desde
+              plataformas bancarias hasta sistemas de gestión empresarial,
+              siempre enfocándome en entregar <strong class="text-success-400"
+                >software de calidad</strong
+              > y experiencias de usuario excepcionales.
+            </p>
+
+            <p>
+              Me apasiona la automatización de procesos, las metodologías
+              ágiles, y el aprendizaje continuo. Actualmente, busco
+              oportunidades donde pueda combinar mi experiencia en QA con
+              desarrollo frontend para crear productos digitales robustos y
+              escalables.
+            </p>
+          </div>
+
+          <!-- Valores -->
+          <div class="pt-4 border-t border-white/10">
+            <h4 class="text-lg font-semibold text-foreground-primary mb-3">
+              Valores que me definen
+            </h4>
+            <div class="flex flex-wrap gap-2">
+              <Badge text="Calidad" variant="skill" />
+              <Badge text="Innovación" variant="skill" />
+              <Badge text="Colaboración" variant="skill" />
+              <Badge text="Mejora continua" variant="skill" />
+            </div>
+          </div>
+        </div>
+      </Card>
+
+      <!-- Columna derecha - Skills -->
+      <div class="space-y-6">
+        {
+          mainSkills.map((skillGroup) => (
+            <Card variant="glass" padding="lg" hover>
+              <h4 class="text-xl font-bold text-foreground-primary mb-4 flex items-center gap-2">
+                <span class="w-2 h-2 bg-brand-400 rounded-full" />
+                {skillGroup.category}
+              </h4>
+              <div class="flex flex-wrap gap-2">
+                {skillGroup.items.map((skill) => (
+                  <Badge text={skill} variant="tech" />
+                ))}
+              </div>
+            </Card>
+          ))
+        }
+
+        <!-- CTA adicional -->
+        <Card variant="bordered" padding="md">
+          <div class="text-center space-y-3">
+            <p class="text-foreground-secondary">¿Interesado en colaborar?</p>
+            <a
+              href="#contact"
+              class="inline-flex items-center gap-2 text-brand-400 hover:text-brand-300 font-semibold transition-colors"
+            >
+              Hablemos
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+              </svg>
+            </a>
+          </div>
+        </Card>
+      </div>
+    </div>
+  </div>
+</Section>
+
+<style>
+  /* Animaciones para las cards */
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+
+  /* Aplicar float a las stat cards */
+  .grid > :global(div) {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .grid > :global(div):nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  .grid > :global(div):nth-child(3) {
+    animation-delay: 0.4s;
+  }
+
+  .grid > :global(div):nth-child(4) {
+    animation-delay: 0.6s;
+  }
+</style>

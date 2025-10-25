@@ -1,0 +1,64 @@
+---
+/**
+ * CARD COMPONENT - Contenedor reutilizable con glassmorphism
+ * Diseño moderno con efecto de vidrio esmerilado
+ */
+
+interface Props {
+  variant?: "glass" | "solid" | "bordered";
+  padding?: "sm" | "md" | "lg";
+  hover?: boolean;
+  class?: string;
+}
+
+const {
+  variant = "glass",
+  padding = "md",
+  hover = false,
+  class: className = "",
+} = Astro.props;
+
+const variants = {
+  glass: "bg-glass-heavy backdrop-blur-xl border border-white/10",
+  solid: "bg-background-elevated border border-white/5",
+  bordered: "bg-background-secondary border-2 border-brand-500/30",
+};
+
+const paddings = {
+  sm: "p-4",
+  md: "p-6",
+  lg: "p-8",
+};
+
+const hoverClass = hover
+  ? "hover:bg-glass-heavy hover:border-white/20 hover:-translate-y-2 hover:scale-[1.02]"
+  : "";
+
+const classes = `${variants[variant]} ${paddings[padding]} ${hoverClass} rounded-2xl transition-all duration-300 ${className}`;
+---
+
+<div class={classes}>
+  <slot />
+</div>
+
+<style>
+  div {
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  div:hover {
+    box-shadow:
+      0 20px 60px rgba(0, 102, 255, 0.15),
+      0 10px 40px rgba(0, 0, 0, 0.4);
+  }
+
+  :global([data-theme="light"]) div {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  :global([data-theme="light"]) div:hover {
+    box-shadow:
+      0 8px 40px rgba(0, 102, 255, 0.1),
+      0 4px 20px rgba(0, 0, 0, 0.12);
+  }
+</style>

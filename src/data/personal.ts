@@ -13,6 +13,6 @@ export const personalInfo: PersonalInfo = {
   profileImageFallback: "/assets/img/profile-fallback.svg",
   linkedin: "https://www.linkedin.com/in/juansamayoa/",
   github: "https://github.com/JuanSamayoa",
-  cvPathEs: "/assets/cv-juan-samayoa-es.pdf",
-  cvPathEn: "/assets/cv-juan-samayoa-en.pdf",
+  cvPathEs: "/assets/cv/cv-juan-samayoa-es.pdf",
+  cvPathEn: "/assets/cv/cv-juan-samayoa-en.pdf",
 };

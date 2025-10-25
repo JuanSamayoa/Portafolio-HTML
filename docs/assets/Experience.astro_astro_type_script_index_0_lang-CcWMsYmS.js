@@ -1,0 +1,1 @@
+document.addEventListener("DOMContentLoaded",()=>{const s=document.querySelectorAll("#experience .relative"),r=new IntersectionObserver(e=>{e.forEach(t=>{t.isIntersecting&&t.target.classList.add("visible")})},{threshold:.2});s.forEach(e=>{e.classList.add("experience-item"),r.observe(e)})});

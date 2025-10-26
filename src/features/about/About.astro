@@ -11,7 +11,7 @@ import Badge from "../../shared/ui/Badge.astro";
 const stats = [
   { value: "3+", label: "Años de Experiencia" },
   { value: "20+", label: "Proyectos Completados" },
-  { value: "95%", label: "Coverage en Tests" },
+  { value: "90%", label: "Coverage en Tests" },
   { value: "100%", label: "Satisfacción Cliente" },
 ];
 
@@ -28,7 +28,10 @@ const mainSkills = [
     category: "Backend",
     items: ["Node.js", "Express", "PostgreSQL", "REST APIs"],
   },
-  { category: "DevOps", items: ["Git", "CI/CD", "Docker", "GitHub Actions"] },
+  {
+    category: "DevOps",
+    items: ["Git", "CI/CD", "Docker", "GitHub Actions"],
+  },
 ];
 ---
 
@@ -42,7 +45,7 @@ const mainSkills = [
         Sobre Mí
       </h2>
       <p class="text-lg text-foreground-secondary max-w-3xl mx-auto">
-        Ingeniero de pruebas con pasión por el desarrollo frontend y la calidad
+        Ingeniero de pruebas con pasión por el desarrollo de aplicaciones y la calidad
         del software
       </p>
     </div>
@@ -75,25 +78,25 @@ const mainSkills = [
           <div class="space-y-4 text-foreground-secondary leading-relaxed">
             <p>
               Soy un <strong class="text-brand-400"
-                >Ingeniero de Pruebas de Software</strong
-              > con amplia experiencia en automatización de pruebas y desarrollo
-              frontend. Mi enfoque combina la rigurosidad del QA con la creatividad
-              del desarrollo.
+                >Ingeniero de Pruebas de Software (QA)</strong
+              > con amplia experiencia en pruebas (funcionales, no funcionales, de humo,
+              caja negra, caja blanca) y desarrollo de aplicaciones web. Mi enfoque combina la
+              rigurosidad del QA con la creatividad del desarrollo.
             </p>
 
             <p>
               A lo largo de mi carrera, he trabajado en proyectos que van desde
-              plataformas bancarias hasta sistemas de gestión empresarial,
-              siempre enfocándome en entregar <strong class="text-success-400"
-                >software de calidad</strong
-              > y experiencias de usuario excepcionales.
+              plataformas bancarias hasta sistemas de reportería en Power BI,
+              siempre enfocándome en entregar
+              <strong class="text-success-400">software de calidad </strong >
+              y aprender mientras contribuyo al éxito del equipo.
             </p>
 
             <p>
-              Me apasiona la automatización de procesos, las metodologías
-              ágiles, y el aprendizaje continuo. Actualmente, busco
-              oportunidades donde pueda combinar mi experiencia en QA con
-              desarrollo frontend para crear productos digitales robustos y
+              Me apasiona la automatización de procesos, el desarrollo de aplicaciones
+              web, aplicaciones de escritorio y el aprendizaje continuo. Actualmente,
+              busco oportunidades donde pueda combinar mi experiencia en QA con
+              desarrollo Java, Python o Frontend para crear productos digitales robustos y
               escalables.
             </p>
           </div>
@@ -106,8 +109,11 @@ const mainSkills = [
             <div class="flex flex-wrap gap-2">
               <Badge text="Calidad" variant="skill" />
               <Badge text="Innovación" variant="skill" />
-              <Badge text="Colaboración" variant="skill" />
+              <Badge text="Responsabilidad" variant="skill" />
               <Badge text="Mejora continua" variant="skill" />
+              <Badge text="Aprendizaje rápido" variant="skill" />
+              <Badge text="Excelencia" variant="skill" />
+              <Badge text="Autenticidad" variant="skill" />
             </div>
           </div>
         </div>

@@ -19,14 +19,14 @@ const navLinks = [
   id="main-header"
   class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
 >
-  <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+  <nav class="max-w-6xl mx-auto w-full px-4 sm:px-6 lg:px-8">
     <div
-      class="flex items-center justify-between h-16 md:h-20 backdrop-blur-2xl rounded-full mt-4 px-6 header-container"
+      class="flex items-center justify-between h-16 md:h-20 backdrop-blur-2xl bg-background-elevated/80 rounded-full mt-4 px-6 header-container"
     >
       <!-- Logo -->
       <a
         href="#hero"
-        class="text-xl md:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-success-400 hover:scale-110 transition-transform duration-300"
+        class="text-xl md:text-2xl font-bold text-transparent bg-clip-text bg-linear-to-r from-brand-400 to-success-400 hover:scale-110 transition-transform duration-300"
       >
         JS
       </a>
@@ -150,6 +150,12 @@ const navLinks = [
   /* Header scroll effect */
   #main-header.scrolled nav > div {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  :global([data-theme="light"]) #main-header.scrolled nav > div {
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.08);
   }
 </style>
 
@@ -255,7 +261,7 @@ const navLinks = [
     document.documentElement.setAttribute("data-theme", currentTheme);
     document.documentElement.classList.toggle(
       "light-theme",
-      currentTheme === "light"
+      currentTheme === "light",
     );
     updateThemeIcons(currentTheme);
 
@@ -271,7 +277,7 @@ const navLinks = [
       document.documentElement.setAttribute("data-theme", newTheme);
       document.documentElement.classList.toggle(
         "light-theme",
-        newTheme === "light"
+        newTheme === "light",
       );
 
       // Actualizar iconos

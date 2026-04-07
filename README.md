@@ -1,94 +1,61 @@
-# Portafolio v2.0.0 | Juan Samayoa
+# Portafolio Profesional | Juan Samayoa
 
-## Acerca de este proyecto
+## Resumen
 
-Portafolio web personal desarrollado con Astro y TypeScript, enfocado en rendimiento y experiencia de usuario. Presenta una arquitectura limpia basada en features, sistema de temas dark/light, y efectos visuales modernos con glassmorphism.
+Este repositorio contiene el portafolio profesional de Juan Samayoa, diseñado como un sitio estático moderno orientado a mostrar perfil técnico, experiencia, proyectos y certificaciones con una experiencia visual clara y consistente.
 
-## Estructura del Proyecto
+La implementación prioriza velocidad de carga, mantenibilidad y una estructura modular que facilita evolución continua del contenido.
 
-```
-src/
-├── core/              # Configuración central (theme tokens)
-├── data/              # Datos del portafolio (personal, projects, experience)
-├── features/          # Componentes por funcionalidad
-│   ├── about/
-│   ├── contact/
-│   ├── experience/
-│   ├── hero/
-│   └── projects/
-├── layouts/           # Layout principal
-├── pages/             # Páginas de Astro
-├── shared/            # Componentes compartidos (UI, animations)
-└── types/             # Definiciones TypeScript
-```
+## Objetivo del Proyecto
+
+El portafolio está orientado a posicionar un perfil de ingeniería de calidad y desarrollo, presentando información profesional de forma accesible para reclutadores, equipos técnicos y clientes potenciales.
+
+## Arquitectura
+
+La base del proyecto sigue una organización por dominios funcionales:
+
+- src/core: configuración transversal y tokens de tema.
+- src/data: fuente única de contenido (perfil, experiencia, proyectos, skills, certificaciones).
+- src/features: secciones funcionales del sitio.
+- src/shared: componentes reutilizables de UI y animaciones.
+- src/layouts: layout principal y configuración global de metadatos/estilos.
+- src/pages: rutas públicas del sitio.
+
+Este enfoque reduce acoplamiento entre secciones y simplifica cambios de contenido sin romper estructura.
 
 ## Stack Tecnológico
 
-- Astro 5.15.1
-- TypeScript 5.9.3
-- Tailwind CSS 3.4.1
-- pnpm 10.19.0
+- Astro 5
+- TypeScript (strict)
+- Tailwind CSS 4
+- PostCSS
 
-### Características Técnicas
+## Capacidades Clave
 
-- Static site generation (SSG)
-- Sistema de temas dark/light con CSS variables
-- Glassmorphism y efectos visuales modernos
-- Animaciones optimizadas con Intersection Observer
-- Diseño responsive mobile-first
-- TypeScript strict mode
-- SEO optimizado
+- Sitio estático optimizado para rendimiento y SEO.
+- Diseño responsive mobile-first.
+- Tema visual con variables CSS y soporte de variantes visuales.
+- Componentes reutilizables para consistencia de interfaz.
+- Secciones animadas con comportamiento progresivo en scroll.
+- Metadatos sociales y estructura semántica para mejor indexación.
 
-## Características del Diseño
+## Calidad Técnica
 
-### Sistema de Colores
+El proyecto mantiene foco en:
 
-- Brand: #0066ff (azul principal)
-- Success: #00cc66 (verde acento)
-- Backgrounds: Oscuros en dark mode, claros en light mode
-- Glass effects: Transparencias con backdrop-blur
+- separación clara entre contenido y presentación,
+- tipado estricto en TypeScript,
+- rutas y assets consistentes para producción,
+- base preparada para auditoría de calidad y seguridad.
 
-### Componentes Principales
+## Despliegue
 
-- Header: Navegación fixed con glassmorphism
-- Hero: Sección de introducción con gradientes
-- Experience: Timeline de experiencia laboral
-- Projects: Grid de proyectos con tecnologías
-- Contact: Formulario y datos de contacto
+El despliegue se realiza automáticamente en GitHub Pages mediante workflow de GitHub Actions, publicando el contenido generado del sitio estático en cada actualización de la rama principal.
 
-### Animaciones
+## Sitio Público
 
-- Smooth scroll
-- Fade in on scroll
-- Pulse effects
-- Gradient animations
-- Scale transforms
+https://juan-samayoa.is-a.dev
 
-## Configuración
+## Autoría
 
-Los datos del portafolio se encuentran en `src/data/`:
-
-- `personal.ts`: Información personal y contacto
-- `experience.ts`: Historial laboral
-- `projects.ts`: Proyectos destacados
-- `skills.ts`: Habilidades técnicas
-- `certifications.ts`: Certificaciones
-
-## Deployment
-
-El sitio se construye automáticamente en la carpeta `docs/` y se despliega via GitHub Pages.
-
-URL del sitio: https://juan-samayoa.is-a.dev
-
-## Performance
-
-Métricas objetivo:
-
-- LCP: < 2.5s
-- FID: < 100ms
-- CLS: < 0.1
-- Build time: ~2s
-
-## Licencia
-
-Todos los derechos reservados - Juan Samayoa 2025
+Desarrollado y mantenido por Juan Samayoa.

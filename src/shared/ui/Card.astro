@@ -37,7 +37,7 @@ const hoverClass = hover
 const classes = `${variants[variant]} ${paddings[padding]} ${hoverClass} rounded-2xl transition-all duration-300 ${className}`;
 ---
 
-<div class={classes}>
+<div class={classes} data-variant={variant}>
   <slot />
 </div>
 
@@ -52,11 +52,18 @@ const classes = `${variants[variant]} ${paddings[padding]} ${hoverClass} rounded
       0 10px 40px rgba(0, 0, 0, 0.4);
   }
 
-  :global([data-theme="light"]) div {
+  /* Light mode: cards con fondo blanco y borde visible */
+  :global([data-theme="light"]) div[data-variant="glass"],
+  :global([data-theme="light"]) div[data-variant="solid"] {
+    background-color: rgba(255, 255, 255, 0.85);
+    border-color: rgba(0, 0, 0, 0.1);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   }
 
-  :global([data-theme="light"]) div:hover {
+  :global([data-theme="light"]) div[data-variant="glass"]:hover,
+  :global([data-theme="light"]) div[data-variant="solid"]:hover {
+    background-color: rgba(255, 255, 255, 0.95);
+    border-color: rgba(0, 102, 255, 0.25);
     box-shadow:
       0 8px 40px rgba(0, 102, 255, 0.1),
       0 4px 20px rgba(0, 0, 0, 0.12);

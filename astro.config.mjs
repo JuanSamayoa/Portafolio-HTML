@@ -1,13 +1,12 @@
 // @ts-check
+import tailwind from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
-import tailwind from "@astrojs/tailwind";
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [tailwind()],
   site: "https://juan-samayoa.is-a.dev",
-  base: "/", // Usar raíz para rutas absolutas
-  outDir: "./docs", // Mantener el directorio de salida para GitHub Pages
+  base: "/",
+  outDir: "./dist",
 
   // Configuración de imágenes remotas
   image: {
@@ -25,6 +24,7 @@ export default defineConfig({
   },
 
   vite: {
+    plugins: [tailwind()],
     build: {
       assetsInlineLimit: 0, // Evitar la incrustación inline de assets pequeños
       // Configuraciones de seguridad para el build

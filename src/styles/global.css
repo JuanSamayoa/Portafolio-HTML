@@ -1,0 +1,87 @@
+/* Tailwind v4 entry (Vite plugin): import tailwind once per project */
+/* =================================================================
+   TAILWIND v4 ENTRY
+   Procesado por @tailwindcss/vite (dev) y
+   scripts/build-tailwind.cjs (build de producción)
+   ================================================================= */
+@import "tailwindcss";
+
+/* =================================================================
+   THEME — Tokens de diseño personalizados
+   TW v4 lee @theme para generar las utility classes.
+
+   • Colores de marca/éxito/alerta → valores FIJOS para que los
+     modificadores de opacidad (bg-brand-500/10) funcionen.
+   • Colores de fondo/texto/glass  → referencias var() para que
+     los temas claro/oscuro se resuelvan en cascada CSS.
+   ================================================================= */
+@theme {
+  /* ── FUENTE ─────────────────────────────────────────────────── */
+  --font-sans: Inter, system-ui, -apple-system, sans-serif;
+
+  /* ── BRAND — azules (valores fijos) ─────────────────────────── */
+  --color-brand-50: #e6f2ff;
+  --color-brand-100: #b3d9ff;
+  --color-brand-200: #80c0ff;
+  --color-brand-300: #4da6ff;
+  --color-brand-400: #1a8cff;
+  --color-brand-500: #0066ff;
+  --color-brand-600: #0052cc;
+  --color-brand-700: #003d99;
+  --color-brand-800: #002966;
+  --color-brand-900: #001433;
+  /* alias sin shade → text-brand, from-brand, bg-brand/10, etc. */
+  --color-brand: #0066ff;
+
+  /* ── SUCCESS — verdes (valores fijos) ───────────────────────── */
+  --color-success-50: #e6f9f0;
+  --color-success-100: #b3f0d4;
+  --color-success-200: #80e7b8;
+  --color-success-300: #4dde9c;
+  --color-success-400: #1ad580;
+  --color-success-500: #00cc66;
+  --color-success-600: #00a352;
+  --color-success-700: #007a3d;
+  --color-success-800: #005229;
+  --color-success-900: #002914;
+  --color-success: #00cc66;
+
+  /* ── WARNING — amarillos (valores fijos) ────────────────────── */
+  --color-warning-50: #fff9e6;
+  --color-warning-100: #ffecb3;
+  --color-warning-200: #ffdf80;
+  --color-warning-300: #ffd24d;
+  --color-warning-400: #ffc51a;
+  --color-warning-500: #ffb800;
+  --color-warning-600: #cc9300;
+  --color-warning-700: #996e00;
+  --color-warning-800: #664a00;
+  --color-warning-900: #332500;
+
+  /* ── FOREGROUND / texto (theme-aware via CSS vars) ──────────── */
+  --color-foreground: var(--fg-primary); /* alias sin shade */
+  --color-foreground-primary: var(--fg-primary);
+  --color-foreground-secondary: var(--fg-secondary);
+  --color-foreground-tertiary: var(--fg-tertiary);
+  --color-foreground-muted: var(--fg-muted);
+
+  /* ── BACKGROUND (theme-aware via CSS vars) ──────────────────── */
+  --color-background-primary: var(--bg-primary);
+  --color-background-secondary: var(--bg-secondary);
+  --color-background-tertiary: var(--bg-tertiary);
+  --color-background-elevated: var(--bg-elevated);
+
+  /* ── GLASS (theme-aware via CSS vars) ───────────────────────── */
+  --color-glass-light: var(--glass-light);
+  --color-glass-medium: var(--glass-medium);
+  --color-glass-heavy: var(--glass-heavy);
+
+  /* ── BORDER ─────────────────────────────────────────────────── */
+  --color-border: rgba(255, 255, 255, 0.15);
+
+  /* ── SOMBRAS PERSONALIZADAS ─────────────────────────────────── */
+  --shadow-glow: 0 0 20px rgb(0 102 255 / 0.4);
+  --shadow-glow-success: 0 0 20px rgb(0 204 102 / 0.4);
+}
+
+/* You can add project-specific base overrides here if needed */

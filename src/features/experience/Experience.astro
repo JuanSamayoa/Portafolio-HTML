@@ -15,7 +15,7 @@ import { experienceData } from "../../data/experience";
     <!-- Header -->
     <div class="text-center space-y-4">
       <h2
-        class="text-3xl sm:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-success-400"
+        class="text-3xl sm:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-linear-to-r from-brand-400 to-success-400"
       >
         Experiencia Profesional
       </h2>
@@ -25,88 +25,76 @@ import { experienceData } from "../../data/experience";
     </div>
 
     <!-- Timeline -->
-    <div class="max-w-4xl mx-auto relative">
-      <!-- Línea vertical del timeline -->
+    <div class="max-w-3xl mx-auto relative">
+      <!-- Línea vertical izquierda -->
       <div
-        class="absolute left-8 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-brand-500 via-brand-400 to-success-500"
+        class="absolute left-5 top-4 bottom-4 w-0.5 bg-linear-to-b from-brand-500 via-brand-400 to-success-500 rounded-full"
         aria-hidden="true"
       >
       </div>
 
       <!-- Experiencias -->
-      <div class="space-y-12">
+      <div class="space-y-8">
         {
-          experienceData.map((exp, index) => (
-            <div class="relative">
+          experienceData.map((exp) => (
+            <div class="relative pl-14">
               {/* Punto del timeline */}
-              <div class="absolute left-8 md:left-1/2 w-4 h-4 -ml-2 mt-6 rounded-full bg-brand-500 border-4 border-background-secondary shadow-lg z-10">
+              <div class="absolute left-5 top-6 w-4 h-4 -translate-x-1/2 rounded-full bg-brand-500 border-4 border-background-secondary shadow-lg z-10">
                 {exp.isActive && (
-                  <span class="absolute inset-0 rounded-full bg-brand-500 animate-ping" />
+                  <span class="absolute inset-0 rounded-full bg-brand-500 animate-ping opacity-75" />
                 )}
               </div>
 
-              {/* Contenido - alternado en desktop */}
-              <div
-                class:list={[
-                  "ml-20 md:ml-0 md:w-[calc(50%-3rem)]",
-                  index % 2 === 0
-                    ? "md:mr-auto md:pr-12"
-                    : "md:ml-auto md:pl-12",
-                ]}
-              >
-                <Card variant="glass" padding="lg" hover>
-                  <div class="space-y-4">
-                    {/* Header con fecha */}
-                    <div class="flex items-start justify-between gap-4 flex-wrap">
-                      <div class="flex-1">
-                        <h3 class="text-xl font-bold text-foreground-primary">
-                          {exp.title}
-                        </h3>
-                        <p class="text-brand-400 font-semibold">
-                          {exp.company}
-                        </p>
-                        <p class="text-sm text-foreground-tertiary">
-                          {exp.location}
-                        </p>
-                      </div>
-                      {exp.isActive && <Badge text="Actual" variant="status" />}
+              <Card variant="glass" padding="lg" hover>
+                <div class="space-y-4">
+                  {/* Header con fecha */}
+                  <div class="flex items-start justify-between gap-4 flex-wrap">
+                    <div class="flex-1">
+                      <h3 class="text-xl font-bold text-foreground-primary">
+                        {exp.title}
+                      </h3>
+                      <p class="text-brand-400 font-semibold">{exp.company}</p>
+                      <p class="text-sm text-foreground-tertiary">
+                        {exp.location}
+                      </p>
                     </div>
-
-                    <div class="flex items-center gap-2 text-sm text-foreground-secondary">
-                      <svg
-                        class="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                        />
-                      </svg>
-                      <span>{exp.date}</span>
-                    </div>
-
-                    {/* Descripción */}
-                    <p class="text-foreground-secondary leading-relaxed">
-                      {exp.description}
-                    </p>
-
-                    {/* Technologies */}
-                    {exp.badges && exp.badges.length > 0 && (
-                      <div class="pt-3 border-t border-white/10">
-                        <div class="flex flex-wrap gap-2">
-                          {exp.badges.map((badge) => (
-                            <Badge text={badge.text} variant="tech" />
-                          ))}
-                        </div>
-                      </div>
-                    )}
+                    {exp.isActive && <Badge text="Actual" variant="status" />}
                   </div>
-                </Card>
-              </div>
+
+                  <div class="flex items-center gap-2 text-sm text-foreground-secondary">
+                    <svg
+                      class="w-4 h-4 shrink-0"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      />
+                    </svg>
+                    <span>{exp.date}</span>
+                  </div>
+
+                  {/* Descripción */}
+                  <p class="text-foreground-secondary leading-relaxed">
+                    {exp.description}
+                  </p>
+
+                  {/* Technologies */}
+                  {exp.badges && exp.badges.length > 0 && (
+                    <div class="pt-3 border-t border-white/10">
+                      <div class="flex flex-wrap gap-2">
+                        {exp.badges.map((badge) => (
+                          <Badge text={badge.text} variant="tech" />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </Card>
             </div>
           ))
         }
@@ -181,7 +169,7 @@ import { experienceData } from "../../data/experience";
           }
         });
       },
-      { threshold: 0.2 }
+      { threshold: 0.2 },
     );
 
     items.forEach((item) => {

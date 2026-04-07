@@ -1,215 +1,183 @@
-# ============================================
-# DEPLOY SCRIPT - Subida segura a GitHub
-# ============================================
-# Este script:
-# 1. Hace build para verificar que todo funciona
-# 2. Verifica el estado de git
-# 3. Pide mensaje de commit
-# 4. Sube solo los archivos necesarios
-# 5. Limpia el tracking de archivos innecesarios
+Set-StrictMode -Version Latest
+$ErrorActionPreference = "Stop"
 
-param(
-    [string]$Message = ""
-)
-
-# Colores para output
-function Write-Success { Write-Host $args -ForegroundColor Green }
-function Write-Error { Write-Host $args -ForegroundColor Red }
-function Write-Info { Write-Host $args -ForegroundColor Cyan }
-function Write-Warning { Write-Host $args -ForegroundColor Yellow }
-
-# Banner
-Write-Host ""
-Write-Info "=========================================="
-Write-Info "  DEPLOY TO GITHUB"
-Write-Info "=========================================="
-Write-Host ""
-
-# Verificar que estamos en un repositorio git
-if (-not (Test-Path ".git")) {
-    Write-Error "Error: No estás en un repositorio git"
-    exit 1
+function Write-Step {
+  param([string]$Message)
+  Write-Host "`n[deploy] $Message"
 }
 
-# 1. VERIFICAR BUILD
-Write-Info "[1/6] Verificando build..."
-$buildResult = pnpm build 2>&1
-if ($LASTEXITCODE -ne 0) {
-    Write-Error "Error: El build falló. No se subirá nada a GitHub."
-    Write-Host $buildResult
-    exit 1
+function Ensure-GitRepo {
+  git rev-parse --is-inside-work-tree *> $null
+  if ($LASTEXITCODE -ne 0) {
+    throw "Este directorio no es un repositorio Git."
+  }
 }
-Write-Success "Build exitoso!"
-Write-Host ""
 
-# 2. ACTUALIZAR .GITIGNORE SI NO EXISTE O ESTÁ INCOMPLETO
-Write-Info "[2/6] Verificando .gitignore..."
-$gitignoreContent = @"
-# Dependencies
-node_modules/
+function Remove-TrackedIgnored {
+  Write-Step "Buscando archivos trackeados que ahora estan en gitignore..."
 
-# Build outputs
-dist/
-.astro/
+  $trackedIgnored = @(git ls-files -ci --exclude-standard)
+  if ($LASTEXITCODE -ne 0) {
+    throw "No se pudo consultar archivos ignorados trackeados."
+  }
 
-# Environment
-.env
-.env.local
-.env.*.local
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# OS
-.DS_Store
-Thumbs.db
-desktop.ini
-
-# Logs
-*.log
-npm-debug.log*
-pnpm-debug.log*
-
-# Cache
-.cache/
-*.cache
-
-# Temporary files
-*.tmp
-*.temp
-.tmp/
-.temp/
-
-# Package manager
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
-
-# Git
-.git/
-"@
-
-if (-not (Test-Path ".gitignore")) {
-    $gitignoreContent | Out-File -FilePath ".gitignore" -Encoding UTF8
-    Write-Success ".gitignore creado"
-} else {
-    # Verificar que tenga las entradas importantes
-    $currentGitignore = Get-Content ".gitignore" -Raw -ErrorAction SilentlyContinue
-    $mustHave = @("node_modules", ".vscode", ".git", ".env")
-    $missing = $mustHave | Where-Object { $currentGitignore -notmatch $_ }
-
-    if ($missing.Count -gt 0) {
-        Write-Warning "Faltan algunas entradas en .gitignore: $($missing -join ', ')"
-        $addToGitignore = Read-Host "Quieres agregarlas automaticamente? (s/n)"
-        if ($addToGitignore -eq "s") {
-            $gitignoreContent | Out-File -FilePath ".gitignore" -Encoding UTF8
-            Write-Success ".gitignore actualizado"
-        }
+  if ($trackedIgnored.Count -gt 0) {
+    foreach ($path in $trackedIgnored) {
+      git rm -r --cached --quiet -- "$path"
+      if ($LASTEXITCODE -ne 0) {
+        throw "No se pudo quitar del indice: $path"
+      }
     }
+    Write-Step "Se quitaron del indice $($trackedIgnored.Count) archivo(s)/carpeta(s) ignorados (se mantienen en local)."
+  }
+  else {
+    Write-Step "No hay archivos trackeados que coincidan con gitignore."
+  }
 }
-Write-Host ""
 
-# 3. LIMPIAR CACHE DE GIT (archivos que deberían estar ignorados)
-Write-Info "[3/6] Limpiando cache de git..."
-$filesToUntrack = @(
-    ".vscode"
-    ".git"
-    "node_modules"
-    ".env"
-    ".env.local"
-    "pnpm-lock.yaml"
-    "*.log"
-)
-
-foreach ($file in $filesToUntrack) {
-    if (Test-Path $file) {
-        git rm -r --cached $file 2>$null
+function Run-Validations {
+  if ((Test-Path "package.json") -and (Get-Command pnpm -ErrorAction SilentlyContinue)) {
+    $pkg = Get-Content "package.json" -Raw | ConvertFrom-Json
+    if ($null -ne $pkg.scripts -and $null -ne $pkg.scripts.check) {
+      Write-Step "Ejecutando validaciones: pnpm check"
+      pnpm check
+      if ($LASTEXITCODE -ne 0) {
+        throw "Fallo la validacion (pnpm check)."
+      }
     }
-}
-Write-Success "Cache limpiado"
-Write-Host ""
-
-# 4. VERIFICAR ESTADO DE GIT
-Write-Info "[4/6] Verificando estado del repositorio..."
-$gitStatus = git status --porcelain
-if (-not $gitStatus) {
-    Write-Warning "No hay cambios para subir"
-    $continue = Read-Host "Quieres continuar de todas formas? (s/n)"
-    if ($continue -ne "s") {
-        Write-Info "Operacion cancelada"
-        exit 0
+    else {
+      Write-Step "No existe script check en package.json, se omite validacion."
     }
+  }
+  else {
+    Write-Step "No se encontro package.json o pnpm, se omite validacion."
+  }
 }
 
-# Mostrar archivos que se van a subir
-Write-Host ""
-Write-Info "Archivos que se subiran:"
-git status --short
-Write-Host ""
+function Stage-Changes {
+  Write-Step "Haciendo git add -A (respeta .gitignore)."
+  git add -A
+  if ($LASTEXITCODE -ne 0) {
+    throw "Fallo git add -A."
+  }
 
-# 5. PEDIR MENSAJE DE COMMIT
-if ([string]::IsNullOrWhiteSpace($Message)) {
-    Write-Info "[5/6] Ingresa el mensaje de commit:"
-    $Message = Read-Host "Mensaje"
-
-    if ([string]::IsNullOrWhiteSpace($Message)) {
-        Write-Error "Error: El mensaje de commit no puede estar vacio"
-        exit 1
-    }
-}
-
-# Confirmar subida
-Write-Host ""
-Write-Warning "Se subirán los cambios a GitHub con el mensaje:"
-Write-Host "  '$Message'" -ForegroundColor Yellow
-Write-Host ""
-$confirm = Read-Host "Continuar? (s/n)"
-if ($confirm -ne "s") {
-    Write-Info "Operacion cancelada"
+  git diff --cached --quiet
+  if ($LASTEXITCODE -eq 0) {
+    Write-Step "No hay cambios para commit despues del add."
     exit 0
+  }
 }
 
-# 6. SUBIR A GITHUB
-Write-Info "[6/6] Subiendo a GitHub..."
-
-# Add all (respetando .gitignore)
-git add .
-if ($LASTEXITCODE -ne 0) {
-    Write-Error "Error al agregar archivos"
-    exit 1
-}
-
-# Commit
-git commit -m $Message
-if ($LASTEXITCODE -ne 0) {
-    Write-Error "Error al hacer commit"
-    exit 1
-}
-
-# Push
-Write-Info "Subiendo cambios al repositorio remoto..."
-git push
-if ($LASTEXITCODE -ne 0) {
-    Write-Error "Error al hacer push"
-    Write-Warning "Intentando hacer push con --force-with-lease..."
-    git push --force-with-lease
-    if ($LASTEXITCODE -ne 0) {
-        Write-Error "Error: No se pudo hacer push. Verifica tu conexion y permisos."
-        exit 1
+function Commit-Changes {
+  $commitMsg = ""
+  while ([string]::IsNullOrWhiteSpace($commitMsg)) {
+    $commitMsg = Read-Host "Nombre del commit"
+    if ([string]::IsNullOrWhiteSpace($commitMsg)) {
+      Write-Host "El commit no puede estar vacio."
     }
+  }
+
+  Write-Step "Creando commit."
+  git commit -m "$commitMsg"
+  if ($LASTEXITCODE -ne 0) {
+    throw "Fallo al crear el commit."
+  }
 }
 
-# 7. VERIFICAR QUE SE SUBIO CORRECTAMENTE
-Write-Host ""
-Write-Success "=========================================="
-Write-Success "  SUBIDA EXITOSA!"
-Write-Success "=========================================="
-Write-Host ""
-Write-Info "Rama actual: $(git branch --show-current)"
-Write-Info "Ultimo commit: $(git log -1 --oneline)"
-Write-Host ""
-Write-Success "Todos los cambios se subieron correctamente a GitHub"
+function Push-Changes {
+  $branch = (git rev-parse --abbrev-ref HEAD).Trim()
+  if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($branch) -or $branch -eq "HEAD") {
+    throw "No se pudo detectar una rama activa."
+  }
+
+  Write-Step "Subiendo cambios a GitHub (rama: $branch)."
+
+  git rev-parse --abbrev-ref --symbolic-full-name "@{u}" *> $null
+  if ($LASTEXITCODE -eq 0) {
+    git push
+  }
+  else {
+    git push -u origin "$branch"
+  }
+
+  if ($LASTEXITCODE -ne 0) {
+    throw "Fallo al subir cambios a GitHub."
+  }
+}
+
+function Hide-LocalStatus {
+  $excludeFile = (git rev-parse --git-path info/exclude).Trim()
+  if ($LASTEXITCODE -ne 0) {
+    throw "No se pudo ubicar .git/info/exclude"
+  }
+
+  $excludeDir = Split-Path $excludeFile -Parent
+  if (-not (Test-Path $excludeDir)) {
+    New-Item -Path $excludeDir -ItemType Directory -Force | Out-Null
+  }
+  if (-not (Test-Path $excludeFile)) {
+    New-Item -Path $excludeFile -ItemType File -Force | Out-Null
+  }
+
+  Write-Step "Ocultando untracked locales en .git/info/exclude."
+  $untracked = @(git ls-files --others --exclude-standard)
+  if ($LASTEXITCODE -ne 0) {
+    throw "No se pudieron listar archivos untracked."
+  }
+
+  if ($untracked.Count -gt 0) {
+    $currentExclude = @(Get-Content $excludeFile -ErrorAction SilentlyContinue)
+
+    Add-Content -Path $excludeFile -Value ""
+    Add-Content -Path $excludeFile -Value ("# Added by deploy-github.ps1 on " + (Get-Date -Format "yyyy-MM-dd HH:mm:ss"))
+
+    foreach ($path in $untracked) {
+      if ($currentExclude -notcontains $path) {
+        Add-Content -Path $excludeFile -Value $path
+      }
+    }
+
+    Write-Step "Se revisaron $($untracked.Count) entrada(s) untracked para ocultar."
+  }
+  else {
+    Write-Step "No hay untracked por ocultar."
+  }
+
+  Write-Step "Ocultando cambios locales en archivos trackeados con skip-worktree."
+  $modified = @(git ls-files -m)
+  if ($LASTEXITCODE -ne 0) {
+    throw "No se pudieron listar archivos modificados."
+  }
+
+  if ($modified.Count -gt 0) {
+    foreach ($path in $modified) {
+      git update-index --skip-worktree -- "$path"
+      if ($LASTEXITCODE -ne 0) {
+        throw "No se pudo marcar skip-worktree en: $path"
+      }
+    }
+    Write-Step "Se marco skip-worktree para $($modified.Count) archivo(s)."
+  }
+  else {
+    Write-Step "No hay archivos modificados por ocultar."
+  }
+
+  Write-Step "Estado final de Git:"
+  git status --short
+}
+
+try {
+  Ensure-GitRepo
+  Remove-TrackedIgnored
+  Run-Validations
+  Stage-Changes
+  Commit-Changes
+  Push-Changes
+  Hide-LocalStatus
+
+  Write-Step "Proceso completado."
+}
+catch {
+  Write-Error $_
+  exit 1
+}

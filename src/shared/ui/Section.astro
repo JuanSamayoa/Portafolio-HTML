@@ -34,7 +34,7 @@ const classes = `${backgrounds[background]} ${spacings[spacing]} ${className}`;
 ---
 
 <section id={id} class={classes}>
-  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="max-w-6xl mx-auto w-full px-4 sm:px-6 lg:px-8">
     <slot />
   </div>
 </section>
@@ -73,7 +73,7 @@ const classes = `${backgrounds[background]} ${spacings[spacing]} ${className}`;
           }
         });
       },
-      { threshold: 0.1, rootMargin: "0px 0px -100px 0px" }
+      { threshold: 0.1, rootMargin: "0px 0px -100px 0px" },
     );
 
     sections.forEach((section) => observer.observe(section));

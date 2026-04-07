@@ -7,7 +7,7 @@
  * Preload de recursos críticos
  */
 export function preloadCriticalResources(): void {
-  if (typeof window === "undefined") return;
+  if (globalThis.window === undefined) return;
 
   const criticalResources = [{ href: "/assets/img/profile.jpg", as: "image" }];
 
@@ -24,7 +24,10 @@ export function preloadCriticalResources(): void {
  * Lazy load de imágenes usando Intersection Observer
  */
 export function setupLazyLoading(): void {
-  if (typeof window === "undefined" || !("IntersectionObserver" in window))
+  if (
+    globalThis.window === undefined ||
+    !("IntersectionObserver" in globalThis)
+  )
     return;
 
   const images = document.querySelectorAll('img[loading="lazy"]');
@@ -36,7 +39,7 @@ export function setupLazyLoading(): void {
           const img = entry.target as HTMLImageElement;
           if (img.dataset.src) {
             img.src = img.dataset.src;
-            img.removeAttribute("data-src");
+            delete img.dataset.src;
           }
           imageObserver.unobserve(img);
         }
@@ -45,7 +48,7 @@ export function setupLazyLoading(): void {
     {
       rootMargin: "50px 0px",
       threshold: 0.01,
-    }
+    },
   );
 
   images.forEach((img) => imageObserver.observe(img));
@@ -55,7 +58,7 @@ export function setupLazyLoading(): void {
  * Prefetch de recursos que se cargarán después
  */
 export function prefetchResources(urls: string[]): void {
-  if (typeof window === "undefined") return;
+  if (globalThis.window === undefined) return;
 
   urls.forEach((url) => {
     const link = document.createElement("link");
@@ -69,19 +72,19 @@ export function prefetchResources(urls: string[]): void {
  * Reportar Web Vitals a la consola (útil para debugging)
  */
 export function reportWebVitals(): void {
-  if (typeof window === "undefined") return;
+  if (globalThis.window === undefined) return;
 
   // LCP - Largest Contentful Paint
-  if ("PerformanceObserver" in window) {
+  if ("PerformanceObserver" in globalThis) {
     try {
       const lcpObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries();
-        const lastEntry = entries[entries.length - 1] as any;
+        const lastEntry = entries.at(-1) as any;
         console.log("LCP:", lastEntry.renderTime || lastEntry.loadTime);
       });
       lcpObserver.observe({ entryTypes: ["largest-contentful-paint"] });
-    } catch (e) {
-      // Silently fail if not supported
+    } catch (error) {
+      console.warn("No se pudo inicializar PerformanceObserver:", error);
     }
   }
 }

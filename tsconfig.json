@@ -2,7 +2,7 @@
   "compilerOptions": {
     "strict": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "target": "esnext",
     "jsx": "preserve",
     "esModuleInterop": true,

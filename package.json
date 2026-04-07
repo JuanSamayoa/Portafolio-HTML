@@ -1,28 +1,40 @@
 {
   "name": "portafolio-dev",
   "type": "module",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "pnpm run build:tailwind && astro build",
     "preview": "astro preview",
+    "build:tailwind": "node tools/build-tailwind.cjs",
     "astro": "astro",
-    "deploy": "astro build && copy /y public\\*.* docs\\ && echo.> docs\\.nojekyll && echo juan-samayoa.is-a.dev > docs\\CNAME",
-    "clean": "rmdir /s /q docs || true",
-    "build:production": "pnpm run clean && pnpm run deploy",
+    "deploy": "pnpm run build",
+    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
+    "build:production": "pnpm run clean && pnpm run build",
     "check": "astro check"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.5",
     "@fontsource/inter": "^5.1.0",
     "@fontsource/onest": "^5.2.7",
-    "astro": "^5.6.1",
-    "typescript": "^5.9.3",
-    "zod": "^4.1.12"
+    "astro": "^5.18.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@astrojs/tailwind": "^5.1.0",
-    "tailwindcss": "^3.4.1"
+    "@astrojs/check": "^0.9.6",
+    "@tailwindcss/postcss": "^4.2.1",
+    "@tailwindcss/vite": "^4.2.1",
+    "autoprefixer": "^10.4.27",
+    "baseline-browser-mapping": "^2.10.0",
+    "tailwindcss": "^4.2.1",
+    "typescript": "^5.9.3"
   },
-  "packageManager": "pnpm@10.19.0+sha512.c9fc7236e92adf5c8af42fd5bf1612df99c2ceb62f27047032f4720b33f8eacdde311865e91c411f2774f618d82f320808ecb51718bfa82c060c4ba7c76a32b8"
+  "packageManager": "pnpm@10.19.0+sha512.c9fc7236e92adf5c8af42fd5bf1612df99c2ceb62f27047032f4720b33f8eacdde311865e91c411f2774f618d82f320808ecb51718bfa82c060c4ba7c76a32b8",
+  "pnpm": {
+    "overrides": {
+      "minimatch": "9.0.7",
+      "ajv": "8.18.0",
+      "sucrase": "3.35.1",
+      "lodash": "4.17.23"
+    }
+  }
 }

@@ -14,7 +14,7 @@ interface Props {
 }
 
 const {
-  title = "Juan Samayoa | QA Engineer & Frontend Developer",
+  title = "Juan Samayoa | QA Engineer & Java Developer",
   description = "Portafolio profesional de Juan Samayoa. Ingeniero de Pruebas TI especializado en pruebas manuales, desarrollo en Java, Python y aprendiendo desarrollo frontend.",
 } = Astro.props;
 
@@ -95,6 +95,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       rel="stylesheet"
     />
 
+    <!-- Tailwind compiled (sanitizado) -->
+    <link rel="stylesheet" href="/assets/tailwind.css" />
+
     <!-- Keyframes globales -->
     <style set:html={keyframes} is:inline></style>
 
@@ -104,7 +107,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         "@context": "https://schema.org",
         "@type": "Person",
         "name": "Juan Samayoa",
-        "jobTitle": "QA Engineer & Frontend Developer",
+        "jobTitle": "QA Engineer & Java Developer",
         "description": "Portafolio profesional de Juan Samayoa. Ingeniero de Pruebas TI especializado en pruebas manuales, desarrollo en Java, Python y aprendiendo desarrollo frontend.",
         "url": "https://juan-samayoa.is-a.dev",
         "image": "https://juan-samayoa.is-a.dev/assets/img/profile.jpg",
@@ -112,7 +115,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
           "https://www.linkedin.com/in/juansamayoa/",
           "https://github.com/JuanSamayoa"
         ],
-        "email": "juancho1705@gmail.com",
+        "email": "contact@juansamayoa.dev",
         "address": {
           "@type": "PostalAddress",
           "addressLocality": "Ciudad de Guatemala",
@@ -122,6 +125,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
           "Quality Assurance",
           "Test Automation",
           "Selenium WebDriver",
+          "Playwright",
           "Frontend Development",
           "Angular",
           "TypeScript",
@@ -138,7 +142,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         document.documentElement.setAttribute("data-theme", theme);
         document.documentElement.classList.toggle(
           "light-theme",
-          theme === "light"
+          theme === "light",
         );
       })();
     </script>
@@ -214,33 +218,37 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         --color-success-500: #00cc66;
         --color-success-600: #1ad580;
 
-        /* Glass effects (más oscuros para light theme) */
+        /* Glass effects (light theme: oscuros para elementos UI y hover) */
         --glass-light: rgba(0, 0, 0, 0.05);
         --glass-medium: rgba(0, 0, 0, 0.08);
         --glass-heavy: rgba(0, 0, 0, 0.12);
       }
 
-      /* Reset y base */
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
+      /* Reset y base — en @layer base para que utilities de TW tengan mayor prioridad */
+      @layer base {
+        *,
+        *::before,
+        *::after {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
 
-      html {
-        font-family:
-          "Inter",
-          system-ui,
-          -apple-system,
-          sans-serif;
-        scroll-behavior: smooth;
-      }
+        html {
+          font-family:
+            "Inter",
+            system-ui,
+            -apple-system,
+            sans-serif;
+          scroll-behavior: smooth;
+        }
 
-      body {
-        min-height: 100vh;
-        line-height: 1.6;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
+        body {
+          min-height: 100vh;
+          line-height: 1.6;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+        }
       }
 
       /* Utility classes globales */
@@ -316,6 +324,41 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         background-color: var(--color-success-600);
       }
 
+      /* Alias sin shade (text-foreground, text-brand) */
+      .text-foreground {
+        color: var(--fg-primary);
+      }
+
+      .text-brand {
+        color: var(--color-brand-500);
+      }
+
+      /* Fondo terciario */
+      .bg-background-tertiary {
+        background-color: var(--bg-tertiary);
+      }
+
+      /* Hover variants para clases que usan CSS vars (no generadas por TW) */
+      .hover\:text-foreground-primary:hover {
+        color: var(--fg-primary);
+      }
+
+      .hover\:text-foreground-secondary:hover {
+        color: var(--fg-secondary);
+      }
+
+      .hover\:text-brand-400:hover {
+        color: var(--color-brand-400);
+      }
+
+      .hover\:bg-glass-light:hover {
+        background-color: var(--glass-light);
+      }
+
+      .hover\:bg-glass-medium:hover {
+        background-color: var(--glass-medium);
+      }
+
       .shadow-glow {
         box-shadow: 0 0 20px rgba(0, 102, 255, 0.4);
       }
@@ -376,9 +419,52 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
           transition: none;
         }
       }
+
+      /* Light mode: form inputs con borde visible */
+      :root[data-theme="light"] input,
+      :root[data-theme="light"] textarea,
+      :root[data-theme="light"] select {
+        border-color: rgba(0, 0, 0, 0.2);
+        background-color: var(--bg-elevated);
+        color: var(--fg-primary);
+      }
+
+      :root[data-theme="light"] input:focus,
+      :root[data-theme="light"] textarea:focus {
+        border-color: var(--color-brand-500);
+        background-color: var(--bg-elevated);
+      }
+
+      /* Light mode: mobile menu y contenedores con border-white */
+      :root[data-theme="light"] #mobile-menu {
+        border-color: rgba(0, 0, 0, 0.1);
+        background-color: rgba(255, 255, 255, 0.95);
+      }
+      /* Removed temporary Tailwind output overrides — build pipeline now
+         produces normalized CSS. If you still see regression, run
+         `node tools/build-tailwind.cjs` to regenerate assets. */
     </style>
 
-    <!-- Scroll reveal script -->
-    <script src="/scripts/scroll-reveal.js" is:inline></script>
+    <script is:inline>
+      document.addEventListener("DOMContentLoaded", () => {
+        const observerOptions = {
+          root: null,
+          rootMargin: "0px",
+          threshold: 0.1,
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+            }
+          });
+        }, observerOptions);
+
+        const animatedElements =
+          document.querySelectorAll(".animate-on-scroll");
+        animatedElements.forEach((el) => observer.observe(el));
+      });
+    </script>
   </body>
 </html>

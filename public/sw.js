@@ -1,21 +1,21 @@
 /**
  * SERVICE WORKER PARA PWA
- * ====================== 
+ * ======================
  * Implementación básica para cacheo y funcionalidad offline
  */
 
-const CACHE_NAME = 'juan-samayoa-portfolio-v1';
-const STATIC_CACHE_NAME = 'juan-samayoa-static-v1';
+const CACHE_NAME = "juan-samayoa-portfolio-v1";
+const STATIC_CACHE_NAME = "juan-samayoa-static-v1";
 
 // Archivos críticos para cachear
 const STATIC_ASSETS = [
-  '/',
-  '/manifest.json',
-  '/favicon.svg',
-  '/assets/img/profile.webp',
-  '/assets/img/profile-fallback.svg',
-  '/assets/cv-juan-samayoa-es.pdf',
-  '/assets/cv-juan-samayoa-en.pdf'
+  "/",
+  "/manifest.json",
+  "/favicon.svg",
+  "/assets/img/profile.webp",
+  "/assets/img/profile-fallback.svg",
+  "/assets/cv-juan-samayoa-es.pdf",
+  "/assets/cv-juan-samayoa-en.pdf",
 ];
 
 // Archivos dinámicos que se cachean bajo demanda
@@ -23,84 +23,86 @@ const DYNAMIC_CACHE_PATTERNS = [
   /^\/assets\/img\//,
   /^\/assets\/certificates\//,
   /^\/assets\/icons\//,
-  /\.(?:js|css|webp|jpg|jpeg|png|svg)$/
+  /\.(?:js|css|webp|jpg|jpeg|png|svg)$/,
 ];
 
 // ================================
 // INSTALACIÓN DEL SERVICE WORKER
 // ================================
-self.addEventListener('install', event => {
-  console.log('[SW] Instalando Service Worker...');
-  
+globalThis.addEventListener("install", (event) => {
+  console.log("[SW] Instalando Service Worker...");
+
   event.waitUntil(
-    caches.open(STATIC_CACHE_NAME)
-      .then(cache => {
-        console.log('[SW] Cacheando archivos estáticos');
+    caches
+      .open(STATIC_CACHE_NAME)
+      .then((cache) => {
+        console.log("[SW] Cacheando archivos estáticos");
         return cache.addAll(STATIC_ASSETS);
       })
       .then(() => {
-        console.log('[SW] Archivos estáticos cacheados correctamente');
-        return self.skipWaiting(); // Activar inmediatamente
+        console.log("[SW] Archivos estáticos cacheados correctamente");
+        return globalThis.skipWaiting(); // Activar inmediatamente
       })
-      .catch(error => {
-        console.error('[SW] Error al cachear archivos estáticos:', error);
-      })
+      .catch((error) => {
+        console.error("[SW] Error al cachear archivos estáticos:", error);
+      }),
   );
 });
 
 // ================================
 // ACTIVACIÓN DEL SERVICE WORKER
 // ================================
-self.addEventListener('activate', event => {
-  console.log('[SW] Activando Service Worker...');
-  
+globalThis.addEventListener("activate", (event) => {
+  console.log("[SW] Activando Service Worker...");
+
   event.waitUntil(
-    caches.keys()
-      .then(cacheNames => {
+    caches
+      .keys()
+      .then((cacheNames) => {
         return Promise.all(
-          cacheNames.map(cacheName => {
+          cacheNames.map((cacheName) => {
             // Limpiar caches antiguos
             if (cacheName !== CACHE_NAME && cacheName !== STATIC_CACHE_NAME) {
-              console.log('[SW] Eliminando cache antiguo:', cacheName);
+              console.log("[SW] Eliminando cache antiguo:", cacheName);
               return caches.delete(cacheName);
             }
-          })
+          }),
         );
       })
       .then(() => {
-        console.log('[SW] Service Worker activado');
-        return self.clients.claim(); // Tomar control inmediatamente
+        console.log("[SW] Service Worker activado");
+        return globalThis.clients.claim(); // Tomar control inmediatamente
       })
-      .catch(error => {
-        console.error('[SW] Error durante la activación:', error);
-      })
+      .catch((error) => {
+        console.error("[SW] Error durante la activación:", error);
+      }),
   );
 });
 
 // ================================
 // INTERCEPTAR PETICIONES (FETCH)
 // ================================
-self.addEventListener('fetch', event => {
+self.addEventListener("fetch", (event) => {
   const { request } = event;
   const url = new URL(request.url);
-  
+
   // Solo interceptar peticiones del mismo origen
   if (url.origin !== location.origin) {
     return;
   }
-  
+
   // Estrategia: Cache First para assets estáticos
   if (isStaticAsset(request.url)) {
     event.respondWith(cacheFirst(request));
     return;
   }
-  
+
   // Estrategia: Network First para HTML y APIs
   if (isNavigationRequest(request)) {
     event.respondWith(networkFirst(request));
     return;
   }
-  
+
   // Estrategia: Stale While Revalidate para otros recursos
   event.respondWith(staleWhileRevalidate(request));
 });
@@ -119,7 +121,7 @@ async function cacheFirst(request) {
     if (cachedResponse) {
       return cachedResponse;
     }
-    
+
     const networkResponse = await fetch(request);
     if (networkResponse.ok) {
       try {
@@ -128,16 +130,16 @@ async function cacheFirst(request) {
         const responseClone = networkResponse.clone();
         await cache.put(request, responseClone);
       } catch (cacheError) {
-        console.warn('[SW] Error al guardar en cache:', cacheError);
+        console.warn("[SW] Error al guardar en cache:", cacheError);
       }
     }
-    
+
     return networkResponse;
   } catch (error) {
-    console.error('[SW] Error en Cache First:', error);
-    return new Response('Recurso no disponible offline', {
+    console.error("[SW] Error en Cache First:", error);
+    return new Response("Recurso no disponible offline", {
       status: 503,
-      statusText: 'Service Unavailable'
+      statusText: "Service Unavailable",
     });
   }
 }
@@ -156,21 +158,28 @@ async function networkFirst(request) {
         const responseClone = networkResponse.clone();
         await cache.put(request, responseClone);
       } catch (cacheError) {
-        console.warn('[SW] Error al guardar en cache:', cacheError);
+        console.warn("[SW] Error al guardar en cache:", cacheError);
       }
     }
     return networkResponse;
   } catch (error) {
-    console.log('[SW] Red no disponible, buscando en cache...');
+    console.warn("[SW] Error de red en Network First:", error);
+    console.log("[SW] Red no disponible, buscando en cache...");
     const cachedResponse = await caches.match(request);
-    
+
     if (cachedResponse) {
       return cachedResponse;
     }
-    
+
     // Página offline personalizada
     if (isNavigationRequest(request)) {
-      return caches.match('/') || new Response(`
+      const offlineHome = await caches.match("/");
+      if (offlineHome) {
+        return offlineHome;
+      }
+
+      return new Response(
+        `
         <!DOCTYPE html>
         <html>
           <head>
@@ -190,14 +199,16 @@ async function networkFirst(request) {
             </div>
           </body>
         </html>
-      `, {
-        headers: { 'Content-Type': 'text/html' }
-      });
+      `,
+        {
+          headers: { "Content-Type": "text/html" },
+        },
+      );
     }
-    
-    return new Response('No disponible offline', {
+
+    return new Response("No disponible offline", {
       status: 503,
-      statusText: 'Service Unavailable'
+      statusText: "Service Unavailable",
     });
   }
 }
@@ -208,24 +219,29 @@ async function networkFirst(request) {
  */
 async function staleWhileRevalidate(request) {
   const cachedResponse = await caches.match(request);
-  
-  const fetchPromise = fetch(request).then(async response => {
-    if (response.ok) {
-      try {
-        const cache = await caches.open(CACHE_NAME);
-        // Clonamos la respuesta antes de cualquier otra operación
-        const responseClone = response.clone();
-        await cache.put(request, responseClone);
-      } catch (error) {
-        console.warn('[SW] Error al actualizar cache en staleWhileRevalidate:', error);
+
+  const fetchPromise = fetch(request)
+    .then(async (response) => {
+      if (response.ok) {
+        try {
+          const cache = await caches.open(CACHE_NAME);
+          // Clonamos la respuesta antes de cualquier otra operación
+          const responseClone = response.clone();
+          await cache.put(request, responseClone);
+        } catch (error) {
+          console.warn(
+            "[SW] Error al actualizar cache en staleWhileRevalidate:",
+            error,
+          );
+        }
       }
-    }
-    return response;
-  }).catch(error => {
-    console.warn('[SW] Error en fetchPromise:', error);
-    return cachedResponse;
-  });
-  
+      return response;
+    })
+    .catch((error) => {
+      console.warn("[SW] Error en fetchPromise:", error);
+      return cachedResponse;
+    });
+
   return cachedResponse || fetchPromise;
 }
 
@@ -234,59 +250,69 @@ async function staleWhileRevalidate(request) {
 // ================================
 
 function isStaticAsset(url) {
-  return DYNAMIC_CACHE_PATTERNS.some(pattern => pattern.test(url));
+  return DYNAMIC_CACHE_PATTERNS.some((pattern) => pattern.test(url));
 }
 
 function isNavigationRequest(request) {
-  return request.mode === 'navigate' || 
-         (request.method === 'GET' && request.headers.get('accept').includes('text/html'));
+  return (
+    request.mode === "navigate" ||
+    (request.method === "GET" &&
+      request.headers.get("accept").includes("text/html"))
+  );
 }
 
 // ================================
 // MANEJO DE MENSAJES
 // ================================
-self.addEventListener('message', event => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
+globalThis.addEventListener("message", (event) => {
+  if (event.origin && event.origin !== globalThis.location.origin) {
+    return;
   }
-  
-  if (event.data && event.data.type === 'GET_VERSION') {
-    event.ports[0].postMessage({ version: CACHE_NAME });
+
+  if (event.data?.type === "SKIP_WAITING") {
+    globalThis.skipWaiting();
+  }
+
+  if (event.data?.type === "GET_VERSION") {
+    event.ports?.[0]?.postMessage({ version: CACHE_NAME });
   }
 });
 
 // ================================
 // NOTIFICACIONES PUSH (Futuro)
 // ================================
-self.addEventListener('push', event => {
+globalThis.addEventListener("push", (event) => {
   if (event.data) {
     const options = {
       body: event.data.text(),
-      icon: '/assets/icons/icon-192.png',
-      badge: '/assets/icons/badge-72.png',
+      icon: "/assets/icons/icon-192.png",
+      badge: "/assets/icons/badge-72.png",
       vibrate: [100, 50, 100],
       data: {
         dateOfArrival: Date.now(),
-        primaryKey: 1
+        primaryKey: 1,
       },
       actions: [
         {
-          action: 'explore',
-          title: 'Ver portafolio',
-          icon: '/assets/icons/checkmark.png'
+          action: "explore",
+          title: "Ver portafolio",
+          icon: "/assets/icons/checkmark.png",
         },
         {
-          action: 'close',
-          title: 'Cerrar',
-          icon: '/assets/icons/xmark.png'
-        }
-      ]
+          action: "close",
+          title: "Cerrar",
+          icon: "/assets/icons/xmark.png",
+        },
+      ],
     };
-    
+
     event.waitUntil(
-      self.registration.showNotification('Juan Samayoa - Portafolio', options)
+      globalThis.registration.showNotification(
+        "Juan Samayoa - Portafolio",
+        options,
+      ),
     );
   }
 });
 
-console.log('[SW] Service Worker cargado correctamente');
+console.log("[SW] Service Worker cargado correctamente");

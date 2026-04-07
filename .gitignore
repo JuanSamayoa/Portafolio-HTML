@@ -1,9 +1,9 @@
 # Build output
 dist/
+docs/
 /tmp
 /out-tsc
 /bazel-out
-# docs/ se incluye en el repositorio para GitHub Pages
 
 # Generated types & dev files
 .astro/
@@ -69,3 +69,4 @@ desktop.ini
 *.temp
 .tmp/
 .temp/
+.sonarlint/

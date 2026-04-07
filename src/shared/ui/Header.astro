@@ -171,7 +171,6 @@ const navLinks = [
     const themeIconDark = document.getElementById("theme-icon-dark");
 
     // Scroll effect
-    let lastScroll = 0;
     window.addEventListener("scroll", () => {
       const currentScroll = window.pageYOffset;
 
@@ -180,8 +179,6 @@ const navLinks = [
       } else {
         header?.classList.remove("scrolled");
       }
-
-      lastScroll = currentScroll;
     });
 
     // Mobile menu toggle

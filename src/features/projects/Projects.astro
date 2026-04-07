@@ -4,11 +4,11 @@
  * Grid moderno con hover effects y filtrado
  */
 
-import Section from '../../shared/ui/Section.astro';
-import Card from '../../shared/ui/Card.astro';
+import { projectsData } from '../../data/projects';
 import Badge from '../../shared/ui/Badge.astro';
 import Button from '../../shared/ui/Button.astro';
-import { projectsData } from '../../data/projects';
+import Card from '../../shared/ui/Card.astro';
+import Section from '../../shared/ui/Section.astro';
 ---
 
 <Section id="projects" background="primary">
@@ -16,7 +16,7 @@ import { projectsData } from '../../data/projects';
     <!-- Header -->
     <div class="text-center space-y-4">
       <h2
-        class="text-3xl sm:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-success-400"
+        class="text-3xl sm:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-linear-to-r from-brand-400 to-success-400"
       >
         Proyectos Destacados
       </h2>
@@ -28,12 +28,12 @@ import { projectsData } from '../../data/projects';
     <!-- Projects Grid -->
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
       {
-        projectsData.map((project, index) => (
+        projectsData.map((project) => (
           <Card variant="glass" padding="sm" hover class="group overflow-hidden">
             <div class="space-y-4">
               <!-- Imagen del proyecto -->
               <div class="relative overflow-hidden rounded-lg aspect-video">
-                <div class="absolute inset-0 bg-gradient-to-t from-background-primary/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10" />
+                <div class="absolute inset-0 bg-linear-to-t from-background-primary/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10" />
                 <img
                   src={project.image}
                   alt={project.title}

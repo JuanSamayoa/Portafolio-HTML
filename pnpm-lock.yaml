@@ -42,6 +42,9 @@ importers:
       baseline-browser-mapping:
         specifier: ^2.10.0
         version: 2.10.0
+      postcss:
+        specifier: ^8.5.8
+        version: 8.5.8
       tailwindcss:
         specifier: ^4.2.1
         version: 4.2.1

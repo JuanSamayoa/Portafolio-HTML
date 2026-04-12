@@ -122,7 +122,7 @@ const navLinks = [
     <!-- Mobile Menu -->
     <div
       id="mobile-menu"
-      class="md:hidden mt-2 p-4 backdrop-blur-xl bg-background-elevated/95 rounded-2xl border border-white/10 shadow-lg hidden opacity-0 transform scale-95 transition-all duration-300"
+      class="md:hidden mt-2 p-4 backdrop-blur-xl bg-background-elevated/95 rounded-2xl mobile-menu-border shadow-lg hidden opacity-0 transform scale-95 transition-all duration-300"
     >
       <div class="flex flex-col gap-2">
         {
@@ -253,8 +253,12 @@ const navLinks = [
       }
     }
 
-    // Inicializar tema
-    const currentTheme = localStorage.getItem("theme") || "dark";
+    // Initialize theme
+    function getSystemTheme() {
+      return window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+    }
+
+    const currentTheme = localStorage.getItem("theme") || getSystemTheme();
     document.documentElement.setAttribute("data-theme", currentTheme);
     document.documentElement.classList.toggle(
       "light-theme",
@@ -262,22 +266,22 @@ const navLinks = [
     );
     updateThemeIcons(currentTheme);
 
-    // Toggle theme al hacer click
+    // Toggle theme on click
     themeToggle?.addEventListener("click", () => {
-      const currentTheme = localStorage.getItem("theme") || "dark";
+      const currentTheme = localStorage.getItem("theme") || getSystemTheme();
       const newTheme = currentTheme === "dark" ? "light" : "dark";
 
-      // Actualizar localStorage
+      // Explicitly set in localStorage to override system preference
       localStorage.setItem("theme", newTheme);
 
-      // Actualizar HTML
+      // Update HTML
       document.documentElement.setAttribute("data-theme", newTheme);
       document.documentElement.classList.toggle(
         "light-theme",
         newTheme === "light",
       );
 
-      // Actualizar iconos
+      // Update icons
       updateThemeIcons(newTheme);
     });
   });
@@ -336,5 +340,18 @@ const navLinks = [
 
   :global([data-theme="light"]) .scrolled .header-container {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  }
+
+  /* Mobile menu border - theme-aware */
+  :root, :root[data-theme="dark"] {
+    --mobile-menu-border: rgba(255, 255, 255, 0.1);
+  }
+
+  :root[data-theme="light"] {
+    --mobile-menu-border: rgba(0, 0, 0, 0.1);
+  }
+
+  .mobile-menu-border {
+    border-color: var(--mobile-menu-border) !important;
   }
 </style>

@@ -40,6 +40,15 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href={canonicalURL} />
 
+    <!-- Content-Security-Policy (meta tag fallback para GitHub Pages) -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://formsubmit.co; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://formsubmit.co wss:; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co;"
+    />
+
+    <!-- Referrer-Policy -->
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link
@@ -134,26 +143,63 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       }
     </script>
 
-    <!-- Theme script - Load early to prevent flash -->
+    <!-- Theme script - Detect system preference + localStorage -->
     <script is:inline>
-      // Cargar tema antes del render para prevenir flash
+      // Detect theme from localStorage or system preference
       (function () {
-        const theme = localStorage.getItem("theme") || "dark";
+        function getSystemTheme() {
+          if (window.matchMedia("(prefers-color-scheme: light)").matches) {
+            return "light";
+          }
+          return "dark";
+        }
+
+        const theme = localStorage.getItem("theme") || getSystemTheme();
         document.documentElement.setAttribute("data-theme", theme);
         document.documentElement.classList.toggle(
           "light-theme",
           theme === "light",
         );
+
+        // Listen for system theme changes
+        window.matchMedia("(prefers-color-scheme: light)").addEventListener("change", (e) => {
+          if (!localStorage.getItem("theme")) {
+            const newTheme = e.matches ? "light" : "dark";
+            document.documentElement.setAttribute("data-theme", newTheme);
+            document.documentElement.classList.toggle("light-theme", newTheme === "light");
+          }
+        });
       })();
+    </script>
+
+    <!-- Register Service Worker for PWA -->
+    <script is:inline>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("/sw.js").then((registration) => {
+            console.log("[SW] Registered successfully, scope:", registration.scope);
+          }).catch((error) => {
+            console.warn("[SW] Registration failed:", error);
+          });
+        });
+      }
     </script>
   </head>
 
   <body class="bg-background-primary text-foreground-primary antialiased">
+    <!-- Skip to content link for accessibility -->
+    <a
+      href="#main-content"
+      class="skip-link absolute -top-16 left-4 z-[100] px-6 py-3 bg-brand-500 text-white font-semibold rounded-lg shadow-glow transition-all duration-300 focus:top-4"
+    >
+      Saltar al contenido principal
+    </a>
+
     <!-- Header -->
     <Header />
 
     <!-- Main Content -->
-    <main>
+    <main id="main-content">
       <slot />
     </main>
 
@@ -241,13 +287,34 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
             -apple-system,
             sans-serif;
           scroll-behavior: smooth;
+          -webkit-text-size-adjust: 100%;
+          text-rendering: optimizeLegibility;
         }
 
         body {
           min-height: 100vh;
-          line-height: 1.6;
+          line-height: 1.7;
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Tipografía profesional */
+        h1, h2, h3, h4, h5, h6 {
+          line-height: 1.2;
+          letter-spacing: -0.02em;
+          font-weight: 700;
+        }
+
+        p {
+          line-height: 1.75;
+          letter-spacing: 0.01em;
+        }
+
+        /* Mejorar selección de texto */
+        ::selection {
+          background-color: var(--color-brand-500);
+          color: white;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
         }
       }
 
@@ -360,11 +427,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       }
 
       .shadow-glow {
-        box-shadow: 0 0 20px rgba(0, 102, 255, 0.4);
+        box-shadow: 0 0 30px rgba(0, 102, 255, 0.4), 0 0 60px rgba(0, 102, 255, 0.15);
       }
 
       .shadow-glowSuccess {
-        box-shadow: 0 0 20px rgba(0, 204, 102, 0.4);
+        box-shadow: 0 0 30px rgba(0, 204, 102, 0.4), 0 0 60px rgba(0, 204, 102, 0.15);
       }
 
       /* Scrollbar personalizado */
@@ -391,10 +458,12 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         color: white;
       }
 
-      /* Focus visible para accesibilidad */
+      /* Focus visible mejorado para accesibilidad */
       *:focus-visible {
-        outline: 2px solid var(--color-brand-500);
-        outline-offset: 2px;
+        outline: 3px solid var(--color-brand-500);
+        outline-offset: 3px;
+        border-radius: 4px;
+        box-shadow: 0 0 0 6px rgba(0, 102, 255, 0.15);
       }
 
       /* Animaciones de scroll reveal */
@@ -433,6 +502,19 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       :root[data-theme="light"] textarea:focus {
         border-color: var(--color-brand-500);
         background-color: var(--bg-elevated);
+      }
+
+      /* Form input borders - theme-aware utility class */
+      :root, :root[data-theme="dark"] {
+        --form-border: rgba(255, 255, 255, 0.1);
+      }
+
+      :root[data-theme="light"] {
+        --form-border: rgba(0, 0, 0, 0.15);
+      }
+
+      .form-input-border {
+        border-color: var(--form-border) !important;
       }
 
       /* Light mode: mobile menu y contenedores con border-white */

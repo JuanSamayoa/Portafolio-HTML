@@ -6,7 +6,7 @@ import type { PersonalInfo } from "../types/portfolio";
 
 export const personalInfo: PersonalInfo = {
   name: "Juan Samayoa",
-  title: "Ingeniero de Pruebas TI",
+  title: "QA Automatizado",
   email: "juancho1705@gmail.com",
   location: "Ciudad de Guatemala, Guatemala",
   profileImage: "/assets/img/profile.jpg",

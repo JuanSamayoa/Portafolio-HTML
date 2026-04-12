@@ -186,7 +186,7 @@ const skills = [
               <img
                 src={personalInfo.profileImage}
                 alt={personalInfo.name}
-                class="relative w-full aspect-square object-cover rounded-2xl border-2 border-white/10"
+                class="relative w-full aspect-square object-cover rounded-2xl border-2 profile-image-border"
                 loading="eager"
               />
             </div>
@@ -323,5 +323,18 @@ const skills = [
   .animate-gradient-text {
     background-size: 200% 200%;
     animation: gradient-text 8s ease infinite;
+  }
+
+  /* Profile image border - theme-aware */
+  :root, :root[data-theme="dark"] {
+    --profile-border: rgba(255, 255, 255, 0.1);
+  }
+
+  :root[data-theme="light"] {
+    --profile-border: rgba(0, 0, 0, 0.12);
+  }
+
+  .profile-image-border {
+    border-color: var(--profile-border) !important;
   }
 </style>

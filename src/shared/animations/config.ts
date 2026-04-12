@@ -66,8 +66,8 @@ export const keyframes = `
   }
 
   @keyframes pulse-glow {
-    0%, 100% { box-shadow: 0 0 20px rgba(0, 102, 255, 0.4); }
-    50% { box-shadow: 0 0 40px rgba(0, 102, 255, 0.6); }
+    0%, 100% { box-shadow: 0 0 20px rgba(0, 102, 255, 0.3); }
+    50% { box-shadow: 0 0 40px rgba(0, 102, 255, 0.5); }
   }
 
   @keyframes shimmer {
@@ -100,5 +100,46 @@ export const keyframes = `
       opacity: 1;
       transform: scale(1);
     }
+  }
+
+  @keyframes glow {
+    0%, 100% {
+      box-shadow: 0 0 20px rgba(0, 102, 255, 0.2);
+    }
+    50% {
+      box-shadow: 0 0 40px rgba(0, 102, 255, 0.4);
+    }
+  }
+
+  @keyframes shimmer-line {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  @keyframes bounce-in {
+    0% {
+      opacity: 0;
+      transform: scale(0.3);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+    70% {
+      transform: scale(0.9);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-5deg); }
+    75% { transform: rotate(5deg); }
   }
 `;

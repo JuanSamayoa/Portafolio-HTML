@@ -34,7 +34,7 @@ const quickLinks = [
 ];
 ---
 
-<footer class="bg-background-secondary border-t border-white/10">
+<footer class="bg-background-secondary border-t footer-border">
   <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <div class="grid md:grid-cols-3 gap-8 mb-8">
       <!-- Columna 1 - About -->
@@ -159,7 +159,7 @@ const quickLinks = [
     </div>
 
     <!-- Bottom bar -->
-    <div class="pt-8 border-t border-white/10">
+    <div class="pt-8 border-t footer-border-bottom">
       <div
         class="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-foreground-tertiary"
       >
@@ -223,6 +223,23 @@ const quickLinks = [
 </script>
 
 <style>
+  /* Theme-aware footer borders */
+  :root, :root[data-theme="dark"] {
+    --footer-border: rgba(255, 255, 255, 0.1);
+  }
+
+  :root[data-theme="light"] {
+    --footer-border: rgba(0, 0, 0, 0.1);
+  }
+
+  .footer-border {
+    border-color: var(--footer-border);
+  }
+
+  .footer-border-bottom {
+    border-color: var(--footer-border);
+  }
+
   #scroll-to-top {
     transform: translateY(0);
   }

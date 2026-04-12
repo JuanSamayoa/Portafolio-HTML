@@ -35,49 +35,54 @@ const mainSkills = [
 ];
 ---
 
-<Section id="about" background="secondary">
-  <div class="space-y-16">
+<Section id="about" background="primary">
+  <div class="space-y-20">
     <!-- Header -->
-    <div class="text-center space-y-4">
+    <div class="text-center space-y-3">
       <h2
         class="text-3xl sm:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-success-400"
       >
         Sobre Mí
       </h2>
-      <p class="text-lg text-foreground-secondary max-w-3xl mx-auto">
+      <p class="text-base sm:text-lg text-foreground-secondary max-w-3xl mx-auto">
         Ingeniero de pruebas con pasión por el desarrollo de aplicaciones y la calidad
         del software
       </p>
     </div>
 
     <!-- Stats Grid -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
       {
-        stats.map((stat) => (
-          <Card variant="glass" padding="md" hover>
-            <div class="text-center space-y-2">
-              <div class="text-3xl lg:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-brand-400 to-success-400">
-                {stat.value}
+        stats.map((stat, index) => (
+          <div class="stat-card stat-card-stagger" data-index={index}>
+            <div class="stat-card-inner">
+              <div class="text-center space-y-1.5">
+                <div class="stat-value text-3xl lg:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-brand-400 to-success-400">
+                  {stat.value}
+                </div>
+                <div class="text-xs sm:text-sm text-foreground-tertiary font-medium">{stat.label}</div>
               </div>
-              <div class="text-sm text-foreground-tertiary">{stat.label}</div>
             </div>
-          </Card>
+          </div>
         ))
       }
     </div>
 
+    <!-- Divider -->
+    <div class="section-divider"></div>
+
     <!-- About content -->
-    <div class="grid lg:grid-cols-2 gap-12 items-start">
+    <div class="grid lg:grid-cols-2 gap-10 xl:gap-14 items-start">
       <!-- Columna izquierda - Descripción -->
       <Card variant="glass" padding="lg">
         <div class="space-y-6">
-          <h3 class="text-2xl font-bold text-foreground-primary">
+          <h3 class="text-xl lg:text-2xl font-bold text-foreground-primary trajectory-title">
             Mi Trayectoria
           </h3>
 
-          <div class="space-y-4 text-foreground-secondary leading-relaxed">
+          <div class="space-y-4 text-foreground-secondary leading-relaxed text-sm sm:text-base">
             <p>
-              Soy un <strong class="text-brand-400"
+              Soy un <strong class="text-brand-400 font-semibold"
                 >Ingeniero de Pruebas de Software (QA)</strong
               > con amplia experiencia en pruebas (funcionales, no funcionales, de humo,
               caja negra, caja blanca) y desarrollo de aplicaciones web. Mi enfoque combina la
@@ -88,7 +93,7 @@ const mainSkills = [
               A lo largo de mi carrera, he trabajado en proyectos que van desde
               plataformas bancarias hasta sistemas de reportería en Power BI,
               siempre enfocándome en entregar
-              <strong class="text-success-400">software de calidad </strong >
+              <strong class="text-success-400 font-semibold">software de calidad </strong >
               y aprender mientras contribuyo al éxito del equipo.
             </p>
 
@@ -102,8 +107,8 @@ const mainSkills = [
           </div>
 
           <!-- Valores -->
-          <div class="pt-4 border-t border-white/10">
-            <h4 class="text-lg font-semibold text-foreground-primary mb-3">
+          <div class="pt-5 border-t" style="border-color: var(--border-color);">
+            <h4 class="text-sm font-semibold text-foreground-primary mb-3 uppercase tracking-wide">
               Valores que me definen
             </h4>
             <div class="flex flex-wrap gap-2">
@@ -120,12 +125,12 @@ const mainSkills = [
       </Card>
 
       <!-- Columna derecha - Skills -->
-      <div class="space-y-6">
+      <div class="space-y-5">
         {
           mainSkills.map((skillGroup) => (
-            <Card variant="glass" padding="lg" hover>
-              <h4 class="text-xl font-bold text-foreground-primary mb-4 flex items-center gap-2">
-                <span class="w-2 h-2 bg-brand-400 rounded-full" />
+            <Card variant="glass" padding="lg" hover class="skill-card">
+              <h4 class="text-base lg:text-lg font-bold text-foreground-primary mb-4 flex items-center gap-2">
+                <span class="w-1.5 h-1.5 bg-brand-400 rounded-full flex-shrink-0" />
                 {skillGroup.category}
               </h4>
               <div class="flex flex-wrap gap-2">
@@ -140,7 +145,7 @@ const mainSkills = [
         <!-- CTA adicional -->
         <Card variant="bordered" padding="md">
           <div class="text-center space-y-3">
-            <p class="text-foreground-secondary">¿Interesado en colaborar?</p>
+            <p class="text-foreground-secondary text-sm">¿Interesado en colaborar?</p>
             <a
               href="#contact"
               class="inline-flex items-center gap-2 text-brand-400 hover:text-brand-300 font-semibold transition-colors"
@@ -167,31 +172,117 @@ const mainSkills = [
 </Section>
 
 <style>
-  /* Animaciones para las cards */
-  @keyframes float {
-    0%,
-    100% {
+  /* Section divider */
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(26, 140, 255, 0.3), rgba(0, 204, 102, 0.3), transparent);
+  }
+
+  :global([data-theme="light"]) .section-divider {
+    background: linear-gradient(to right, transparent, rgba(0, 102, 255, 0.2), rgba(0, 204, 102, 0.2), transparent);
+  }
+
+  /* Stat cards with gradient borders — theme-aware */
+  .stat-card {
+    position: relative;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    backdrop-filter: blur(12px);
+    transition: all 0.3s ease;
+    background: var(--card-bg);
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, var(--card-border-start), var(--card-border-end));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+  }
+
+  .stat-card:hover::before {
+    opacity: 1;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--card-hover-shadow);
+  }
+
+  .stat-card-inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  :root, :root[data-theme="dark"] {
+    --card-bg: rgba(17, 17, 19, 0.6);
+    --card-border-start: rgba(26, 140, 255, 0.4);
+    --card-border-end: rgba(0, 204, 102, 0.4);
+    --card-hover-shadow: 0 12px 40px rgba(26, 140, 255, 0.15);
+    --border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  :root[data-theme="light"] {
+    --card-bg: rgba(255, 255, 255, 0.75);
+    --card-border-start: rgba(0, 102, 255, 0.3);
+    --card-border-end: rgba(0, 204, 102, 0.3);
+    --card-hover-shadow: 0 12px 40px rgba(0, 102, 255, 0.1);
+    --border-color: rgba(0, 0, 0, 0.1);
+  }
+
+  /* Staggered animation for stat cards */
+  .stat-card-stagger {
+    opacity: 0;
+    animation: stat-reveal 0.6s ease-out forwards;
+  }
+
+  .stat-card-stagger[data-index="0"] { animation-delay: 0.1s; }
+  .stat-card-stagger[data-index="1"] { animation-delay: 0.2s; }
+  .stat-card-stagger[data-index="2"] { animation-delay: 0.3s; }
+  .stat-card-stagger[data-index="3"] { animation-delay: 0.4s; }
+
+  @keyframes stat-reveal {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
       transform: translateY(0);
     }
-    50% {
-      transform: translateY(-5px);
-    }
   }
 
-  /* Aplicar float a las stat cards */
-  .grid > :global(div) {
-    animation: float 3s ease-in-out infinite;
+  /* Trajectory title with left accent */
+  .trajectory-title {
+    position: relative;
+    padding-left: 1rem;
   }
 
-  .grid > :global(div):nth-child(2) {
-    animation-delay: 0.2s;
+  .trajectory-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 70%;
+    background: linear-gradient(to bottom, #1a8cff, #00cc66);
+    border-radius: 2px;
   }
 
-  .grid > :global(div):nth-child(3) {
-    animation-delay: 0.4s;
+  /* Skill cards hover effect */
+  .skill-card {
+    transition: all 0.3s ease;
   }
 
-  .grid > :global(div):nth-child(4) {
-    animation-delay: 0.6s;
+  .skill-card:hover {
+    border-color: var(--card-border-start);
   }
 </style>

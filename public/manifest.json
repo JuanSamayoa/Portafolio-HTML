@@ -1,4 +1,5 @@
-{  "name": "Juan Samayoa - Portafolio Profesional",
+{
+  "name": "Juan Samayoa - Portafolio Profesional",
   "short_name": "Juan Samayoa",
   "description": "Portafolio profesional de Juan Samayoa - QA Engineer y Desarrollador Frontend",
   "start_url": "/",
@@ -18,7 +19,7 @@
       "label": "Página principal en desktop"
     },
     {
-      "src": "/assets/screenshots/mobile-home.webp", 
+      "src": "/assets/screenshots/mobile-home.webp",
       "sizes": "375x812",
       "type": "image/webp",
       "form_factor": "narrow",
@@ -39,7 +40,7 @@
     },
     {
       "src": "/assets/icons/icon-512.png",
-      "sizes": "512x512", 
+      "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
@@ -52,7 +53,7 @@
     {
       "src": "/assets/icons/icon-512-maskable.png",
       "sizes": "512x512",
-      "type": "image/png", 
+      "type": "image/png",
       "purpose": "maskable"
     }
   ],
@@ -61,7 +62,7 @@
       "name": "Ver Proyectos",
       "short_name": "Proyectos",
       "description": "Ver mis proyectos destacados",
-      "url": "/#proyectos",
+      "url": "/#projects",
       "icons": [
         {
           "src": "/assets/icons/projects-96.png",
@@ -70,10 +71,10 @@
       ]
     },
     {
-      "name": "Ver Experiencia", 
+      "name": "Ver Experiencia",
       "short_name": "Experiencia",
       "description": "Ver mi experiencia profesional",
-      "url": "/#experiencia",
+      "url": "/#experience",
       "icons": [
         {
           "src": "/assets/icons/experience-96.png",
@@ -83,9 +84,9 @@
     },
     {
       "name": "Contacto",
-      "short_name": "Contacto", 
+      "short_name": "Contacto",
       "description": "Enviarme un mensaje",
-      "url": "/#contacto",
+      "url": "/#contact",
       "icons": [
         {
           "src": "/assets/icons/contact-96.png",

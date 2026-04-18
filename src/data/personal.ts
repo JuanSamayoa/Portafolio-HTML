@@ -7,7 +7,7 @@ import type { PersonalInfo } from "../types/portfolio";
 export const personalInfo: PersonalInfo = {
   name: "Juan Samayoa",
   title: "QA Automatizado",
-  email: "juancho1705@gmail.com",
+  email: "contact@juansamayoa.dev",
   location: "Ciudad de Guatemala, Guatemala",
   profileImage: "/assets/img/profile.jpg",
   profileImageFallback: "/assets/img/profile-fallback.svg",

@@ -1,5 +1,5 @@
-Contact: mailto:juancho1705@gmail.com
-Contact: https://juan-samayoa.is-a.dev/#contacto
+Contact: mailto:contact@juansamayoa.dev
+Contact: https://juan-samayoa.is-a.dev/#contact
 Expires: 2026-07-09T23:59:59.000Z
 Acknowledgments: https://juan-samayoa.is-a.dev/#about
 Preferred-Languages: es, en
@@ -9,7 +9,7 @@ Canonical: https://juan-samayoa.is-a.dev/.well-known/security.txt
 
 Si encuentras una vulnerabilidad de seguridad en este portafolio, por favor:
 
-1. Envía un email a juancho1705@gmail.com con los detalles
+1. Envía un email a contact@juansamayoa.dev con los detalles
 2. Include pasos para reproducir la vulnerabilidad
 3. Proporciona información sobre el impacto potencial
 4. Permite tiempo razonable para la corrección antes de la divulgación pública
@@ -31,5 +31,5 @@ Este archivo de seguridad cubre:
 
 # Reconocimientos
 
-Agradecemos a todos los investigadores de seguridad que han contribuido 
+Agradecemos a todos los investigadores de seguridad que han contribuido
 a mejorar la seguridad de este proyecto.

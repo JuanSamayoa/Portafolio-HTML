@@ -14,8 +14,8 @@ const STATIC_ASSETS = [
   "/favicon.svg",
   "/assets/img/profile.webp",
   "/assets/img/profile-fallback.svg",
-  "/assets/cv-juan-samayoa-es.pdf",
-  "/assets/cv-juan-samayoa-en.pdf",
+  "/assets/cv/cv-juan-samayoa-es.pdf",
+  "/assets/cv/cv-juan-samayoa-en.pdf",
 ];
 
 // Archivos dinámicos que se cachean bajo demanda

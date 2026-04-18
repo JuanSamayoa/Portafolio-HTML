@@ -162,13 +162,18 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         );
 
         // Listen for system theme changes
-        window.matchMedia("(prefers-color-scheme: light)").addEventListener("change", (e) => {
-          if (!localStorage.getItem("theme")) {
-            const newTheme = e.matches ? "light" : "dark";
-            document.documentElement.setAttribute("data-theme", newTheme);
-            document.documentElement.classList.toggle("light-theme", newTheme === "light");
-          }
-        });
+        window
+          .matchMedia("(prefers-color-scheme: light)")
+          .addEventListener("change", (e) => {
+            if (!localStorage.getItem("theme")) {
+              const newTheme = e.matches ? "light" : "dark";
+              document.documentElement.setAttribute("data-theme", newTheme);
+              document.documentElement.classList.toggle(
+                "light-theme",
+                newTheme === "light",
+              );
+            }
+          });
       })();
     </script>
 
@@ -176,11 +181,17 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <script is:inline>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", () => {
-          navigator.serviceWorker.register("/sw.js").then((registration) => {
-            console.log("[SW] Registered successfully, scope:", registration.scope);
-          }).catch((error) => {
-            console.warn("[SW] Registration failed:", error);
-          });
+          navigator.serviceWorker
+            .register("/sw.js")
+            .then((registration) => {
+              console.log(
+                "[SW] Registered successfully, scope:",
+                registration.scope,
+              );
+            })
+            .catch((error) => {
+              console.warn("[SW] Registration failed:", error);
+            });
         });
       }
     </script>
@@ -190,7 +201,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <!-- Skip to content link for accessibility -->
     <a
       href="#main-content"
-      class="skip-link absolute -top-16 left-4 z-[100] px-6 py-3 bg-brand-500 text-white font-semibold rounded-lg shadow-glow transition-all duration-300 focus:top-4"
+      class="skip-link absolute -top-16 left-4 z-100 px-6 py-3 bg-brand-500 text-white font-semibold rounded-lg shadow-glow transition-all duration-300 focus:top-4"
     >
       Saltar al contenido principal
     </a>
@@ -299,7 +310,12 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         }
 
         /* Tipografía profesional */
-        h1, h2, h3, h4, h5, h6 {
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
           line-height: 1.2;
           letter-spacing: -0.02em;
           font-weight: 700;
@@ -427,11 +443,15 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       }
 
       .shadow-glow {
-        box-shadow: 0 0 30px rgba(0, 102, 255, 0.4), 0 0 60px rgba(0, 102, 255, 0.15);
+        box-shadow:
+          0 0 30px rgba(0, 102, 255, 0.4),
+          0 0 60px rgba(0, 102, 255, 0.15);
       }
 
       .shadow-glowSuccess {
-        box-shadow: 0 0 30px rgba(0, 204, 102, 0.4), 0 0 60px rgba(0, 204, 102, 0.15);
+        box-shadow:
+          0 0 30px rgba(0, 204, 102, 0.4),
+          0 0 60px rgba(0, 204, 102, 0.15);
       }
 
       /* Scrollbar personalizado */
@@ -505,7 +525,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       }
 
       /* Form input borders - theme-aware utility class */
-      :root, :root[data-theme="dark"] {
+      :root,
+      :root[data-theme="dark"] {
         --form-border: rgba(255, 255, 255, 0.1);
       }
 

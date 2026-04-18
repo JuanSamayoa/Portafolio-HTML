@@ -1,66 +1,173 @@
 ---
 /**
  * ABOUT SECTION - Sobre mí con enfoque QA/Dev
- * Layout moderno con stats y habilidades destacadas
+ * Layout moderno con propuesta de valor y contexto profesional
  */
 
-import Section from "../../shared/ui/Section.astro";
-import Card from "../../shared/ui/Card.astro";
 import Badge from "../../shared/ui/Badge.astro";
+import Card from "../../shared/ui/Card.astro";
+import Section from "../../shared/ui/Section.astro";
+
+const technicalApplications = [
+  {
+    category: "QA & Testing",
+    entries: [
+      {
+        tool: "Selenium + Python/Java",
+        context:
+          "Automatizo regresiones y tareas repetitivas para reducir tiempos de validación y liberar espacio para pruebas de mayor valor.",
+      },
+      {
+        tool: "Postman",
+        context:
+          "Analizo el sistema a nivel de API para validar flujos críticos, integridad de datos y rendimiento, complementando pruebas funcionales.",
+      },
+      {
+        tool: "Jira/Azure DevOps",
+        context:
+          "Gestiono defectos y priorización por riesgo para mantener visibilidad del estado de calidad durante todo el ciclo.",
+      },
+    ],
+  },
+  {
+    category: "Data & Validación",
+    entries: [
+      {
+        tool: "SQL - PL/SQL",
+        context:
+          "Utilizo tecnicas de SQL para analizar, completar y validar flujos de sistemas Backend. Hago queries avanzados para validar integridad de datos, resultados de procesos y consistencia entre sistemas.",
+      },
+      {
+        tool: "Excel + Power Query",
+        context:
+          "Transformo y depuro datos para validar resultados funcionales, detectar inconsistencias entre fuentes y consolidar evidencias de prueba de forma trazable.",
+      },
+    ],
+  },
+  {
+    category: "Frontend & Colaboración",
+    entries: [
+      {
+        tool: "Angular + TypeScript + Tailwind",
+        context:
+          "Colaboro en frontends funcionales y consistentes, aplicando criterios de calidad desde el diseño hasta la entrega.",
+      },
+      {
+        tool: "Git + Flujo en equipo",
+        context:
+          "Trabajo con control de versiones y comunicación técnica clara para integrar QA y desarrollo sin fricción.",
+      },
+    ],
+  },
+];
+
+const technicalEntriesCount = technicalApplications.reduce(
+  (acc, group) => acc + group.entries.length,
+  0,
+);
 
 const stats = [
   { value: "3+", label: "Años de Experiencia" },
-  { value: "20+", label: "Proyectos Completados" },
-  { value: "90%", label: "Coverage en Tests" },
-  { value: "100%", label: "Satisfacción Cliente" },
+  { value: `${technicalApplications.length}`, label: "Áreas de aplicación" },
+  { value: `${technicalEntriesCount}+`, label: "Usos técnicos documentados" },
+  { value: "Remoto / Híbrido", label: "Modalidad actual", compact: true },
 ];
 
-const mainSkills = [
+const valueProposition =
+  "Aporto una combinación práctica de QA y desarrollo para que los equipos entreguen con más confianza: menos reprocesos, pruebas más claras y mejor visibilidad del estado real de calidad.";
+
+const workMethod = [
   {
-    category: "QA & Testing",
-    items: ["Selenium", "Cypress", "Playwright", "Jest", "Test Strategy"],
+    title: "Analizo objetivo, alcance y riesgo",
+    description:
+      "Empiezo entendiendo el impacto funcional y técnico para priorizar pruebas donde más riesgo existe.",
   },
   {
-    category: "Frontend",
-    items: ["Angular", "TypeScript", "React", "Tailwind", "Astro"],
+    title: "Diseño escenarios claros y trazables",
+    description:
+      "Defino casos de prueba y criterios de aceptación fáciles de revisar por QA, desarrollo y negocio.",
   },
   {
-    category: "Backend",
-    items: ["Node.js", "Express", "PostgreSQL", "REST APIs"],
+    title: "Ejecuto y automatizo donde conviene",
+    description:
+      "Combino pruebas manuales con automatización en flujos repetitivos para ganar velocidad sin perder cobertura útil.",
   },
   {
-    category: "DevOps",
-    items: ["Git", "CI/CD", "Docker", "GitHub Actions"],
+    title: "Reporto con contexto y seguimiento",
+    description:
+      "Documento hallazgos con evidencia, severidad e impacto para facilitar decisiones y correcciones oportunas.",
   },
 ];
+
+const availability = {
+  status: "Disponible para oportunidades QA Manual y QA Automatizado",
+  modalities: [
+    "Remoto",
+    "Híbrido (Ciudad de Guatemala)",
+    "Freelance por proyecto",
+  ],
+  preferredRoles: [
+    "QA Manual",
+    "QA Automatizado",
+    "QA con enfoque API y datos",
+    "Automatización de Procesos de Pruebas",
+  ],
+  timezone: "GMT-6 (Guatemala)",
+  responseTime: "Respuesta inicial en menos de 24 horas.",
+};
 ---
 
 <Section id="about" background="primary">
-  <div class="space-y-20">
+  <div class="space-y-20 sm:space-y-24 lg:space-y-28">
     <!-- Header -->
     <div class="text-center space-y-3">
       <h2
-        class="text-3xl sm:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-success-400"
+        class="text-3xl sm:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-linear-to-r from-brand-400 to-success-400"
       >
         Sobre Mí
       </h2>
-      <p class="text-base sm:text-lg text-foreground-secondary max-w-3xl mx-auto">
-        Ingeniero de pruebas con pasión por el desarrollo de aplicaciones y la calidad
-        del software
+      <p
+        class="text-base sm:text-lg text-foreground-secondary max-w-3xl mx-auto"
+      >
+        Ingeniero de pruebas con enfoque práctico en calidad, automatización y
+        colaboración técnica
       </p>
     </div>
 
+    <!-- Propuesta de valor -->
+    <Card variant="glass" padding="lg" class="max-w-4xl mx-auto about-panel">
+      <div class="space-y-3 text-center">
+        <h3 class="text-xl lg:text-2xl font-bold text-foreground-primary">
+          Propuesta de Valor
+        </h3>
+        <p class="text-foreground-secondary leading-relaxed">
+          {valueProposition}
+        </p>
+      </div>
+    </Card>
+
     <!-- Stats Grid -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-7 lg:gap-8 max-w-5xl mx-auto"
+    >
       {
         stats.map((stat, index) => (
           <div class="stat-card stat-card-stagger" data-index={index}>
             <div class="stat-card-inner">
               <div class="text-center space-y-1.5">
-                <div class="stat-value text-3xl lg:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-brand-400 to-success-400">
+                <div
+                  class:list={[
+                    "stat-value font-bold text-transparent bg-clip-text bg-linear-to-br from-brand-400 to-success-400",
+                    stat.compact
+                      ? "text-2xl lg:text-3xl leading-tight"
+                      : "text-3xl lg:text-4xl",
+                  ]}
+                >
                   {stat.value}
                 </div>
-                <div class="text-xs sm:text-sm text-foreground-tertiary font-medium">{stat.label}</div>
+                <div class="text-xs sm:text-sm text-foreground-tertiary font-medium">
+                  {stat.label}
+                </div>
               </div>
             </div>
           </div>
@@ -72,135 +179,270 @@ const mainSkills = [
     <div class="section-divider"></div>
 
     <!-- About content -->
-    <div class="grid lg:grid-cols-2 gap-10 xl:gap-14 items-start">
-      <!-- Columna izquierda - Descripción -->
-      <Card variant="glass" padding="lg">
+    <div class="grid gap-14 lg:gap-16 items-start">
+      <Card
+        variant="glass"
+        padding="lg"
+        class="max-w-4xl mx-auto w-full about-panel"
+      >
         <div class="space-y-6">
-          <h3 class="text-xl lg:text-2xl font-bold text-foreground-primary trajectory-title">
+          <h3
+            class="text-xl lg:text-2xl font-bold text-foreground-primary trajectory-title"
+          >
             Mi Trayectoria
           </h3>
 
-          <div class="space-y-4 text-foreground-secondary leading-relaxed text-sm sm:text-base">
+          <div
+            class="space-y-4 text-foreground-secondary leading-relaxed text-sm sm:text-base"
+          >
             <p>
               Soy un <strong class="text-brand-400 font-semibold"
                 >Ingeniero de Pruebas de Software (QA)</strong
-              > con amplia experiencia en pruebas (funcionales, no funcionales, de humo,
-              caja negra, caja blanca) y desarrollo de aplicaciones web. Mi enfoque combina la
-              rigurosidad del QA con la creatividad del desarrollo.
+              > con experiencia en pruebas funcionales y no funcionales, junto con
+              desarrollo de aplicaciones web orientado a calidad.
             </p>
 
             <p>
-              A lo largo de mi carrera, he trabajado en proyectos que van desde
-              plataformas bancarias hasta sistemas de reportería en Power BI,
-              siempre enfocándome en entregar
-              <strong class="text-success-400 font-semibold">software de calidad </strong >
-              y aprender mientras contribuyo al éxito del equipo.
+              He participado en proyectos de banca y servicios, combinando
+              validación técnica, automatización y seguimiento de defectos para
+              mejorar la estabilidad de las entregas.
             </p>
 
             <p>
-              Me apasiona la automatización de procesos, el desarrollo de aplicaciones
-              web, aplicaciones de escritorio y el aprendizaje continuo. Actualmente,
-              busco oportunidades donde pueda combinar mi experiencia en QA con
-              desarrollo Java, Python o Frontend para crear productos digitales robustos y
-              escalables.
+              Mi objetivo es integrarme a equipos donde pueda aportar criterio
+              de QA, ejecución efectiva y colaboración cercana con desarrollo
+              para construir productos confiables.
             </p>
           </div>
 
-          <!-- Valores -->
           <div class="pt-5 border-t" style="border-color: var(--border-color);">
-            <h4 class="text-sm font-semibold text-foreground-primary mb-3 uppercase tracking-wide">
+            <h4
+              class="text-sm font-semibold text-foreground-primary mb-3 uppercase tracking-wide"
+            >
               Valores que me definen
             </h4>
             <div class="flex flex-wrap gap-2">
               <Badge text="Calidad" variant="skill" />
-              <Badge text="Innovación" variant="skill" />
               <Badge text="Responsabilidad" variant="skill" />
+              <Badge text="Comunicación" variant="skill" />
               <Badge text="Mejora continua" variant="skill" />
               <Badge text="Aprendizaje rápido" variant="skill" />
-              <Badge text="Excelencia" variant="skill" />
-              <Badge text="Autenticidad" variant="skill" />
             </div>
           </div>
         </div>
       </Card>
-
-      <!-- Columna derecha - Skills -->
-      <div class="space-y-5">
-        {
-          mainSkills.map((skillGroup) => (
-            <Card variant="glass" padding="lg" hover class="skill-card">
-              <h4 class="text-base lg:text-lg font-bold text-foreground-primary mb-4 flex items-center gap-2">
-                <span class="w-1.5 h-1.5 bg-brand-400 rounded-full flex-shrink-0" />
-                {skillGroup.category}
-              </h4>
-              <div class="flex flex-wrap gap-2">
-                {skillGroup.items.map((skill) => (
-                  <Badge text={skill} variant="tech" />
-                ))}
-              </div>
-            </Card>
-          ))
-        }
-
-        <!-- CTA adicional -->
-        <Card variant="bordered" padding="md">
-          <div class="text-center space-y-3">
-            <p class="text-foreground-secondary text-sm">¿Interesado en colaborar?</p>
-            <a
-              href="#contact"
-              class="inline-flex items-center gap-2 text-brand-400 hover:text-brand-300 font-semibold transition-colors"
-            >
-              Hablemos
-              <svg
-                class="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-              </svg>
-            </a>
-          </div>
-        </Card>
-      </div>
     </div>
+
+    <!-- Aplicación técnica -->
+    <Card variant="glass" padding="lg" class="about-panel">
+      <div class="space-y-7">
+        <div class="text-center lg:text-left space-y-2">
+          <h3 class="text-xl lg:text-2xl font-bold text-foreground-primary">
+            Aplicación Técnica en Entornos Reales
+          </h3>
+          <p
+            class="text-sm text-foreground-secondary max-w-3xl mx-auto lg:mx-0"
+          >
+            Relación entre herramientas, objetivos de calidad y resultados
+            prácticos en proyectos de QA y colaboración con desarrollo.
+          </p>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-6 lg:gap-7">
+          {
+            technicalApplications.map((group) => (
+              <div class="stack-group rounded-xl p-5 h-full">
+                <h4 class="text-base lg:text-lg font-bold text-foreground-primary mb-4 flex items-center gap-2">
+                  <span class="w-1.5 h-1.5 bg-brand-400 rounded-full shrink-0" />
+                  {group.category}
+                </h4>
+                <div class="space-y-4">
+                  {group.entries.map((entry) => (
+                    <div class="stack-entry rounded-lg p-4">
+                      <p class="text-sm font-semibold text-foreground-primary">
+                        {entry.tool}
+                      </p>
+                      <p class="text-sm text-foreground-secondary mt-1 leading-relaxed">
+                        {entry.context}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </Card>
+
+    <!-- Cómo trabajo + Disponibilidad -->
+    <div class="grid lg:grid-cols-2 gap-12 lg:gap-14 items-start">
+      <Card variant="glass" padding="lg" class="about-panel">
+        <div class="space-y-6">
+          <h3 class="text-xl lg:text-2xl font-bold text-foreground-primary">
+            Cómo Trabajo
+          </h3>
+          <div class="space-y-4">
+            {
+              workMethod.map((step, index) => (
+                <div class="process-step">
+                  <div class="flex items-start gap-3">
+                    <span class="process-index">{index + 1}</span>
+                    <div>
+                      <p class="text-sm font-semibold text-foreground-primary">
+                        {step.title}
+                      </p>
+                      <p class="text-sm text-foreground-secondary mt-1">
+                        {step.description}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      </Card>
+
+      <Card variant="glass" padding="lg" class="about-panel">
+        <div class="space-y-6">
+          <h3 class="text-xl lg:text-2xl font-bold text-foreground-primary">
+            Disponibilidad y Modalidad
+          </h3>
+
+          <div class="availability-box rounded-lg p-4">
+            <p class="text-sm font-semibold text-success-400">
+              {availability.status}
+            </p>
+            <p class="text-sm text-foreground-secondary mt-2">
+              {availability.responseTime}
+            </p>
+          </div>
+
+          <div>
+            <h4
+              class="text-sm font-semibold text-foreground-primary mb-2 uppercase tracking-wide"
+            >
+              Modalidades
+            </h4>
+            <div class="flex flex-wrap gap-2">
+              {
+                availability.modalities.map((modality) => (
+                  <Badge text={modality} variant="skill" />
+                ))
+              }
+            </div>
+          </div>
+
+          <div>
+            <h4
+              class="text-sm font-semibold text-foreground-primary mb-2 uppercase tracking-wide"
+            >
+              Enfoque de rol
+            </h4>
+            <div class="flex flex-wrap gap-2">
+              {
+                availability.preferredRoles.map((role) => (
+                  <Badge text={role} variant="skill" />
+                ))
+              }
+            </div>
+          </div>
+
+          <p class="text-sm text-foreground-tertiary">
+            Zona horaria de trabajo: <span
+              class="font-semibold text-foreground-secondary"
+              >{availability.timezone}</span
+            >
+          </p>
+        </div>
+      </Card>
+    </div>
+
+    <Card
+      variant="bordered"
+      padding="md"
+      class="max-w-md mx-auto about-panel cta-panel"
+    >
+      <div class="text-center space-y-3">
+        <p class="text-foreground-secondary text-sm">
+          ¿Te interesa conversar sobre una oportunidad?
+        </p>
+        <a
+          href="#contact"
+          class="inline-flex items-center gap-2 text-brand-400 hover:text-brand-300 font-semibold transition-colors"
+        >
+          Hablemos
+          <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+          </svg>
+        </a>
+      </div>
+    </Card>
   </div>
 </Section>
 
 <style>
-  /* Section divider */
   .section-divider {
     height: 1px;
-    background: linear-gradient(to right, transparent, rgba(26, 140, 255, 0.3), rgba(0, 204, 102, 0.3), transparent);
+    background: linear-gradient(
+      to right,
+      transparent,
+      rgba(26, 140, 255, 0.3),
+      rgba(0, 204, 102, 0.3),
+      transparent
+    );
   }
 
   :global([data-theme="light"]) .section-divider {
-    background: linear-gradient(to right, transparent, rgba(0, 102, 255, 0.2), rgba(0, 204, 102, 0.2), transparent);
+    background: linear-gradient(
+      to right,
+      transparent,
+      rgba(0, 102, 255, 0.2),
+      rgba(0, 204, 102, 0.2),
+      transparent
+    );
   }
 
-  /* Stat cards with gradient borders — theme-aware */
   .stat-card {
     position: relative;
     border-radius: 1rem;
-    padding: 1.5rem;
+    padding: 1.85rem;
+    min-height: 10rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     backdrop-filter: blur(12px);
     transition: all 0.3s ease;
     background: var(--card-bg);
   }
 
   .stat-card::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     border-radius: inherit;
     padding: 1px;
-    background: linear-gradient(135deg, var(--card-border-start), var(--card-border-end));
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    background: linear-gradient(
+      135deg,
+      var(--card-border-start),
+      var(--card-border-end)
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     opacity: 0.5;
@@ -221,12 +463,16 @@ const mainSkills = [
     z-index: 1;
   }
 
-  :root, :root[data-theme="dark"] {
+  :root,
+  :root[data-theme="dark"] {
     --card-bg: rgba(17, 17, 19, 0.6);
     --card-border-start: rgba(26, 140, 255, 0.4);
     --card-border-end: rgba(0, 204, 102, 0.4);
     --card-hover-shadow: 0 12px 40px rgba(26, 140, 255, 0.15);
     --border-color: rgba(255, 255, 255, 0.1);
+    --process-bg: rgba(255, 255, 255, 0.04);
+    --stack-entry-bg: rgba(255, 255, 255, 0.04);
+    --stack-entry-border: rgba(255, 255, 255, 0.08);
   }
 
   :root[data-theme="light"] {
@@ -235,38 +481,51 @@ const mainSkills = [
     --card-border-end: rgba(0, 204, 102, 0.3);
     --card-hover-shadow: 0 12px 40px rgba(0, 102, 255, 0.1);
     --border-color: rgba(0, 0, 0, 0.1);
+    --process-bg: rgba(0, 0, 0, 0.03);
+    --stack-entry-bg: rgba(0, 0, 0, 0.03);
+    --stack-entry-border: rgba(0, 0, 0, 0.08);
   }
 
-  /* Staggered animation for stat cards */
   .stat-card-stagger {
     opacity: 0;
     animation: stat-reveal 0.6s ease-out forwards;
   }
 
-  .stat-card-stagger[data-index="0"] { animation-delay: 0.1s; }
-  .stat-card-stagger[data-index="1"] { animation-delay: 0.2s; }
-  .stat-card-stagger[data-index="2"] { animation-delay: 0.3s; }
-  .stat-card-stagger[data-index="3"] { animation-delay: 0.4s; }
+  .stat-card-stagger[data-index="0"] {
+    animation-delay: 0.1s;
+  }
+
+  .stat-card-stagger[data-index="1"] {
+    animation-delay: 0.2s;
+  }
+
+  .stat-card-stagger[data-index="2"] {
+    animation-delay: 0.3s;
+  }
+
+  .stat-card-stagger[data-index="3"] {
+    animation-delay: 0.4s;
+  }
 
   @keyframes stat-reveal {
     from {
       opacity: 0;
       transform: translateY(20px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
     }
   }
 
-  /* Trajectory title with left accent */
   .trajectory-title {
     position: relative;
     padding-left: 1rem;
   }
 
   .trajectory-title::before {
-    content: '';
+    content: "";
     position: absolute;
     left: 0;
     top: 50%;
@@ -277,12 +536,69 @@ const mainSkills = [
     border-radius: 2px;
   }
 
-  /* Skill cards hover effect */
-  .skill-card {
+  .about-panel {
+    margin-inline: auto;
+  }
+
+  .cta-panel {
+    margin-top: 0.25rem;
+  }
+
+  .stack-group {
+    background: var(--process-bg);
+    border: 1px solid var(--stack-entry-border);
+    padding: 1.35rem;
     transition: all 0.3s ease;
   }
 
-  .skill-card:hover {
+  .stack-group:hover {
     border-color: var(--card-border-start);
+  }
+
+  .stack-entry {
+    background: var(--stack-entry-bg);
+    border: 1px solid var(--stack-entry-border);
+    padding: 1rem;
+  }
+
+  .process-step {
+    background: var(--process-bg);
+    border: 1px solid var(--stack-entry-border);
+    border-radius: 0.75rem;
+    padding: 1.1rem;
+  }
+
+  .process-index {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 9999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    color: white;
+    background: linear-gradient(135deg, #0066ff, #00cc66);
+  }
+
+  .availability-box {
+    background: var(--process-bg);
+    border: 1px solid var(--stack-entry-border);
+  }
+
+  @media (max-width: 640px) {
+    .stat-card {
+      min-height: 8.9rem;
+      padding: 1.35rem;
+    }
+
+    .stack-group {
+      padding: 1.1rem;
+    }
+
+    .stack-entry {
+      padding: 0.95rem;
+    }
   }
 </style>

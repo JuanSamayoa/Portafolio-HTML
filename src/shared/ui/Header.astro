@@ -255,34 +255,35 @@ const navLinks = [
 
     // Initialize theme
     function getSystemTheme() {
-      return window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+      return window.matchMedia("(prefers-color-scheme: light)").matches
+        ? "light"
+        : "dark";
     }
 
-    const currentTheme = localStorage.getItem("theme") || getSystemTheme();
-    document.documentElement.setAttribute("data-theme", currentTheme);
-    document.documentElement.classList.toggle(
-      "light-theme",
-      currentTheme === "light",
-    );
-    updateThemeIcons(currentTheme);
+    function applyTheme(theme: string) {
+      document.documentElement.setAttribute("data-theme", theme);
+      document.documentElement.classList.toggle(
+        "light-theme",
+        theme === "light",
+      );
+      updateThemeIcons(theme);
+    }
+
+    const initialTheme =
+      document.documentElement.getAttribute("data-theme") ||
+      localStorage.getItem("theme") ||
+      getSystemTheme();
+    updateThemeIcons(initialTheme);
 
     // Toggle theme on click
     themeToggle?.addEventListener("click", () => {
-      const currentTheme = localStorage.getItem("theme") || getSystemTheme();
+      const currentTheme =
+        document.documentElement.getAttribute("data-theme") || getSystemTheme();
       const newTheme = currentTheme === "dark" ? "light" : "dark";
 
       // Explicitly set in localStorage to override system preference
       localStorage.setItem("theme", newTheme);
-
-      // Update HTML
-      document.documentElement.setAttribute("data-theme", newTheme);
-      document.documentElement.classList.toggle(
-        "light-theme",
-        newTheme === "light",
-      );
-
-      // Update icons
-      updateThemeIcons(newTheme);
+      applyTheme(newTheme);
     });
   });
 </script>
@@ -343,7 +344,8 @@ const navLinks = [
   }
 
   /* Mobile menu border - theme-aware */
-  :root, :root[data-theme="dark"] {
+  :root,
+  :root[data-theme="dark"] {
     --mobile-menu-border: rgba(255, 255, 255, 0.1);
   }
 

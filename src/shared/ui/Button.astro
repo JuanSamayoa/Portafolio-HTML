@@ -27,24 +27,24 @@ const {
 // Variantes de estilo
 const variants = {
   primary:
-    "bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 text-white shadow-lg hover:shadow-xl hover:scale-105",
+    "bg-brand-500 hover:bg-brand-600 text-white shadow-lg hover:shadow-glow hover:-translate-y-0.5",
   secondary:
-    "bg-gradient-to-r from-success-500 to-success-600 hover:from-success-600 hover:to-success-700 text-white shadow-lg hover:shadow-xl hover:scale-105",
+    "bg-success-500 hover:bg-success-600 text-white shadow-lg hover:shadow-lg hover:-translate-y-0.5",
   outline:
-    "border-2 border-brand-500 text-brand-500 hover:bg-brand-500 hover:text-white hover:scale-105 hover:shadow-lg",
+    "border border-foreground-muted/30 text-foreground-secondary hover:border-foreground-muted hover:text-foreground-primary hover:-translate-y-0.5",
   ghost:
-    "bg-glass-light hover:bg-glass-medium text-foreground-primary hover:scale-105",
+    "bg-glass-light hover:bg-glass-medium text-foreground-primary hover:-translate-y-0.5",
 };
 
 // Tamaños
 const sizes = {
-  sm: "px-4 py-2 text-sm",
-  md: "px-6 py-3 text-base",
-  lg: "px-8 py-4 text-lg",
+  sm: "px-4 py-2 text-xs",
+  md: "px-6 py-3 text-sm",
+  lg: "px-6 py-3 text-sm", // The mockup has one consistent padding roughly 12px 24px
 };
 
 const baseClasses =
-  "inline-flex items-center justify-center gap-2 font-semibold rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed";
+  "inline-flex items-center justify-center gap-2 font-mono font-medium tracking-wide rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer";
 
 const classes = `${baseClasses} ${variants[variant]} ${sizes[size]} ${className}`;
 
@@ -62,16 +62,6 @@ const Tag = href ? "a" : "button";
 </Tag>
 
 <style>
-  button,
-  a {
-    transform: translateY(0);
-  }
-
-  button:hover:not(:disabled),
-  a:hover {
-    transform: translateY(-2px);
-  }
-
   button:active:not(:disabled),
   a:active {
     transform: translateY(0);

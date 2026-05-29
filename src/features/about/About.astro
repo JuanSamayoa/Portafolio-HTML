@@ -121,8 +121,13 @@ const availability = {
   <div class="space-y-20 sm:space-y-24 lg:space-y-28">
     <!-- Header -->
     <div class="text-center space-y-3">
+      <div
+        class="font-mono text-[11px] tracking-[0.1em] text-brand-400 uppercase flex items-center justify-center gap-2 before:content-[''] before:block before:w-6 before:h-px before:bg-brand-400"
+      >
+        ¿Quién soy?
+      </div>
       <h2
-        class="text-3xl sm:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-linear-to-r from-brand-400 to-success-400"
+        class="text-3xl sm:text-4xl lg:text-5xl font-bold font-display tracking-tight text-foreground-primary"
       >
         Sobre Mí
       </h2>
@@ -137,7 +142,9 @@ const availability = {
     <!-- Propuesta de valor -->
     <Card variant="glass" padding="lg" class="max-w-4xl mx-auto about-panel">
       <div class="space-y-3 text-center">
-        <h3 class="text-xl lg:text-2xl font-bold text-foreground-primary">
+        <h3
+          class="text-xl lg:text-2xl font-bold font-display tracking-tight text-foreground-primary"
+        >
           Propuesta de Valor
         </h3>
         <p class="text-foreground-secondary leading-relaxed">
@@ -157,15 +164,15 @@ const availability = {
               <div class="text-center space-y-1.5">
                 <div
                   class:list={[
-                    "stat-value font-bold text-transparent bg-clip-text bg-linear-to-br from-brand-400 to-success-400",
+                    "stat-value font-bold font-display text-brand-400 leading-none",
                     stat.compact
-                      ? "text-2xl lg:text-3xl leading-tight"
+                      ? "text-2xl lg:text-3xl"
                       : "text-3xl lg:text-4xl",
                   ]}
                 >
                   {stat.value}
                 </div>
-                <div class="text-xs sm:text-sm text-foreground-tertiary font-medium">
+                <div class="text-xs sm:text-sm text-foreground-secondary font-mono tracking-wide mt-2">
                   {stat.label}
                 </div>
               </div>
@@ -187,7 +194,7 @@ const availability = {
       >
         <div class="space-y-6">
           <h3
-            class="text-xl lg:text-2xl font-bold text-foreground-primary trajectory-title"
+            class="text-xl lg:text-2xl font-bold font-display tracking-tight text-foreground-primary trajectory-title"
           >
             Mi Trayectoria
           </h3>
@@ -237,7 +244,9 @@ const availability = {
     <Card variant="glass" padding="lg" class="about-panel">
       <div class="space-y-7">
         <div class="text-center lg:text-left space-y-2">
-          <h3 class="text-xl lg:text-2xl font-bold text-foreground-primary">
+          <h3
+            class="text-xl lg:text-2xl font-bold font-display tracking-tight text-foreground-primary"
+          >
             Aplicación Técnica en Entornos Reales
           </h3>
           <p
@@ -279,7 +288,9 @@ const availability = {
     <div class="grid lg:grid-cols-2 gap-12 lg:gap-14 items-start">
       <Card variant="glass" padding="lg" class="about-panel">
         <div class="space-y-6">
-          <h3 class="text-xl lg:text-2xl font-bold text-foreground-primary">
+          <h3
+            class="text-xl lg:text-2xl font-bold font-display tracking-tight text-foreground-primary"
+          >
             Cómo Trabajo
           </h3>
           <div class="space-y-4">
@@ -306,7 +317,9 @@ const availability = {
 
       <Card variant="glass" padding="lg" class="about-panel">
         <div class="space-y-6">
-          <h3 class="text-xl lg:text-2xl font-bold text-foreground-primary">
+          <h3
+            class="text-xl lg:text-2xl font-bold font-display tracking-tight text-foreground-primary"
+          >
             Disponibilidad y Modalidad
           </h3>
 

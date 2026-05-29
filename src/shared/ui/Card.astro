@@ -30,9 +30,7 @@ const paddings = {
   lg: "p-8",
 };
 
-const hoverClass = hover
-  ? "card-hover"
-  : "";
+const hoverClass = hover ? "card-hover" : "";
 
 const classes = `${variants[variant]} ${paddings[padding]} ${hoverClass} rounded-2xl transition-all duration-300 ${className}`;
 ---
@@ -43,20 +41,23 @@ const classes = `${variants[variant]} ${paddings[padding]} ${hoverClass} rounded
 
 <style>
   /* Theme-aware card borders using CSS variables */
-  :root, :root[data-theme="dark"] {
+  :root,
+  :root[data-theme="dark"] {
     --card-border: rgba(255, 255, 255, 0.1);
     --card-border-subtle: rgba(255, 255, 255, 0.05);
     --card-border-hover: rgba(255, 255, 255, 0.2);
     --card-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    --card-shadow-hover: 0 20px 60px rgba(0, 102, 255, 0.15), 0 10px 40px rgba(0, 0, 0, 0.4);
+    --card-shadow-hover:
+      0 20px 60px rgba(20, 184, 166, 0.15), 0 10px 40px rgba(0, 0, 0, 0.4);
   }
 
   :root[data-theme="light"] {
     --card-border: rgba(0, 0, 0, 0.1);
     --card-border-subtle: rgba(0, 0, 0, 0.05);
-    --card-border-hover: rgba(0, 102, 255, 0.25);
+    --card-border-hover: rgba(20, 184, 166, 0.25);
     --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    --card-shadow-hover: 0 8px 40px rgba(0, 102, 255, 0.1), 0 4px 20px rgba(0, 0, 0, 0.12);
+    --card-shadow-hover:
+      0 8px 40px rgba(20, 184, 166, 0.1), 0 4px 20px rgba(0, 0, 0, 0.12);
   }
 
   .card-border {

@@ -7,7 +7,6 @@
 import { personalInfo } from "../../data/personal";
 import Badge from "../../shared/ui/Badge.astro";
 import Button from "../../shared/ui/Button.astro";
-import Card from "../../shared/ui/Card.astro";
 
 const skills = [
   "QA",
@@ -45,31 +44,35 @@ const skills = [
       <!-- Columna izquierda - Texto -->
       <div class="space-y-8 text-center lg:text-left">
         <!-- Status badge -->
-        <div class="flex justify-center lg:justify-start">
+        <div class="flex justify-center lg:justify-start mb-4">
           <Badge text="Disponible para proyectos" variant="status" />
         </div>
 
         <!-- Título principal -->
         <div class="space-y-4">
-          <h1 class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold">
-            <span class="text-foreground-secondary block mb-2 animate-fade-in">
+          <h1
+            class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold font-display tracking-tight"
+          >
+            <span
+              class="text-foreground-secondary block mb-2 animate-fade-in text-lg font-mono"
+            >
               Hola, soy
             </span>
             <span
-              class="text-transparent bg-clip-text bg-linear-to-r from-brand-400 via-brand-500 to-success-400 animate-gradient-text"
+              class="text-transparent bg-clip-text bg-linear-to-r from-brand-400 via-brand-500 to-brand-600 animate-gradient-text"
             >
               {personalInfo.name}
             </span>
           </h1>
 
           <h2
-            class="text-xl sm:text-2xl lg:text-3xl text-foreground-secondary font-medium"
+            class="text-xl sm:text-2xl lg:text-3xl text-foreground-secondary font-medium font-display"
           >
             {personalInfo.title}
           </h2>
 
           <p
-            class="text-base sm:text-lg text-foreground-tertiary max-w-2xl mx-auto lg:mx-0 leading-relaxed"
+            class="text-base sm:text-lg text-foreground-tertiary max-w-2xl mx-auto lg:mx-0 leading-relaxed font-sans"
           >
             Portafolio profesional de Juan Samayoa. Ingeniero de Pruebas TI
             especializado en pruebas manuales, desarrollo en Java, Python y
@@ -84,11 +87,16 @@ const skills = [
 
         <!-- CTAs -->
         <div
-          class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
+          class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mt-8"
         >
-          <Button variant="primary" size="lg" href="#contact">
+          <Button
+            variant="primary"
+            size="lg"
+            href="#contact"
+            class="font-mono text-sm tracking-wide shadow-glow"
+          >
             <svg
-              class="w-5 h-5"
+              class="w-5 h-5 mr-2"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -103,9 +111,14 @@ const skills = [
             Contáctame
           </Button>
 
-          <Button variant="outline" size="lg" href="#projects">
+          <Button
+            variant="outline"
+            size="lg"
+            href="#projects"
+            class="font-mono text-sm tracking-wide"
+          >
             <svg
-              class="w-5 h-5"
+              class="w-5 h-5 mr-2"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -173,74 +186,75 @@ const skills = [
         </div>
       </div>
 
-      <!-- Columna derecha - Profile card -->
+      <!-- Columna derecha - Profile card / Terminal -->
       <div class="flex justify-center lg:justify-end">
-        <Card variant="glass" padding="lg" hover class="max-w-md w-full">
-          <div class="space-y-6">
-            <!-- Imagen de perfil con efecto glow -->
-            <div class="relative">
+        <div
+          class="bg-background-elevated border border-foreground-muted/20 rounded-2xl p-6 md:p-8 w-full max-w-md shadow-lg relative"
+        >
+          <!-- Header card -->
+          <div
+            class="flex items-center gap-4 mb-6 pb-5 border-b border-foreground-muted/20"
+          >
+            <div
+              class="w-14 h-14 rounded-full flex items-center justify-center bg-brand-400 text-white font-display text-xl font-bold shrink-0 shadow-[0_0_15px_rgba(20,184,166,0.3)]"
+            >
+              JS
+            </div>
+            <div>
               <div
-                class="absolute inset-0 bg-linear-to-br from-brand-500 to-success-500 rounded-2xl blur-2xl opacity-50 animate-pulse"
+                class="font-display text-lg font-semibold text-foreground-primary"
               >
+                Juan Samayoa
               </div>
-              <img
-                src={personalInfo.profileImage}
-                alt={personalInfo.name}
-                class="relative w-full aspect-square object-cover rounded-2xl border-2 profile-image-border"
-                loading="eager"
-              />
-            </div>
-
-            <!-- Info adicional -->
-            <div class="space-y-4">
-              <div class="flex items-center gap-3 text-foreground-secondary">
-                <svg
-                  class="w-5 h-5 text-brand-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                  ></path>
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                </svg>
-                <span>{personalInfo.location}</span>
-              </div>
-
-              <div class="flex items-center gap-3 text-foreground-secondary">
-                <svg
-                  class="w-5 h-5 text-success-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <span>Disponible para colaboración y laborar</span>
+              <div
+                class="font-mono text-xs text-foreground-tertiary tracking-wide mt-1"
+              >
+                QA Automation Engineer
               </div>
             </div>
+          </div>
 
-            <!-- CV Download -->
+          <!-- Terminal block -->
+          <div
+            class="bg-gray-900 rounded-xl overflow-hidden shadow-xl border border-gray-800"
+          >
+            <div class="bg-gray-800 px-4 py-3 flex items-center gap-3">
+              <div class="flex gap-1.5">
+                <div class="w-2.5 h-2.5 rounded-full bg-red-500"></div>
+                <div class="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
+                <div class="w-2.5 h-2.5 rounded-full bg-green-500"></div>
+              </div>
+              <span
+                class="font-mono text-xs text-gray-400 flex-grow text-center pr-12"
+                >skills.json</span
+              >
+            </div>
+            <div
+              class="p-5 md:p-6 font-mono text-sm leading-relaxed text-gray-300"
+            >
+              <span class="text-brand-400">"automation"</span>: <span
+                class="text-gray-300"
+                >["Selenium", "Playwright", "Cypress"]</span
+              >,<br />
+              <span class="text-brand-400">"api"</span>: <span
+                class="text-gray-300">["Postman", "REST Assured"]</span
+              >,<br />
+              <span class="text-brand-400">"languages"</span>: <span
+                class="text-gray-300">["Java", "Python", "JavaScript"]</span
+              >
+            </div>
+          </div>
+
+          <!-- CV Download -->
+          <div class="mt-6">
             <Button
-              variant="ghost"
+              variant="outline"
               size="md"
               href={personalInfo.cvPathEs}
-              class="w-full"
+              class="w-full font-mono text-sm"
             >
               <svg
-                class="w-5 h-5"
+                class="w-5 h-5 mr-2"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -255,7 +269,7 @@ const skills = [
               Descargar CV
             </Button>
           </div>
-        </Card>
+        </div>
       </div>
     </div>
   </div>
@@ -326,7 +340,8 @@ const skills = [
   }
 
   /* Profile image border - theme-aware */
-  :root, :root[data-theme="dark"] {
+  :root,
+  :root[data-theme="dark"] {
     --profile-border: rgba(255, 255, 255, 0.1);
   }
 

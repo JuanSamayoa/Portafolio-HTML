@@ -3,21 +3,26 @@
 // SKILLS SECTION - Sección de habilidades técnicas
 // ==============================================
 
+import { skillsData } from "../../data/skills";
 import Section from "../../shared/ui/Section.astro";
 import SkillCard from "./SkillCard.astro";
-import { skillsData } from "../../data/skills";
 
 const totalTechnologies = skillsData.reduce(
   (acc, skill) => acc + skill.technologies.length,
-  0
+  0,
 );
 ---
 
 <Section id="skills">
   <!-- Título de la sección -->
   <div class="text-center mb-12 animate-on-scroll">
+    <div
+      class="font-mono text-[11px] tracking-[0.1em] text-brand-400 uppercase flex items-center justify-center gap-2 before:content-[''] before:block before:w-6 before:h-px before:bg-brand-400 mb-2"
+    >
+      Herramientas
+    </div>
     <h2
-      class="text-4xl md:text-5xl font-bold text-foreground mb-4 bg-gradient-to-r from-brand to-brand-600 bg-clip-text text-transparent"
+      class="text-4xl md:text-5xl font-bold font-display tracking-tight text-foreground-primary mb-4"
     >
       Habilidades Técnicas
     </h2>

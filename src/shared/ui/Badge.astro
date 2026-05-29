@@ -54,19 +54,23 @@ const getGradient = () => {
 };
 
 const variants = {
-  tech: `bg-gradient-to-r ${getGradient()} text-white shadow-md hover:shadow-lg hover:scale-105`,
+  tech: `bg-background-elevated border border-foreground-muted/30 text-foreground-secondary hover:border-brand-300 hover:text-brand-500`,
   skill:
-    "bg-glass-heavy text-foreground-primary border border-white/20 hover:border-brand-400/50 hover:scale-105",
-  status:
-    "bg-success-500/20 text-success-400 border border-success-500/40 shadow-sm shadow-success-500/20 hover:scale-105 animate-pulse",
+    "bg-background-elevated text-foreground-secondary border border-foreground-muted/30 hover:border-brand-400/50",
+  status: "bg-brand-50 border border-brand-200 text-brand-600 shadow-sm", // matching .hero-available or .tag-primary
 };
 
 const baseClasses =
-  "inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold backdrop-blur-md transition-all duration-300 cursor-default";
+  "inline-flex items-center px-3 py-1.5 rounded-full font-mono text-[11px] tracking-wide transition-all duration-300 cursor-default";
 const classes = `${baseClasses} ${variants[variant]} ${className}`;
 ---
 
 <span class={classes}>
+  {
+    variant === "status" && (
+      <div class="w-1.5 h-1.5 rounded-full bg-brand-400 animate-pulse mr-2" />
+    )
+  }
   {text}
 </span>
 

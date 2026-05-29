@@ -16,22 +16,24 @@
      los temas claro/oscuro se resuelvan en cascada CSS.
    ================================================================= */
 @theme {
-  /* ── FUENTE ─────────────────────────────────────────────────── */
-  --font-sans: Inter, system-ui, -apple-system, sans-serif;
+  /* ── FUENTES ─────────────────────────────────────────────────── */
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-display: "Syne", sans-serif;
+  --font-mono: "DM Mono", monospace;
 
-  /* ── BRAND — azules (valores fijos) ─────────────────────────── */
-  --color-brand-50: #e6f2ff;
-  --color-brand-100: #b3d9ff;
-  --color-brand-200: #80c0ff;
-  --color-brand-300: #4da6ff;
-  --color-brand-400: #1a8cff;
-  --color-brand-500: #0066ff;
-  --color-brand-600: #0052cc;
-  --color-brand-700: #003d99;
-  --color-brand-800: #002966;
-  --color-brand-900: #001433;
+  /* ── BRAND — Teal (valores fijos para TW opacity modifiers) ──── */
+  --color-brand-50: #e1f5ee;
+  --color-brand-100: #c2eadf;
+  --color-brand-200: #5dcaa5;
+  --color-brand-300: #35b48b;
+  --color-brand-400: #1d9e75;
+  --color-brand-500: #0f6e56;
+  --color-brand-600: #085041;
+  --color-brand-700: #04342c;
+  --color-brand-800: #02201c;
+  --color-brand-900: #011210;
   /* alias sin shade → text-brand, from-brand, bg-brand/10, etc. */
-  --color-brand: #0066ff;
+  --color-brand: #1d9e75;
 
   /* ── SUCCESS — verdes (valores fijos) ───────────────────────── */
   --color-success-50: #e6f9f0;

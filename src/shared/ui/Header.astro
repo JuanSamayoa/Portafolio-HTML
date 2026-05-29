@@ -26,18 +26,19 @@ const navLinks = [
       <!-- Logo -->
       <a
         href="#hero"
-        class="text-xl md:text-2xl font-bold text-transparent bg-clip-text bg-linear-to-r from-brand-400 to-success-400 hover:scale-110 transition-transform duration-300"
+        class="text-xl md:text-2xl font-bold font-display text-foreground-primary hover:scale-105 transition-transform duration-300 flex items-center gap-2"
       >
-        JS
+        <div class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></div>
+        Juan Samayoa
       </a>
 
       <!-- Desktop Navigation -->
-      <div class="hidden md:flex items-center gap-2">
+      <div class="hidden md:flex items-center gap-4">
         {
           navLinks.map((link) => (
             <a
               href={link.href}
-              class="nav-link px-4 py-2 rounded-lg text-foreground-secondary hover:text-foreground-primary transition-all duration-300 font-medium relative"
+              class="nav-link font-mono text-sm text-foreground-secondary hover:text-brand-400 transition-colors duration-300 relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[1px] after:bg-brand-400 after:transition-all hover:after:w-full"
             >
               {link.label}
             </a>

@@ -96,11 +96,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
     <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
 
-    <!-- Fonts - Inter -->
+    <!-- Fonts - DM Mono, Syne, Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
 
@@ -223,21 +223,21 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       :root,
       :root[data-theme="dark"] {
         /* Backgrounds */
-        --bg-primary: #000000;
+        --bg-primary: #1a1a18;
         --bg-secondary: #0a0a0b;
         --bg-tertiary: #111113;
-        --bg-elevated: #1a1a1d;
+        --bg-elevated: #242428;
 
         /* Foregrounds */
         --fg-primary: #ffffff;
-        --fg-secondary: #d1d1d6;
-        --fg-tertiary: #8e8e93;
-        --fg-muted: #636366;
+        --fg-secondary: #d6d4cb;
+        --fg-tertiary: #8a8880;
+        --fg-muted: #5a5955;
 
         /* Brand colors */
-        --color-brand-400: #1a8cff;
-        --color-brand-500: #0066ff;
-        --color-brand-600: #0052cc;
+        --color-brand-400: #5dcaa5;
+        --color-brand-500: #1d9e75;
+        --color-brand-600: #0f6e56;
 
         /* Success colors */
         --color-success-400: #1ad580;
@@ -254,28 +254,28 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       :root[data-theme="light"],
       .light-theme {
         /* Backgrounds */
-        --bg-primary: #ffffff;
-        --bg-secondary: #f5f5f7;
+        --bg-primary: #f8f8f6;
+        --bg-secondary: #f0efe9;
         --bg-tertiary: #e8e8ed;
         --bg-elevated: #ffffff;
 
         /* Foregrounds */
-        --fg-primary: #1d1d1f;
-        --fg-secondary: #6e6e73;
-        --fg-tertiary: #86868b;
-        --fg-muted: #aeaeb2;
+        --fg-primary: #1a1a18;
+        --fg-secondary: #5a5955;
+        --fg-tertiary: #8a8880;
+        --fg-muted: #d6d4cb;
 
-        /* Brand colors (más oscuros para mejor contraste en light) */
-        --color-brand-400: #0052cc;
-        --color-brand-500: #0066ff;
-        --color-brand-600: #1a8cff;
+        /* Brand colors */
+        --color-brand-400: #1d9e75;
+        --color-brand-500: #0f6e56;
+        --color-brand-600: #085041;
 
         /* Success colors */
         --color-success-400: #00a352;
         --color-success-500: #00cc66;
         --color-success-600: #1ad580;
 
-        /* Glass effects (light theme: oscuros para elementos UI y hover) */
+        /* Glass effects */
         --glass-light: rgba(0, 0, 0, 0.05);
         --glass-medium: rgba(0, 0, 0, 0.08);
         --glass-heavy: rgba(0, 0, 0, 0.12);
@@ -444,8 +444,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
       .shadow-glow {
         box-shadow:
-          0 0 30px rgba(0, 102, 255, 0.4),
-          0 0 60px rgba(0, 102, 255, 0.15);
+          0 0 30px rgba(29, 158, 117, 0.4),
+          0 0 60px rgba(29, 158, 117, 0.15);
       }
 
       .shadow-glowSuccess {
@@ -483,7 +483,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         outline: 3px solid var(--color-brand-500);
         outline-offset: 3px;
         border-radius: 4px;
-        box-shadow: 0 0 0 6px rgba(0, 102, 255, 0.15);
+        box-shadow: 0 0 0 6px rgba(29, 158, 117, 0.15);
       }
 
       /* Animaciones de scroll reveal */

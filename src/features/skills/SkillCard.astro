@@ -3,8 +3,8 @@
 // SKILL CARD - Tarjeta individual de categoría de habilidades
 // ==============================================
 
-import Card from "../../shared/ui/Card.astro";
 import Badge from "../../shared/ui/Badge.astro";
+import Card from "../../shared/ui/Card.astro";
 
 interface Props {
   category: string;
@@ -30,7 +30,7 @@ const { category, technologies, icon } = Astro.props;
         )
       }
       <h3
-        class="text-xl font-bold text-foreground group-hover:text-brand transition-colors duration-300"
+        class="text-xl font-bold font-display tracking-tight text-foreground-primary group-hover:text-brand transition-colors duration-300"
       >
         {category}
       </h3>

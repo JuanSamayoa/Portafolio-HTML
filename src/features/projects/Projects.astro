@@ -15,8 +15,11 @@ import Section from '../../shared/ui/Section.astro';
   <div class="space-y-12">
     <!-- Header -->
     <div class="text-center space-y-4">
+      <div class="font-mono text-[11px] tracking-[0.1em] text-brand-400 uppercase flex items-center justify-center gap-2 before:content-[''] before:block before:w-6 before:h-px before:bg-brand-400">
+        Trabajo seleccionado
+      </div>
       <h2
-        class="text-3xl sm:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-linear-to-r from-brand-400 to-success-400"
+        class="text-3xl sm:text-4xl lg:text-5xl font-bold font-display tracking-tight text-foreground-primary"
       >
         Proyectos Destacados
       </h2>
@@ -95,7 +98,7 @@ import Section from '../../shared/ui/Section.astro';
 
               <!-- Contenido -->
               <div class="p-4 space-y-3">
-                <h3 class="text-xl font-bold text-foreground-primary line-clamp-2">
+                <h3 class="text-xl font-bold font-display tracking-tight text-foreground-primary line-clamp-2">
                   {project.title}
                 </h3>
 

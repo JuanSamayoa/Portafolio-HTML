@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   build:
-    name: Build + SonarQube
+    name: Build + Deploy
     runs-on: ubuntu-latest
     permissions:
       contents: read

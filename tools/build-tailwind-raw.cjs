@@ -6,7 +6,16 @@ const tailwind = require("@tailwindcss/postcss");
 const autoprefixer = require("autoprefixer");
 
 async function build() {
-  const input = path.resolve(__dirname, "..", "src", "styles", "global.css");
+  const candidateInputs = [
+    path.resolve(__dirname, "..", "src", "styles", "global.css"),
+    path.resolve(__dirname, "..", "public", "assets", "tailwind.css"),
+  ];
+  const input = candidateInputs.find((filePath) => fs.existsSync(filePath));
+
+  if (!input) {
+    throw new Error("No Tailwind CSS source file found.");
+  }
+
   const outDir = path.resolve(__dirname, "..", "tmp");
   const outFile = path.join(outDir, "tailwind-raw.css");
   const css = fs.readFileSync(input, "utf8");

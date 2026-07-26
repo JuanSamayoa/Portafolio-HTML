@@ -18,7 +18,6 @@ export const projectsData: Project[] = [
       { text: "Tailwind" },
       { text: "Node JS" },
     ],
-    featured: true,
     github: "https://github.com/JuanSamayoa/my-wedding-website",
   },
   {

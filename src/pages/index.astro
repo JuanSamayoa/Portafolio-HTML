@@ -27,16 +27,16 @@ const previewImage = Astro.site
 const schemaOrgPerson = {
   "@context": "https://schema.org",
   "@type": "Person",
-  "name": personalInfo.name,
-  "jobTitle": personalInfo.title,
-  "email": personalInfo.email,
-  "address": {
+  name: personalInfo.name,
+  jobTitle: personalInfo.title,
+  email: personalInfo.email,
+  address: {
     "@type": "PostalAddress",
-    "addressLocality": "Guatemala City",
-    "addressCountry": "GT"
+    addressLocality: "Guatemala City",
+    addressCountry: "GT",
   },
-  "url": canonicalUrl,
-  "sameAs": [personalInfo.linkedin, personalInfo.github]
+  url: canonicalUrl,
+  sameAs: [personalInfo.linkedin, personalInfo.github],
 };
 ---
 
@@ -67,15 +67,27 @@ const schemaOrgPerson = {
     <meta name="twitter:description" content={pageDescription} />
     <meta name="twitter:image" content={previewImage} />
     <meta name="theme-color" content="#0f6e56" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin="anonymous"
+    />
     <link
       href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
       rel="stylesheet"
       crossorigin="anonymous"
     />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <script type="application/ld+json" set:html={JSON.stringify(schemaOrgPerson)} />
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={JSON.stringify(schemaOrgPerson)}
+    />
   </head>
   <body>
     <nav>
@@ -114,7 +126,9 @@ const schemaOrgPerson = {
     <footer>
       <div class="container footer-inner">
         <div>© 2026 Juan Samayoa · Guatemala City</div>
-        <div>built with <span>Astro</span> · deployed on <span>GitHub Pages</span></div>
+        <div>
+          built with <span>Astro</span> · deployed on <span>GitHub Pages</span>
+        </div>
       </div>
     </footer>
 
@@ -128,7 +142,9 @@ const schemaOrgPerson = {
         { threshold: 0.12 },
       );
 
-      document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+      document
+        .querySelectorAll(".reveal")
+        .forEach((el) => observer.observe(el));
 
       const sections = document.querySelectorAll<HTMLElement>("section[id]");
       const navLinks = document.querySelectorAll(".nav-links a");
@@ -140,7 +156,10 @@ const schemaOrgPerson = {
           if (window.scrollY >= top) current = section.getAttribute("id") || "";
         });
         navLinks.forEach((link) => {
-          link.classList.toggle("active", link.getAttribute("href") === `#${current}`);
+          link.classList.toggle(
+            "active",
+            link.getAttribute("href") === `#${current}`,
+          );
         });
       });
     </script>

@@ -29,7 +29,7 @@ const DYNAMIC_CACHE_PATTERNS = [
 // ================================
 // INSTALACIÓN DEL SERVICE WORKER
 // ================================
-globalThis.addEventListener("install", (event) => {
+self.addEventListener("install", (event) => {
   console.log("[SW] Instalando Service Worker...");
 
   event.waitUntil(
@@ -41,7 +41,7 @@ globalThis.addEventListener("install", (event) => {
       })
       .then(() => {
         console.log("[SW] Archivos estáticos cacheados correctamente");
-        return globalThis.skipWaiting(); // Activar inmediatamente
+        return self.skipWaiting(); // Activar inmediatamente
       })
       .catch((error) => {
         console.error("[SW] Error al cachear archivos estáticos:", error);
@@ -52,26 +52,26 @@ globalThis.addEventListener("install", (event) => {
 // ================================
 // ACTIVACIÓN DEL SERVICE WORKER
 // ================================
-globalThis.addEventListener("activate", (event) => {
+self.addEventListener("activate", (event) => {
   console.log("[SW] Activando Service Worker...");
 
   event.waitUntil(
     caches
       .keys()
       .then((cacheNames) => {
+        const obsoleteCaches = cacheNames.filter(
+          (cacheName) => cacheName !== CACHE_NAME && cacheName !== STATIC_CACHE_NAME,
+        );
         return Promise.all(
-          cacheNames.map((cacheName) => {
-            // Limpiar caches antiguos
-            if (cacheName !== CACHE_NAME && cacheName !== STATIC_CACHE_NAME) {
-              console.log("[SW] Eliminando cache antiguo:", cacheName);
-              return caches.delete(cacheName);
-            }
+          obsoleteCaches.map((cacheName) => {
+            console.log("[SW] Eliminando cache antiguo:", cacheName);
+            return caches.delete(cacheName);
           }),
         );
       })
       .then(() => {
         console.log("[SW] Service Worker activado");
-        return globalThis.clients.claim(); // Tomar control inmediatamente
+        return self.clients.claim(); // Tomar control inmediatamente
       })
       .catch((error) => {
         console.error("[SW] Error durante la activación:", error);
@@ -264,13 +264,13 @@ function isNavigationRequest(request) {
 // ================================
 // MANEJO DE MENSAJES
 // ================================
-globalThis.addEventListener("message", (event) => {
-  if (event.origin && event.origin !== globalThis.location.origin) {
+self.addEventListener("message", (event) => {
+  if (event.origin && event.origin !== self.location.origin) {
     return;
   }
 
   if (event.data?.type === "SKIP_WAITING") {
-    globalThis.skipWaiting();
+    self.skipWaiting();
   }
 
   if (event.data?.type === "GET_VERSION") {
@@ -281,10 +281,32 @@ globalThis.addEventListener("message", (event) => {
 // ================================
 // NOTIFICACIONES PUSH (Futuro)
 // ================================
-globalThis.addEventListener("push", (event) => {
-  if (event.data) {
+self.addEventListener("push", (event) => {
+  if (!event.data) return;
+
+  try {
+    const rawText = event.data.text();
+    let bodyText = "";
+    let titleText = "Juan Samayoa - Portafolio";
+
+    try {
+      const payload = JSON.parse(rawText);
+      if (typeof payload === "object" && payload !== null) {
+        bodyText = String(payload.body || "");
+        if (payload.title) {
+          titleText = String(payload.title).replace(/[^a-zA-Z0-9 ._#-]/g, "");
+        }
+      } else {
+        bodyText = String(payload);
+      }
+    } catch {
+      bodyText = rawText;
+    }
+
+    const sanitizedBody = bodyText.replace(/[^a-zA-Z0-9 ._#-]/g, "").slice(0, 250);
+
     const options = {
-      body: event.data.text(),
+      body: sanitizedBody,
       icon: "/assets/icons/icon-192.png",
       badge: "/assets/icons/badge-72.png",
       vibrate: [100, 50, 100],
@@ -307,11 +329,10 @@ globalThis.addEventListener("push", (event) => {
     };
 
     event.waitUntil(
-      globalThis.registration.showNotification(
-        "Juan Samayoa - Portafolio",
-        options,
-      ),
+      self.registration.showNotification(titleText, options),
     );
+  } catch (error) {
+    console.error("[SW] Error al procesar notificación push:", error);
   }
 });
 

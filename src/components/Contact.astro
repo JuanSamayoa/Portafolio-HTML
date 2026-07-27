@@ -1,0 +1,104 @@
+---
+import { personalInfo } from "../data/personal";
+---
+
+<section id="contacto">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="reveal">
+        <h2 class="contact-title">
+          Trabajemos<br />
+          <span>juntos.</span>
+        </h2>
+        <p class="contact-desc">
+          Abierto a roles QA manual y automation, consultoría o proyectos
+          freelance. Respondo en menos de 24 horas.
+        </p>
+        <div class="contact-status">
+          <span class="available-dot"></span>
+          Respuesta usual: &lt;24h · GMT-6
+        </div>
+        <div class="contact-links">
+          <a href={`mailto:${personalInfo.email}`} class="contact-link">
+            <span>@</span>
+            {personalInfo.email}
+          </a>
+          <a
+            href={personalInfo.github}
+            class="contact-link"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <span>GH</span>
+            github.com/JuanSamayoa
+          </a>
+          <a
+            href={personalInfo.linkedin}
+            class="contact-link"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <span>in</span>
+            linkedin.com/in/juansamayoa
+          </a>
+        </div>
+        <div class="cv-actions">
+          <a href={personalInfo.cvPathEs} class="btn-ghost dark"
+            >descargar CV (ES) -></a
+          >
+          <a href={personalInfo.cvPathEn} class="btn-ghost dark"
+            >descargar CV (EN) -></a
+          >
+        </div>
+      </div>
+
+      <form
+        class="contact-form reveal reveal-delay-2"
+        action="https://formsubmit.co/a86c080c5798a24e031ab363057c720c"
+        method="POST"
+      >
+        <input type="hidden" name="_next" value="https://juansamayoa.dev/thanks" />
+        <input type="hidden" name="_captcha" value="true" />
+        <input
+          type="text"
+          name="_honey"
+          style="display:none"
+          tabindex="-1"
+          autocomplete="off"
+        />
+        <input type="hidden" name="_template" value="table" />
+        <div class="form-row">
+          <label>
+            <span>nombre</span>
+            <input type="text" name="name" placeholder="Tu nombre" required />
+          </label>
+          <label>
+            <span>email</span>
+            <input
+              type="email"
+              name="email"
+              placeholder="tu@email.com"
+              required
+            />
+          </label>
+        </div>
+        <label>
+          <span>asunto</span>
+          <input
+            type="text"
+            name="subject"
+            placeholder="¿Sobre qué quieres hablar?"
+          />
+        </label>
+        <label>
+          <span>mensaje</span>
+          <textarea
+            name="message"
+            placeholder="Cuéntame más sobre tu proyecto..."
+            required></textarea>
+        </label>
+        <button class="btn-submit" type="submit">enviar mensaje -></button>
+      </form>
+    </div>
+  </div>
+</section>

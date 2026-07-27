@@ -50,7 +50,7 @@ export const projectsData: Project[] = [
   {
     title: "Proyecto Musical con Java",
     description:
-      "Proyecto musical que utiliza automatas finitos, expresiones regulares y gramáticas para la generación de melodías y ritmos de forma programática.",
+      "Proyecto musical que utiliza autómatas finitos, expresiones regulares y gramáticas para la generación de melodías y ritmos de forma programática.",
     image: "/assets/img/javamusic.webp",
     tags: [{ text: "Java" }, { text: "Swing" }],
     github: "https://github.com/JuanSamayoa/Proyecto-Final-Automatas",

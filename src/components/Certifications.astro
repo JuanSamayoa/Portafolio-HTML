@@ -1,0 +1,100 @@
+---
+import { Image } from "astro:assets";
+import {
+  additionalCertifications,
+  featuredCertifications,
+} from "../data/certifications";
+
+const allCertificationsCount =
+  featuredCertifications.length + additionalCertifications.length;
+---
+
+<section id="certificaciones">
+  <div class="container">
+    <div class="section-tag">certificaciones</div>
+    <div class="certs-header">
+      <h2 class="section-title">Formación continua</h2>
+      <p>
+        {allCertificationsCount} certificaciones en total, con las más
+        relevantes visibles primero.
+      </p>
+    </div>
+    <div class="certs-grid">
+      {
+        featuredCertifications.map((certification, index) => (
+          <article class:list={["cert-card reveal", `reveal-delay-${index % 4}`]}>
+            <div class="cert-image">
+              <Image
+                src={certification.image}
+                alt={`Certificación ${certification.title}`}
+                width={400}
+                height={250}
+                loading="lazy"
+              />
+            </div>
+            <div class="cert-content">
+              <div class="cert-issuer">{certification.issuer}</div>
+              <h3 class="cert-name">{certification.title}</h3>
+              <div class="cert-footer">
+                <div class="cert-year">{certification.date}</div>
+                {certification.link ? (
+                  <a
+                    href={certification.link}
+                    class="cert-verify"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    verificar ->
+                  </a>
+                ) : (
+                  <span class="cert-verify muted">sin link público</span>
+                )}
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <details class="more-certs reveal">
+      <summary>
+        <span>ver más certificaciones</span>
+        <strong>{additionalCertifications.length} adicionales</strong>
+      </summary>
+      <div class="more-certs-grid">
+        {
+          additionalCertifications.map((certification) => (
+            <article class="mini-cert">
+              <Image
+                src={certification.image}
+                alt={`Certificación ${certification.title}`}
+                width={200}
+                height={200}
+                loading="lazy"
+              />
+              <div class="mini-cert-body">
+                <div class="cert-issuer">{certification.issuer}</div>
+                <h3 class="mini-cert-name">{certification.title}</h3>
+                <div class="cert-footer">
+                  <div class="cert-year">{certification.date}</div>
+                  {certification.link ? (
+                    <a
+                      href={certification.link}
+                      class="cert-verify"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      verificar ->
+                    </a>
+                  ) : (
+                    <span class="cert-verify muted">sin link público</span>
+                  )}
+                </div>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </details>
+  </div>
+</section>

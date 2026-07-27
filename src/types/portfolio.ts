@@ -47,12 +47,15 @@ export interface Skill {
   icon?: string;
 }
 
+export type CertificationCategory = "featured" | "additional";
+
 export interface Certification {
   title: string;
   issuer: string;
   image: string;
   date: string;
   link?: string; // Opcional - algunos certificados no tienen link de verificación
+  category?: CertificationCategory;
 }
 
 export interface SocialLink {

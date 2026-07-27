@@ -1,0 +1,69 @@
+---
+import { Image } from "astro:assets";
+import { personalInfo } from "../data/personal";
+import { projectsData } from "../data/projects";
+---
+
+<section id="proyectos">
+  <div class="container">
+    <div class="projects-header">
+      <div>
+        <div class="section-tag">proyectos</div>
+        <h2 class="section-title no-margin">Proyectos</h2>
+      </div>
+      <a href={personalInfo.github} class="btn-ghost" target="_blank" rel="noreferrer">ver GitHub -></a>
+    </div>
+
+    <div class="projects-grid">
+      {
+        projectsData.map((project, index) => (
+          <article
+            class:list={[
+              "project-card reveal",
+              project.featured && "featured",
+              `reveal-delay-${index % 4}`,
+            ]}
+          >
+            <div class="project-img media">
+              {project.image && (
+                <Image
+                  src={project.image}
+                  alt={`Vista previa de ${project.title}`}
+                  width={600}
+                  height={340}
+                  loading="lazy"
+                />
+              )}
+              <span class:list={["project-type-badge", project.featured ? "badge-pro" : "badge-personal"]}>
+                {project.featured ? "destacado" : project.github ? "github" : "profesional"}
+              </span>
+            </div>
+            <div class="project-body">
+              <h3 class="project-title">{project.title}</h3>
+              <p class="project-desc">{project.description}</p>
+              <div class="project-stack">
+                {project.tags.map((tag) => (
+                  <span class="stack-chip">{tag.text}</span>
+                ))}
+              </div>
+              <div class="project-actions">
+                {project.github ? (
+                  <a href={project.github} class="project-link" target="_blank" rel="noreferrer">
+                    ver código ->
+                  </a>
+                ) : (
+                  <span class="project-link muted">código privado</span>
+                )}
+                {project.link && (
+                  <a href={project.link} class="project-link" target="_blank" rel="noreferrer">
+                    ver demo ->
+                  </a>
+                )}
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

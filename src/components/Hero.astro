@@ -1,0 +1,102 @@
+---
+import { Image } from "astro:assets";
+import { personalInfo } from "../data/personal";
+---
+
+<section id="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-bg-glow"></div>
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-left reveal">
+        <div class="hero-available">
+          <span class="available-dot"></span>
+          disponible para colaboración
+        </div>
+        <h1 class="hero-title">
+          QA Automation Engineer
+          <span class="hero-title-accent">Software Quality Specialist</span>
+        </h1>
+        <p class="hero-subtitle">
+          PLAYWRIGHT · JAVA · PYTHON · GUATEMALA CITY
+        </p>
+        <p class="hero-desc">
+          QA Engineer especializado en automatización, pruebas
+          funcionales y validación de datos. Combino criterio QA con base
+          de desarrollo para entregar cobertura real, trazable y útil.
+        </p>
+        <div class="hero-tags">
+          <span class="tag tag-primary">Playwright</span>
+          <span class="tag tag-primary">Java</span>
+          <span class="tag">Python</span>
+          <span class="tag">Black-box</span>
+          <span class="tag">White-box</span>
+          <span class="tag">CI/CD</span>
+          <span class="tag">SQL</span>
+        </div>
+        <div class="language-strip" aria-label="Idiomas">
+          <span>Español nativo</span>
+          <span>Inglés profesional</span>
+        </div>
+        <div class="hero-actions">
+          <a href="#proyectos" class="btn-primary">ver proyectos -></a>
+          <a href="#contacto" class="btn-ghost">contáctame</a>
+        </div>
+        <div class="response-badge">
+          <span class="available-dot"></span>
+          Respondo en menos de 24h · GMT-6
+        </div>
+      </div>
+
+      <aside class="hero-card reveal reveal-delay-1" aria-label="Resumen técnico">
+        <div class="hero-card-header">
+          <Image
+            class="avatar-photo"
+            src={personalInfo.profileImage}
+            alt="Foto de perfil de Juan Samayoa"
+            width={48}
+            height={48}
+            loading="eager"
+          />
+          <div>
+            <div class="hero-card-name">Juan Enrique Samayoa</div>
+            <div class="hero-card-role">QA AUTOMATION ENGINEER · GMT-6</div>
+          </div>
+        </div>
+
+        <div class="terminal">
+          <div class="terminal-bar">
+            <span class="t-dot red"></span>
+            <span class="t-dot yellow"></span>
+            <span class="t-dot green"></span>
+          </div>
+          <div class="terminal-body">
+            <div><span class="t-prompt">~</span> <span class="t-cmd">npx playwright test</span></div>
+            <div><span class="t-comment">Running 47 tests using 4 workers</span></div>
+            <div>&nbsp;</div>
+            <div><span class="t-success">✓</span> <span class="t-comment">smoke/login.spec.ts (1.2s)</span></div>
+            <div><span class="t-success">✓</span> <span class="t-comment">api/endpoints.spec.ts (2.4s)</span></div>
+            <div><span class="t-success">✓</span> <span class="t-comment">regression/catalog.spec.ts (3.1s)</span></div>
+            <div>&nbsp;</div>
+            <div><span class="t-success">47 passed</span> <span class="t-comment">(18.7s)</span> <span class="t-cursor"></span></div>
+          </div>
+        </div>
+
+        <div class="metrics">
+          <div class="metric">
+            <div class="metric-num">3+</div>
+            <div class="metric-label">años QA</div>
+          </div>
+          <div class="metric">
+            <div class="metric-num">47+</div>
+            <div class="metric-label">tests auto</div>
+          </div>
+          <div class="metric">
+            <div class="metric-num">GMT-6</div>
+            <div class="metric-label">timezone</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>

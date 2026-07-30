@@ -9,13 +9,11 @@
     "allowJs": true,
     "skipLibCheck": true
   },
-  "include": [".astro/types.d.ts", "src", "index.html"],
+  "include": [".astro/types.d.ts", "src"],
   "exclude": [
     "dist",
-    "docs",
     "public",
     ".astro",
-    "node_modules",
-    "src/components/Badge.astro"
+    "node_modules"
   ]
 }

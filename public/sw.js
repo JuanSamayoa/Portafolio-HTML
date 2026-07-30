@@ -1,273 +1,188 @@
 /**
- * SERVICE WORKER PARA PWA
- * ======================
- * Implementación básica para cacheo y funcionalidad offline
+ * SERVICE WORKER - PWA
+ * Cache strategies + offline support + security hardening
  */
 
-const CACHE_NAME = "juan-samayoa-portfolio-v1";
-const STATIC_CACHE_NAME = "juan-samayoa-static-v1";
+const CACHE_NAME = "juan-samayoa-portfolio-v2";
+const STATIC_CACHE_NAME = "juan-samayoa-static-v2";
 
-// Archivos críticos para cachear
+// Critical assets for offline (imágenes principales vía Cloudinary, no locales)
 const STATIC_ASSETS = [
   "/",
   "/manifest.json",
   "/favicon.svg",
-  "/assets/img/profile.webp",
-  "/assets/img/profile-fallback.svg",
-  "/assets/cv/cv-juan-samayoa-es.pdf",
-  "/assets/cv/cv-juan-samayoa-en.pdf",
 ];
 
-// Archivos dinámicos que se cachean bajo demanda
+// Dynamic cache patterns
 const DYNAMIC_CACHE_PATTERNS = [
   /^\/assets\/img\//,
-  /^\/assets\/certificates\//,
   /^\/assets\/icons\//,
   /\.(?:js|css|webp|jpg|jpeg|png|svg)$/,
 ];
 
+// Max cache entries for dynamic cache
+const MAX_DYNAMIC_ENTRIES = 50;
+
 // ================================
-// INSTALACIÓN DEL SERVICE WORKER
+// INSTALL
 // ================================
 self.addEventListener("install", (event) => {
-  console.log("[SW] Instalando Service Worker...");
-
   event.waitUntil(
     caches
       .open(STATIC_CACHE_NAME)
-      .then((cache) => {
-        console.log("[SW] Cacheando archivos estáticos");
-        return cache.addAll(STATIC_ASSETS);
-      })
-      .then(() => {
-        console.log("[SW] Archivos estáticos cacheados correctamente");
-        return self.skipWaiting(); // Activar inmediatamente
-      })
-      .catch((error) => {
-        console.error("[SW] Error al cachear archivos estáticos:", error);
-      }),
+      .then((cache) => cache.addAll(STATIC_ASSETS))
+      .then(() => self.skipWaiting())
+      .catch(() => {}),
   );
 });
 
 // ================================
-// ACTIVACIÓN DEL SERVICE WORKER
+// ACTIVATE
 // ================================
 self.addEventListener("activate", (event) => {
-  console.log("[SW] Activando Service Worker...");
-
   event.waitUntil(
     caches
       .keys()
-      .then((cacheNames) => {
-        const obsoleteCaches = cacheNames.filter(
-          (cacheName) => cacheName !== CACHE_NAME && cacheName !== STATIC_CACHE_NAME,
-        );
-        return Promise.all(
-          obsoleteCaches.map((cacheName) => {
-            console.log("[SW] Eliminando cache antiguo:", cacheName);
-            return caches.delete(cacheName);
-          }),
-        );
-      })
-      .then(() => {
-        console.log("[SW] Service Worker activado");
-        return self.clients.claim(); // Tomar control inmediatamente
-      })
-      .catch((error) => {
-        console.error("[SW] Error durante la activación:", error);
-      }),
+      .then((keys) =>
+        Promise.all(
+          keys
+            .filter((k) => k !== CACHE_NAME && k !== STATIC_CACHE_NAME)
+            .map((k) => caches.delete(k)),
+        ),
+      )
+      .then(() => self.clients.claim())
+      .catch(() => {}),
   );
 });
 
 // ================================
-// INTERCEPTAR PETICIONES (FETCH)
+// FETCH
 // ================================
 self.addEventListener("fetch", (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Solo interceptar peticiones del mismo origen
-  if (url.origin !== location.origin) {
-    return;
-  }
+  // Only intercept same-origin requests
+  if (url.origin !== location.origin) return;
 
-  // Estrategia: Cache First para assets estáticos
+  // Never cache sensitive files
+  if (isSensitivePath(url.pathname)) return;
+
+  // Cache First for static assets
   if (isStaticAsset(request.url)) {
     event.respondWith(cacheFirst(request));
     return;
   }
 
-  // Estrategia: Network First para HTML y APIs
+  // Network First for HTML navigation
   if (isNavigationRequest(request)) {
     event.respondWith(networkFirst(request));
     return;
   }
 
-  // Estrategia: Stale While Revalidate para otros recursos
+  // Stale While Revalidate for everything else
   event.respondWith(staleWhileRevalidate(request));
 });
 
 // ================================
-// ESTRATEGIAS DE CACHE
+// CACHE STRATEGIES
 // ================================
 
-/**
- * Cache First: Busca en cache primero, si no encuentra va a la red
- * Ideal para: CSS, JS, imágenes, fuentes
- */
 async function cacheFirst(request) {
   try {
-    const cachedResponse = await caches.match(request);
-    if (cachedResponse) {
-      return cachedResponse;
-    }
+    const cached = await caches.match(request);
+    if (cached) return cached;
 
-    const networkResponse = await fetch(request);
-    if (networkResponse.ok) {
-      try {
-        const cache = await caches.open(CACHE_NAME);
-        // Clonamos la respuesta antes de usarla
-        const responseClone = networkResponse.clone();
-        await cache.put(request, responseClone);
-      } catch (cacheError) {
-        console.warn("[SW] Error al guardar en cache:", cacheError);
-      }
+    const response = await fetch(request);
+    if (response.ok) {
+      const cache = await caches.open(CACHE_NAME);
+      await cache.put(request, response.clone());
+      await limitCacheSize(cache, MAX_DYNAMIC_ENTRIES);
     }
-
-    return networkResponse;
-  } catch (error) {
-    console.error("[SW] Error en Cache First:", error);
-    return new Response("Recurso no disponible offline", {
-      status: 503,
-      statusText: "Service Unavailable",
-    });
+    return response;
+  } catch {
+    return new Response("Offline", { status: 503 });
   }
 }
 
-/**
- * Network First: Intenta la red primero, si falla usa cache
- * Ideal para: HTML, APIs, contenido dinámico
- */
 async function networkFirst(request) {
   try {
-    const networkResponse = await fetch(request);
-    if (networkResponse.ok) {
-      try {
-        const cache = await caches.open(CACHE_NAME);
-        // Clonamos la respuesta antes de usarla
-        const responseClone = networkResponse.clone();
-        await cache.put(request, responseClone);
-      } catch (cacheError) {
-        console.warn("[SW] Error al guardar en cache:", cacheError);
-      }
+    const response = await fetch(request);
+    if (response.ok) {
+      const cache = await caches.open(CACHE_NAME);
+      await cache.put(request, response.clone());
     }
-    return networkResponse;
-  } catch (error) {
-    console.warn("[SW] Error de red en Network First:", error);
-    console.log("[SW] Red no disponible, buscando en cache...");
-    const cachedResponse = await caches.match(request);
+    return response;
+  } catch {
+    const cached = await caches.match(request);
+    if (cached) return cached;
 
-    if (cachedResponse) {
-      return cachedResponse;
-    }
-
-    // Página offline personalizada
     if (isNavigationRequest(request)) {
       const offlineHome = await caches.match("/");
-      if (offlineHome) {
-        return offlineHome;
-      }
+      if (offlineHome) return offlineHome;
 
       return new Response(
-        `
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <title>Sin conexión - Juan Samayoa</title>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <style>
-              body { font-family: system-ui, sans-serif; text-align: center; padding: 50px; }
-              .offline { color: #666; }
-            </style>
-          </head>
-          <body>
-            <div class="offline">
-              <h1>Sin conexión a internet</h1>
-              <p>Por favor, verifica tu conexión e intenta de nuevo.</p>
-              <button onclick="window.location.reload()">Reintentar</button>
-            </div>
-          </body>
-        </html>
-      `,
-        {
-          headers: { "Content-Type": "text/html" },
-        },
+        `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sin conexion</title><style>body{font-family:system-ui,sans-serif;text-align:center;padding:50px;color:#666}</style></head><body><h1>Sin conexion a internet</h1><p>Verifica tu conexion e intenta de nuevo.</p><button onclick="location.reload()">Reintentar</button></body></html>`,
+        { headers: { "Content-Type": "text/html; charset=utf-8" } },
       );
     }
 
-    return new Response("No disponible offline", {
-      status: 503,
-      statusText: "Service Unavailable",
-    });
+    return new Response("Offline", { status: 503 });
   }
 }
 
-/**
- * Stale While Revalidate: Devuelve cache rápido y actualiza en background
- * Ideal para: Recursos que cambian ocasionalmente
- */
 async function staleWhileRevalidate(request) {
-  const cachedResponse = await caches.match(request);
+  const cached = await caches.match(request);
 
   const fetchPromise = fetch(request)
     .then(async (response) => {
       if (response.ok) {
-        try {
-          const cache = await caches.open(CACHE_NAME);
-          // Clonamos la respuesta antes de cualquier otra operación
-          const responseClone = response.clone();
-          await cache.put(request, responseClone);
-        } catch (error) {
-          console.warn(
-            "[SW] Error al actualizar cache en staleWhileRevalidate:",
-            error,
-          );
-        }
+        const cache = await caches.open(CACHE_NAME);
+        await cache.put(request, response.clone());
+        await limitCacheSize(cache, MAX_DYNAMIC_ENTRIES);
       }
       return response;
     })
-    .catch((error) => {
-      console.warn("[SW] Error en fetchPromise:", error);
-      return cachedResponse;
-    });
+    .catch(() => cached);
 
-  return cachedResponse || fetchPromise;
+  return cached || fetchPromise;
 }
 
 // ================================
-// FUNCIONES AUXILIARES
+// HELPERS
 // ================================
 
 function isStaticAsset(url) {
-  return DYNAMIC_CACHE_PATTERNS.some((pattern) => pattern.test(url));
+  return DYNAMIC_CACHE_PATTERNS.some((p) => p.test(url));
 }
 
 function isNavigationRequest(request) {
   return (
     request.mode === "navigate" ||
     (request.method === "GET" &&
-      request.headers.get("accept").includes("text/html"))
+      request.headers.get("accept")?.includes("text/html"))
   );
 }
 
+function isSensitivePath(pathname) {
+  const sensitive = ["/sw.js", "/.well-known/", "/_headers"];
+  return sensitive.some((s) => pathname.startsWith(s));
+}
+
+async function limitCacheSize(cache, maxEntries) {
+  const keys = await cache.keys();
+  while (keys.length > maxEntries) {
+    const oldest = keys.shift();
+    await cache.delete(oldest);
+  }
+}
+
 // ================================
-// MANEJO DE MENSAJES
+// MESSAGES
 // ================================
 self.addEventListener("message", (event) => {
-  if (event.origin && event.origin !== self.location.origin) {
-    return;
-  }
+  // Only accept messages from same origin
+  if (event.origin && event.origin !== self.location.origin) return;
 
   if (event.data?.type === "SKIP_WAITING") {
     self.skipWaiting();
@@ -279,7 +194,7 @@ self.addEventListener("message", (event) => {
 });
 
 // ================================
-// NOTIFICACIONES PUSH (Futuro)
+// PUSH NOTIFICATIONS
 // ================================
 self.addEventListener("push", (event) => {
   if (!event.data) return;
@@ -305,35 +220,16 @@ self.addEventListener("push", (event) => {
 
     const sanitizedBody = bodyText.replace(/[^a-zA-Z0-9 ._#-]/g, "").slice(0, 250);
 
-    const options = {
-      body: sanitizedBody,
-      icon: "/assets/icons/icon-192.png",
-      badge: "/assets/icons/badge-72.png",
-      vibrate: [100, 50, 100],
-      data: {
-        dateOfArrival: Date.now(),
-        primaryKey: 1,
-      },
-      actions: [
-        {
-          action: "explore",
-          title: "Ver portafolio",
-          icon: "/assets/icons/checkmark.png",
-        },
-        {
-          action: "close",
-          title: "Cerrar",
-          icon: "/assets/icons/xmark.png",
-        },
-      ],
-    };
-
     event.waitUntil(
-      self.registration.showNotification(titleText, options),
+      self.registration.showNotification(titleText, {
+        body: sanitizedBody,
+        icon: "/assets/icons/icon-192.png",
+        badge: "/assets/icons/icon-192.png",
+        vibrate: [100, 50, 100],
+        data: { dateOfArrival: Date.now(), primaryKey: 1 },
+      }),
     );
-  } catch (error) {
-    console.error("[SW] Error al procesar notificación push:", error);
+  } catch {
+    // Silently fail on push errors
   }
 });
-
-console.log("[SW] Service Worker cargado correctamente");

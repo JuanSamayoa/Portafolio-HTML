@@ -8,11 +8,6 @@ export default defineConfig({
   base: "/",
   outDir: "./dist",
 
-  // Configuración de imágenes remotas
-  image: {
-    domains: ["coursera.org", "capacitateparaelempleo.org"],
-  },
-
   // Configuración de seguridad
   security: {
     checkOrigin: true,

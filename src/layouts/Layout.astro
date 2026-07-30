@@ -1,0 +1,138 @@
+---
+import "../styles/global.css";
+
+export interface Props {
+  title: string;
+  description: string;
+  canonicalUrl: string;
+  previewImage: string;
+  schemaOrg: Record<string, unknown>;
+  robots?: string;
+}
+
+const { title, description, canonicalUrl, previewImage, schemaOrg, robots = "index, follow, noimageindex, noarchive, nosnippet" } = Astro.props;
+const navLinks = [
+  { href: "#impacto", text: "impacto" },
+  { href: "#servicios", text: "servicios" },
+  { href: "#casos", text: "casos" },
+  { href: "#sobre", text: "sobre" },
+  { href: "#experiencia", text: "experiencia" },
+  { href: "#proyectos", text: "proyectos" },
+  { href: "#habilidades", text: "stack" },
+  { href: "#certificaciones", text: "certs" },
+];
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta name="author" content="Juan Samayoa" />
+    <meta
+      name="keywords"
+      content="QA Automation Engineer, Playwright, Java, Selenium, Postman, SQL, Guatemala, Testing"
+    />
+    <meta name="robots" content={robots} />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://formsubmit.co; base-uri 'self'; form-action 'self'"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={previewImage} />
+    <meta property="og:image:alt" content="Foto de perfil de Juan Samayoa" />
+    <meta property="og:site_name" content="Juan Samayoa Portfolio" />
+    <meta property="og:locale" content="es_GT" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={previewImage} />
+    <meta name="theme-color" content="#0f6e56" />
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+      crossorigin="anonymous"
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={JSON.stringify(schemaOrg)}
+    />
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">
+      Saltar al contenido principal / Skip to main content
+    </a>
+    <nav aria-label="Navegación principal">
+      <a class="nav-logo" href="#hero" aria-label="Ir al inicio">
+        <span class="nav-logo-dot"></span>
+        Juan Samayoa
+      </a>
+      <ul class="nav-links">
+        {navLinks.map(({ href, text }) => (
+          <li><a href={href}>{text}</a></li>
+        ))}
+      </ul>
+      <a href="#contacto" class="nav-cta">contacto -></a>
+    </nav>
+
+    <main id="main-content">
+      <slot />
+    </main>
+
+    <footer aria-label="Pie de página">
+      <div class="container footer-inner">
+        <div>© 2026 Juan Samayoa · Guatemala City</div>
+        <div>
+          built with <span>Astro</span> · deployed on <span>GitHub Pages</span>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Reveal on scroll — anima cuando el elemento está ~35% arriba del viewport
+      const io = new IntersectionObserver(
+        (es) => es.forEach((e) => e.isIntersecting && e.target.classList.add("visible")),
+        { rootMargin: '0px 0px -35% 0px' },
+      );
+      document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+
+      // Active nav link on scroll
+      const sections = document.querySelectorAll<HTMLElement>("section[id]");
+      const links = document.querySelectorAll(".nav-links a");
+      let ticking = false;
+
+      window.addEventListener("scroll", () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          let current = "";
+          sections.forEach((s) => {
+            if (window.scrollY >= s.offsetTop - 90) current = s.id;
+          });
+          links.forEach((l) => l.classList.toggle("active", l.getAttribute("href") === `#${current}`));
+          ticking = false;
+        });
+      });
+    </script>
+  </body>
+</html>

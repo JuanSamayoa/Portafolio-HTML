@@ -9,8 +9,8 @@ export const personalInfo: PersonalInfo = {
   title: "QA Automatizado",
   email: "contact@juansamayoa.dev",
   location: "Ciudad de Guatemala, Guatemala",
-  profileImage: "/assets/img/profile.jpg",
-  profileImageFallback: "/assets/img/profile-fallback.svg",
+  profileImage:
+    "https://res.cloudinary.com/df3b2ec0h/image/upload/v1785438411/IMG_8748_baq06u.jpg",
   linkedin: "https://www.linkedin.com/in/juansamayoa/",
   github: "https://github.com/JuanSamayoa",
   cvPathEs: "/assets/cv/cv-juan-samayoa-es.pdf",

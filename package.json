@@ -1,12 +1,12 @@
 {
   "name": "portafolio-dev",
   "type": "module",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "pnpm run build:tailwind && astro build",
+    "build": "astro build",
     "preview": "astro preview",
-    "build:tailwind": "node tools/build-tailwind.cjs",
+
     "astro": "astro",
     "deploy": "pnpm run build",
     "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
@@ -14,20 +14,15 @@
     "check": "astro check"
   },
   "dependencies": {
-    "@fontsource/inter": "^5.3.0",
-    "@fontsource/onest": "^5.3.0",
-    "astro": "^5.18.2",
-    "zod": "^4.4.3"
+    "astro": "^7.1.6"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.9",
+    "@astrojs/check": "^0.9.10",
     "@tailwindcss/postcss": "^4.3.3",
     "@tailwindcss/vite": "^4.3.3",
-    "autoprefixer": "^10.5.4",
-    "baseline-browser-mapping": "^2.11.4",
-    "postcss": "^8.5.23",
+    "postcss": "^8.5.25",
     "tailwindcss": "^4.3.3",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.0"
   },
   "packageManager": "pnpm@10.19.0+sha512.c9fc7236e92adf5c8af42fd5bf1612df99c2ceb62f27047032f4720b33f8eacdde311865e91c411f2774f618d82f320808ecb51718bfa82c060c4ba7c76a32b8",
   "pnpm": {
@@ -35,7 +30,8 @@
       "minimatch": "9.0.7",
       "ajv": "8.18.0",
       "sucrase": "3.35.1",
-      "lodash": "4.17.23"
+      "lodash": "4.17.23",
+    "sharp": "0.35.3"
     }
   }
 }

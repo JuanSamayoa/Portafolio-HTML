@@ -1,88 +1,78 @@
 ---
-import "../styles/global.css";
+import Layout from "../layouts/Layout.astro";
 
-const pageTitle = "¡Gracias por contactarme! | Thank You! - Juan Samayoa";
+const pageTitle = "¡Gracias por contactarme! — Juan Samayoa";
 const pageDescription =
   "Mensaje enviado exitosamente. Confirmación de recepción con tiempo estimado de respuesta de 24 a 72 horas.";
+const canonicalUrl = "https://juan-samayoa.is-a.dev/thanks";
+const previewImage = "https://juan-samayoa.is-a.dev/favicon.svg";
+const schemaOrg = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: pageTitle,
+  description: pageDescription,
+  url: canonicalUrl,
+};
 ---
 
-<!doctype html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{pageTitle}</title>
-    <meta name="description" content={pageDescription} />
-    <meta name="robots" content="noindex, follow" />
-    <meta name="theme-color" content="#0f6e56" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
-      rel="stylesheet"
-      crossorigin="anonymous"
-    />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  </head>
-  <body>
-    <main class="thanks-wrapper" id="main-content">
-      <div class="thanks-card">
-        <div class="icon-container" aria-hidden="true">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="48"
-            height="48"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-            <polyline points="22 4 12 14.01 9 11.01"></polyline>
-          </svg>
-        </div>
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  canonicalUrl={canonicalUrl}
+  previewImage={previewImage}
+  schemaOrg={schemaOrg}
+  robots="noindex, follow"
+>
+  <div class="thanks-wrapper">
+    <div class="thanks-card">
+      <div class="thanks-icon" aria-hidden="true">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="48"
+          height="48"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+          <polyline points="22 4 12 14.01 9 11.01" />
+        </svg>
+      </div>
 
-        <h1 class="thanks-title">
-          <span>¡Mensaje Recibido!</span>
-          <span lang="en">Message Received!</span>
-        </h1>
+      <h1 class="thanks-title">
+        <span>¡Mensaje Recibido!</span>
+        <span lang="en">Message Received!</span>
+      </h1>
 
-        <div class="thanks-body">
-          <section lang="es" class="lang-block">
-            <p>
-              Gracias por ponerte en contacto. Tu mensaje ha sido enviado correctamente y responderé en un lapso estimado de <strong>24 a 72 horas</strong>.
-            </p>
-          </section>
-
-          <hr class="divider" aria-hidden="true" />
-
-          <section lang="en" class="lang-block">
-            <p>
-              Thank you for reaching out. Your message has been successfully sent, and I will get back to you within an estimated timeframe of <strong>24 to 72 hours</strong>.
-            </p>
-          </section>
-        </div>
-
-        <div class="thanks-actions">
-          <a href="/" class="btn-primary" aria-label="Volver al inicio / Back to Home">
+      <div class="thanks-body">
+        <p lang="es">
+          Gracias por ponerte en contacto. Tu mensaje ha sido enviado
+          correctamente y responderé en un lapso estimado de
+          <strong>24 a 72 horas</strong>.
+        </p>
+        <hr class="thanks-divider" aria-hidden="true" />
+        <p lang="en">
+          Thank you for reaching out. Your message has been successfully sent,
+          and I will get back to you within an estimated timeframe of
+          <strong>24 to 72 hours</strong>.
+        </p>
+      </div><a href="/" class="btn-primary">
             ← Volver al inicio / Back to Home
           </a>
-        </div>
-      </div>
-    </main>
-  </body>
-</html>
+    </div>
+  </div>
+</Layout>
 
 <style>
   .thanks-wrapper {
-    min-height: 100vh;
+    min-height: calc(100vh - 56px);
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 2rem 1.5rem;
-    background: var(--gray-50);
   }
 
   .thanks-card {
@@ -96,7 +86,7 @@ const pageDescription =
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   }
 
-  .icon-container {
+  .thanks-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -134,48 +124,21 @@ const pageDescription =
     text-align: left;
   }
 
-  .lang-block p {
+  .thanks-body p {
     font-size: 0.95rem;
     color: var(--gray-600);
     line-height: 1.6;
   }
 
-  .lang-block strong {
+  .thanks-body strong {
     color: var(--teal-600);
     font-weight: 600;
   }
 
-  .divider {
+  .thanks-divider {
     border: 0;
     height: 1px;
     background: var(--gray-200);
-    margin: 0.25rem 0;
-  }
-
-  .thanks-actions {
-    display: flex;
-    justify-content: center;
-  }
-
-  .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.75rem 1.5rem;
-    background: var(--teal-600);
-    color: #ffffff;
-    font-family: var(--mono);
-    font-size: 0.9rem;
-    font-weight: 500;
-    text-decoration: none;
-    border-radius: 6px;
-    transition: background-color 0.2s ease, transform 0.2s ease;
-  }
-
-  .btn-primary:hover,
-  .btn-primary:focus-visible {
-    background: var(--teal-800);
-    outline: 2px solid var(--teal-600);
-    outline-offset: 2px;
+    margin: 0;
   }
 </style>

@@ -1,0 +1,116 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const title = "Página no encontrada | 404 — Juan Samayoa";
+const description =
+  "La página que buscas no existe o fue movida. Regresa al inicio para encontrar lo que necesitas.";
+const canonicalUrl = "https://juan-samayoa.is-a.dev/404";
+const previewImage = "https://juan-samayoa.is-a.dev/favicon.svg";
+const schemaOrg = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description,
+  url: canonicalUrl,
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  canonicalUrl={canonicalUrl}
+  previewImage={previewImage}
+  schemaOrg={schemaOrg}
+  robots="noindex, follow"
+>
+  <div class="notfound-wrapper">
+    <div class="notfound-card">
+      <div class="notfound-code" aria-hidden="true">404</div>
+      <h1 class="notfound-title">Página no encontrada</h1>
+      <p class="notfound-desc">
+        La página que buscas no existe, fue movida o el enlace está
+        incorrecto. Revisa la URL o vuelve al inicio.
+      </p>
+      <div class="terminal notfound-terminal">
+        <div class="terminal-bar">
+          <span class="t-dot red"></span>
+          <span class="t-dot yellow"></span>
+          <span class="t-dot green"></span>
+        </div>
+        <div class="terminal-body">
+          <div>
+            <span class="t-prompt">~</span>
+            <span class="t-cmd">curl https://juan-samayoa.is-a.dev/esta-ruta</span>
+          </div>
+          <div><span class="t-comment">&gt; HTTP/2 404 Not Found</span></div>
+          <div><span class="t-comment">&gt; La ruta solicitada no existe en este servidor.</span></div>
+          <div>&nbsp;</div>
+          <div>
+            <span class="t-prompt">~</span>
+            <span class="t-cmd"># Intentá con la página principal:</span>
+          </div>
+          <div>
+            <span class="t-prompt">~</span>
+            <span class="t-success">curl https://juan-samayoa.is-a.dev</span>
+          </div>
+          <div>
+            <span class="t-comment">&gt; HTTP/2 200 OK — Portafolio de Juan Samayoa</span>
+            <span class="t-cursor"></span>
+          </div>
+        </div>
+      </div>
+      <a href="/" class="btn-primary" aria-label="Volver al inicio">
+        ← volver al inicio
+      </a>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .notfound-wrapper {
+    min-height: calc(100vh - 56px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.5rem;
+  }
+
+  .notfound-card {
+    max-width: 560px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .notfound-code {
+    font-family: var(--display);
+    font-size: clamp(96px, 20vw, 160px);
+    font-weight: 700;
+    line-height: 0.85;
+    color: var(--teal-200);
+    opacity: 0.5;
+    margin-bottom: 0.5rem;
+    user-select: none;
+  }
+
+  .notfound-title {
+    font-family: var(--display);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 1rem;
+  }
+
+  .notfound-desc {
+    max-width: 420px;
+    margin: 0 auto 2rem;
+    color: var(--gray-600);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .notfound-terminal {
+    max-width: 480px;
+    margin: 0 auto 2rem;
+    text-align: left;
+  }
+</style>

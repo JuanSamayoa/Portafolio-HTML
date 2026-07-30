@@ -9,7 +9,6 @@ export interface PersonalInfo {
   email: string;
   location: string;
   profileImage: string;
-  profileImageFallback: string;
   linkedin: string;
   github: string;
   cvPathEs: string;
@@ -19,16 +18,6 @@ export interface PersonalInfo {
 export interface Badge {
   text: string;
   color?: string;
-}
-
-export interface ExperienceItem {
-  date: string;
-  title: string;
-  company: string;
-  location: string;
-  description: string;
-  badges: Badge[];
-  isActive?: boolean;
 }
 
 export interface Project {
@@ -41,12 +30,6 @@ export interface Project {
   featured?: boolean;
 }
 
-export interface Skill {
-  category: string;
-  technologies: string[];
-  icon?: string;
-}
-
 export type CertificationCategory = "featured" | "additional";
 
 export interface Certification {
@@ -54,12 +37,6 @@ export interface Certification {
   issuer: string;
   image: string;
   date: string;
-  link?: string; // Opcional - algunos certificados no tienen link de verificación
+  link?: string;
   category?: CertificationCategory;
-}
-
-export interface SocialLink {
-  platform: string;
-  url: string;
-  icon: string;
 }

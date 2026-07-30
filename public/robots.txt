@@ -1,13 +1,26 @@
 User-agent: *
 Allow: /
-
-# Archivos y directorios a bloquear
 Disallow: /assets/cv/
-Disallow: /*.json$
-Disallow: /*_headers$
+Disallow: /sw.js
+Disallow: /_headers
+Disallow: /security.txt
 
-# Sitemap
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
 Sitemap: https://juan-samayoa.is-a.dev/sitemap.xml
-
-# Tiempo de rastreo (crawl-delay)
-Crawl-delay: 1

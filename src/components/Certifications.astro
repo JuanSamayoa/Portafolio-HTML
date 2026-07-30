@@ -22,7 +22,7 @@ const allCertificationsCount =
     <div class="certs-grid">
       {
         featuredCertifications.map((certification, index) => (
-          <article class:list={["cert-card reveal", `reveal-delay-${index % 4}`]}>
+          <article class:list={["cert-card reveal", `reveal-delay-${(index % 4) + 1}`]}>
             <div class="cert-image">
               <Image
                 src={certification.image}

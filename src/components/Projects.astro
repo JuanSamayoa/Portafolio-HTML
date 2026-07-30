@@ -20,11 +20,10 @@ import { projectsData } from "../data/projects";
           <article
             class:list={[
               "project-card reveal",
-              project.featured && "featured",
-              `reveal-delay-${index % 4}`,
+              `reveal-delay-${(index % 3) + 1}`,
             ]}
           >
-            <div class="project-img media">
+            <div class="project-img">
               {project.image && (
                 <Image
                   src={project.image}

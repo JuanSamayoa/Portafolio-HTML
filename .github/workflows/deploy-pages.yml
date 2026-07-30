@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy Portfolio
 
 on:
   push:
@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   build:
-    name: Build + Deploy
+    name: Build
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -29,8 +29,18 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
+
+      - name: Cache Astro build
+        uses: actions/cache@v4
+        with:
+          path: |
+            .astro
+            node_modules/.vite
+          key: astro-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            astro-${{ runner.os }}-
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --prod=false --ignore-scripts
@@ -48,6 +58,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
+          retention-days: 1
 
   deploy:
     if: github.ref == 'refs/heads/main'

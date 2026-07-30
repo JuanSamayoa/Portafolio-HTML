@@ -1412,6 +1412,14 @@ label span {
   grid-template-rows: 128px 1fr;
   overflow: hidden;
   padding: 0;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.cert-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(29, 158, 117, 0.15);
+  border-color: var(--teal-400);
 }
 
 .cert-image {
@@ -1540,6 +1548,14 @@ label span {
   border-radius: 10px;
   background: white;
   overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.mini-cert:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(29, 158, 117, 0.12);
+  border-color: var(--teal-400);
 }
 
 .mini-cert img {

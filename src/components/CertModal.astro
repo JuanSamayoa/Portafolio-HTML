@@ -1,0 +1,287 @@
+---
+// CertModal.astro - Modal component for certification preview
+// Uses native <dialog> element for better accessibility
+// Listens for custom event 'open-cert-modal' to display certification data
+---
+
+<dialog id="cert-modal" class="cert-modal" aria-labelledby="modal-cert-title">
+  <div class="cert-modal-container">
+    <button class="cert-modal-close" aria-label="Cerrar modal" type="button" data-close>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+    
+    <div class="cert-modal-content">
+      <div class="cert-modal-image-wrapper">
+        <img id="modal-cert-image" src="" alt="" class="cert-modal-image" />
+      </div>
+      
+      <div class="cert-modal-info">
+        <div class="cert-modal-issuer" id="modal-cert-issuer"></div>
+        <h3 class="cert-modal-title" id="modal-cert-title"></h3>
+        <div class="cert-modal-date" id="modal-cert-date"></div>
+        <div class="cert-modal-actions">
+          <a id="modal-cert-link" href="" class="cert-modal-verify" target="_blank" rel="noreferrer" style="display: none;">
+            Verificar certificación →
+          </a>
+          <span id="modal-cert-no-link" class="cert-modal-no-link" style="display: none;">
+            Sin enlace de verificación público
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<style>
+  .cert-modal {
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    padding: 0;
+    max-width: 1100px;
+    width: calc(100% - 48px);
+    max-height: 90vh;
+    background: transparent;
+    border: none;
+    overflow: visible;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .cert-modal[open] {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .cert-modal::backdrop {
+    background: rgba(26, 26, 24, 0.85);
+    backdrop-filter: blur(8px);
+  }
+
+  .cert-modal-container {
+    position: relative;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 32px 64px rgba(26, 26, 24, 0.24);
+    transform: scale(0.95) translateY(20px);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .cert-modal[open] .cert-modal-container {
+    transform: scale(1) translateY(0);
+  }
+
+  .cert-modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--gray-900);
+    cursor: pointer;
+    z-index: 10;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .cert-modal-close:hover {
+    background: white;
+    transform: scale(1.1);
+  }
+
+  .cert-modal-content {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    min-height: 400px;
+  }
+
+  .cert-modal-image-wrapper {
+    position: relative;
+    background: var(--gray-100);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .cert-modal-image {
+    max-width: 100%;
+    max-height: 70vh;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  }
+
+  .cert-modal-info {
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+    background: white;
+  }
+
+  .cert-modal-issuer {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--teal-600);
+    margin-bottom: 12px;
+  }
+
+  .cert-modal-title {
+    font-family: var(--display);
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--gray-900);
+    margin-bottom: 16px;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .cert-modal-date {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--gray-400);
+    margin-bottom: auto;
+  }
+
+  .cert-modal-actions {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid var(--gray-200);
+  }
+
+  .cert-modal-verify {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border: 1px solid var(--teal-400);
+    border-radius: 8px;
+    background: var(--teal-400);
+    color: white;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .cert-modal-verify:hover {
+    background: var(--teal-600);
+    transform: translateY(-2px);
+  }
+
+  .cert-modal-no-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    background: var(--gray-100);
+    color: var(--gray-400);
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+
+  @media (max-width: 768px) {
+    .cert-modal {
+      width: calc(100% - 24px);
+    }
+
+    .cert-modal-content {
+      grid-template-columns: 1fr;
+    }
+
+    .cert-modal-image-wrapper {
+      max-height: 50vh;
+    }
+
+    .cert-modal-info {
+      padding: 24px;
+    }
+
+    .cert-modal-title {
+      font-size: 22px;
+    }
+  }
+</style>
+
+<script>
+  // Modal functionality - listens for custom event 'open-cert-modal'
+  function initCertModal() {
+    const modal = document.getElementById('cert-modal') as HTMLDialogElement;
+    const closeBtns = modal?.querySelectorAll('[data-close]');
+    const modalImage = document.getElementById('modal-cert-image') as HTMLImageElement;
+    const modalIssuer = document.getElementById('modal-cert-issuer');
+    const modalTitle = document.getElementById('modal-cert-title');
+    const modalDate = document.getElementById('modal-cert-date');
+    const modalLink = document.getElementById('modal-cert-link') as HTMLAnchorElement;
+    const modalNoLink = document.getElementById('modal-cert-no-link');
+
+    function openModal(data: {
+      image: string;
+      issuer: string;
+      title: string;
+      date: string;
+      link?: string;
+    }) {
+      if (!modal || !modalImage || !modalIssuer || !modalTitle || !modalDate) return;
+
+      modalImage.src = data.image;
+      modalImage.alt = data.title;
+      modalIssuer.textContent = data.issuer;
+      modalTitle.textContent = data.title;
+      modalDate.textContent = data.date;
+
+      if (data.link && modalLink && modalNoLink) {
+        modalLink.href = data.link;
+        modalLink.style.display = 'inline-flex';
+        modalNoLink.style.display = 'none';
+      } else if (modalLink && modalNoLink) {
+        modalLink.style.display = 'none';
+        modalNoLink.style.display = 'inline-flex';
+      }
+
+      modal.showModal();
+      document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    }
+
+    function closeModal() {
+      if (!modal) return;
+      modal.close();
+      document.body.style.overflow = ''; // Restore scrolling
+    }
+
+    // Close on button clicks
+    closeBtns?.forEach(btn => btn.addEventListener('click', closeModal));
+
+    // Close on backdrop click
+    modal?.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    // Listen for custom event to open modal
+    document.addEventListener('open-cert-modal', ((e: CustomEvent) => {
+      openModal(e.detail);
+    }) as EventListener);
+  }
+
+  // Initialize on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCertModal);
+  } else {
+    initCertModal();
+  }
+</script>

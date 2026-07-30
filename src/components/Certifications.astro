@@ -4,6 +4,7 @@ import {
   additionalCertifications,
   featuredCertifications,
 } from "../data/certifications";
+import CertModal from "./CertModal.astro";
 
 const allCertificationsCount =
   featuredCertifications.length + additionalCertifications.length;
@@ -98,3 +99,54 @@ const allCertificationsCount =
     </details>
   </div>
 </section>
+
+<CertModal />
+
+<script>
+  // Attach click handlers to certification cards
+  function initCertCards() {
+    const certCards = document.querySelectorAll('.cert-card, .mini-cert');
+    
+    certCards.forEach((card) => {
+      // Add interactive attributes
+      card.setAttribute('role', 'button');
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('aria-label', 'Ver certificación en detalle');
+
+      const imageData = card.querySelector('img');
+      const issuer = card.querySelector('.cert-issuer')?.textContent || '';
+      const title = card.querySelector('.cert-name, .mini-cert-name')?.textContent || '';
+      const date = card.querySelector('.cert-year')?.textContent || '';
+      const linkEl = card.querySelector('a.cert-verify[href]') as HTMLAnchorElement;
+      const link = linkEl?.href;
+
+      const openHandler = () => {
+        // Dispatch custom event to open modal
+        document.dispatchEvent(new CustomEvent('open-cert-modal', {
+          detail: {
+            image: imageData?.src || '',
+            issuer,
+            title,
+            date,
+            link,
+          }
+        }));
+      };
+
+      card.addEventListener('click', openHandler);
+      card.addEventListener('keydown', (e: Event) => {
+        if ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') {
+          e.preventDefault();
+          openHandler();
+        }
+      });
+    });
+  }
+
+  // Initialize on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCertCards);
+  } else {
+    initCertCards();
+  }
+</script>

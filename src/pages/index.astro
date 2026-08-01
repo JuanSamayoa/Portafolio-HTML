@@ -20,9 +20,13 @@ const description =
 const canonicalUrl = Astro.site
   ? new URL(Astro.url.pathname, Astro.site).toString()
   : "https://juan-samayoa.is-a.dev/";
-const previewImage = Astro.site
-  ? new URL("/og-image.png", Astro.site).toString()
-  : "https://juan-samayoa.is-a.dev/og-image.png";
+const previewImage =
+  "https://res.cloudinary.com/df3b2ec0h/image/upload/v1785438411/IMG_8748_baq06u.jpg";
+const ogImage =
+  "https://res.cloudinary.com/df3b2ec0h/image/upload/v1785553053/og-image_vonu7x.png";
+const ogImageType = "image/png";
+const ogImageWidth = 1200;
+const ogImageHeight = 630;
 
 const schemaOrg = {
   "@context": "https://schema.org",
@@ -40,7 +44,17 @@ const schemaOrg = {
 };
 ---
 
-<Layout {title} {description} {canonicalUrl} {previewImage} {schemaOrg}>
+<Layout
+  {title}
+  {description}
+  {canonicalUrl}
+  {previewImage}
+  {ogImage}
+  {ogImageType}
+  {ogImageWidth}
+  {ogImageHeight}
+  {schemaOrg}
+>
   <Hero />
   <Impact />
   <Services />

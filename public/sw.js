@@ -7,7 +7,7 @@ const CACHE_NAME = "juan-samayoa-portfolio-v2";
 const STATIC_CACHE_NAME = "juan-samayoa-static-v2";
 
 // Critical assets for offline (imágenes principales vía Cloudinary, no locales)
-const STATIC_ASSETS = ["/", "/manifest.json", "/favicon.svg"];
+const STATIC_ASSETS = ["/", "/manifest.json", "/favicon.ico"];
 
 // Dynamic cache patterns
 const DYNAMIC_CACHE_PATTERNS = [

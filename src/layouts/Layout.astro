@@ -10,7 +10,14 @@ export interface Props {
   robots?: string;
 }
 
-const { title, description, canonicalUrl, previewImage, schemaOrg, robots = "index, follow, noimageindex, noarchive, nosnippet" } = Astro.props;
+const {
+  title,
+  description,
+  canonicalUrl,
+  previewImage,
+  schemaOrg,
+  robots = "index, follow, max-image-preview:large",
+} = Astro.props;
 const navLinks = [
   { href: "#impacto", text: "impacto" },
   { href: "#servicios", text: "servicios" },
@@ -48,14 +55,29 @@ const navLinks = [
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={previewImage} />
-    <meta property="og:image:alt" content="Foto de perfil de Juan Samayoa" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Vista previa del portafolio de Juan Samayoa"
+    />
     <meta property="og:site_name" content="Juan Samayoa Portfolio" />
     <meta property="og:locale" content="es_GT" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={previewImage} />
+    <meta
+      name="twitter:image:alt"
+      content="Vista previa del portafolio de Juan Samayoa"
+    />
     <meta name="theme-color" content="#0f6e56" />
+    <meta name="application-name" content="Juan Samayoa" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="format-detection" content="telephone=no" />
     <link
       rel="preconnect"
       href="https://fonts.googleapis.com"
@@ -72,6 +94,7 @@ const navLinks = [
       crossorigin="anonymous"
     />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
     <script
       type="application/ld+json"
       is:inline
@@ -88,9 +111,13 @@ const navLinks = [
         Juan Samayoa
       </a>
       <ul class="nav-links">
-        {navLinks.map(({ href, text }) => (
-          <li><a href={href}>{text}</a></li>
-        ))}
+        {
+          navLinks.map(({ href, text }) => (
+            <li>
+              <a href={href}>{text}</a>
+            </li>
+          ))
+        }
       </ul>
       <a href="#contacto" class="nav-cta">contacto -></a>
     </nav>
@@ -111,8 +138,11 @@ const navLinks = [
     <script>
       // Reveal on scroll — anima cuando el elemento está ~35% arriba del viewport
       const io = new IntersectionObserver(
-        (es) => es.forEach((e) => e.isIntersecting && e.target.classList.add("visible")),
-        { rootMargin: '0px 0px -35% 0px' },
+        (es) =>
+          es.forEach(
+            (e) => e.isIntersecting && e.target.classList.add("visible"),
+          ),
+        { rootMargin: "0px 0px -35% 0px" },
       );
       document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
 
@@ -129,7 +159,12 @@ const navLinks = [
           sections.forEach((s) => {
             if (window.scrollY >= s.offsetTop - 90) current = s.id;
           });
-          links.forEach((l) => l.classList.toggle("active", l.getAttribute("href") === `#${current}`));
+          links.forEach((l) =>
+            l.classList.toggle(
+              "active",
+              l.getAttribute("href") === `#${current}`,
+            ),
+          );
           ticking = false;
         });
       });

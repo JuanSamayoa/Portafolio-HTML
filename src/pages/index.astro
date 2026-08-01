@@ -1,18 +1,18 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import { personalInfo } from "../data/personal";
-import Hero from "../components/Hero.astro";
-import Impact from "../components/Impact.astro";
-import Services from "../components/Services.astro";
-import Cases from "../components/Cases.astro";
 import About from "../components/About.astro";
-import Experience from "../components/Experience.astro";
-import Projects from "../components/Projects.astro";
-import Skills from "../components/Skills.astro";
-import Toolkit from "../components/Toolkit.astro";
-import Faq from "../components/Faq.astro";
+import Cases from "../components/Cases.astro";
 import Certifications from "../components/Certifications.astro";
 import Contact from "../components/Contact.astro";
+import Experience from "../components/Experience.astro";
+import Faq from "../components/Faq.astro";
+import Hero from "../components/Hero.astro";
+import Impact from "../components/Impact.astro";
+import Projects from "../components/Projects.astro";
+import Services from "../components/Services.astro";
+import Skills from "../components/Skills.astro";
+import Toolkit from "../components/Toolkit.astro";
+import { personalInfo } from "../data/personal";
+import Layout from "../layouts/Layout.astro";
 
 const title = "Juan Samayoa | QA Automation Engineer";
 const description =
@@ -21,8 +21,8 @@ const canonicalUrl = Astro.site
   ? new URL(Astro.url.pathname, Astro.site).toString()
   : "https://juan-samayoa.is-a.dev/";
 const previewImage = Astro.site
-  ? new URL(personalInfo.profileImage, Astro.site).toString()
-  : "https://juan-samayoa.is-a.dev/assets/img/profile.jpg";
+  ? new URL("/og-image.png", Astro.site).toString()
+  : "https://juan-samayoa.is-a.dev/og-image.png";
 
 const schemaOrg = {
   "@context": "https://schema.org",

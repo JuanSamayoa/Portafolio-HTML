@@ -7,11 +7,7 @@ const CACHE_NAME = "juan-samayoa-portfolio-v2";
 const STATIC_CACHE_NAME = "juan-samayoa-static-v2";
 
 // Critical assets for offline (imágenes principales vía Cloudinary, no locales)
-const STATIC_ASSETS = [
-  "/",
-  "/manifest.json",
-  "/favicon.svg",
-];
+const STATIC_ASSETS = ["/", "/manifest.json", "/favicon.svg"];
 
 // Dynamic cache patterns
 const DYNAMIC_CACHE_PATTERNS = [
@@ -218,13 +214,15 @@ self.addEventListener("push", (event) => {
       bodyText = rawText;
     }
 
-    const sanitizedBody = bodyText.replace(/[^a-zA-Z0-9 ._#-]/g, "").slice(0, 250);
+    const sanitizedBody = bodyText
+      .replace(/[^a-zA-Z0-9 ._#-]/g, "")
+      .slice(0, 250);
 
     event.waitUntil(
       self.registration.showNotification(titleText, {
         body: sanitizedBody,
-        icon: "/assets/icons/icon-192.png",
-        badge: "/assets/icons/icon-192.png",
+        icon: "/apple-touch-icon.png",
+        badge: "/apple-touch-icon.png",
         vibrate: [100, 50, 100],
         data: { dateOfArrival: Date.now(), primaryKey: 1 },
       }),

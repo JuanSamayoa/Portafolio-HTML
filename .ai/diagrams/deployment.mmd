@@ -1,0 +1,29 @@
+flowchart TD
+    DEV["Desarrollo local<br/>pnpm dev"] --> EDIT["Cambios en src/ o public/"]
+    EDIT --> CHECK["pnpm check<br/>astro check"]
+    CHECK -->|"errores"| FIX["Corregir"]
+    FIX --> CHECK
+    CHECK -->|"0 errores"| BUILD["pnpm build<br/>dist/"]
+    BUILD --> COMMIT["Commit + push a main"]
+
+    COMMIT --> WF["GitHub Actions<br/>deploy-pages.yml"]
+    WF --> SETUP["checkout · corepack pnpm 10.19.0<br/>Node 22 · caché"]
+    SETUP --> INSTALL["pnpm install --frozen-lockfile<br/>--prod=false --ignore-scripts"]
+    INSTALL --> CICHECK["pnpm check<br/>bloqueante"]
+    CICHECK -->|"falla"| STOP["Build rojo<br/>sin despliegue"]
+    CICHECK -->|"pasa"| CIBUILD["pnpm build"]
+    CIBUILD -->|"falla"| STOP
+    CIBUILD -->|"ok"| ART["upload-pages-artifact<br/>path ./dist · 1 día"]
+    ART --> DEPLOY["deploy-pages<br/>entorno github-pages"]
+    DEPLOY --> LIVE["https://juan-samayoa.is-a.dev<br/>CNAME + .nojekyll"]
+
+    LIVE --> VERIFY["Verificación manual<br/>4 rutas · anclas · formulario"]
+    VERIFY -->|"defecto"| REVERT["Revertir commit en main<br/>y volver a integrar"]
+    REVERT --> WF
+
+    classDef ok fill:#e1f5ee,stroke:#0f6e56,color:#04342c
+    classDef bad fill:#faeeda,stroke:#8c5f14,color:#1a1a18
+    classDef live fill:#04342c,stroke:#0f6e56,color:#ffffff
+    class CHECK,BUILD,CICHECK,CIBUILD,ART,DEPLOY ok
+    class STOP,FIX bad
+    class LIVE live

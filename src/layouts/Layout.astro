@@ -26,22 +26,33 @@ const {
   schemaOrg,
   robots = "index, follow, max-image-preview:large",
 } = Astro.props;
+const rawBase = import.meta.env.BASE_URL;
+const base = rawBase.endsWith("/") ? rawBase : `${rawBase}/`;
+const isHome = Astro.url.pathname === base;
+const sectionHref = (id: string) => (isHome ? `#${id}` : `${base}#${id}`);
 const navLinks = [
-  { href: "#impacto", text: "impacto" },
-  { href: "#servicios", text: "servicios" },
-  { href: "#casos", text: "casos" },
-  { href: "#sobre", text: "sobre" },
-  { href: "#experiencia", text: "experiencia" },
-  { href: "#proyectos", text: "proyectos" },
-  { href: "#habilidades", text: "stack" },
-  { href: "#certificaciones", text: "certs" },
-];
+  { id: "impacto", text: "impacto" },
+  { id: "servicios", text: "servicios" },
+  { id: "casos", text: "casos" },
+  { id: "sobre", text: "sobre" },
+  { id: "experiencia", text: "experiencia" },
+  { id: "proyectos", text: "proyectos" },
+  { id: "habilidades", text: "stack" },
+  { id: "certificaciones", text: "certs" },
+].map(({ id, text }) => ({ href: sectionHref(id), text }));
 ---
 
 <!doctype html>
-<html lang="es">
+<html
+  lang="es"
+  class="no-js"
+  data-home={isHome ? "true" : undefined}
+>
   <head>
     <meta charset="UTF-8" />
+    <script is:inline>
+      document.documentElement.classList.replace("no-js", "js");
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -115,12 +126,27 @@ const navLinks = [
     <a href="#main-content" class="skip-link">
       Saltar al contenido principal / Skip to main content
     </a>
-    <nav aria-label="Navegación principal">
-      <a class="nav-logo" href="#hero" aria-label="Ir al inicio">
+    <nav class="site-nav" aria-label="Navegación principal">
+      <a
+        class="nav-logo"
+        href={isHome ? "#hero" : base}
+        aria-label="Ir al inicio"
+      >
         <span class="nav-logo-dot"></span>
         Juan Samayoa
       </a>
-      <ul class="nav-links">
+      <button
+        class="nav-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="primary-navigation"
+        aria-label="Abrir menú de navegación"
+      >
+        <span class="nav-toggle-icon" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </span>
+      </button>
+      <ul class="nav-links" id="primary-navigation">
         {
           navLinks.map(({ href, text }) => (
             <li>
@@ -129,7 +155,7 @@ const navLinks = [
           ))
         }
       </ul>
-      <a href="#contacto" class="nav-cta">contacto -></a>
+      <a href={sectionHref("contacto")} class="nav-cta">contacto -></a>
     </nav>
 
     <main id="main-content">
@@ -169,14 +195,64 @@ const navLinks = [
           sections.forEach((s) => {
             if (window.scrollY >= s.offsetTop - 90) current = s.id;
           });
-          links.forEach((l) =>
+          links.forEach((l) => {
+            const href = l.getAttribute("href") ?? "";
             l.classList.toggle(
               "active",
-              l.getAttribute("href") === `#${current}`,
-            ),
-          );
+              href.startsWith("#") && href === `#${current}`,
+            );
+          });
           ticking = false;
         });
+      });
+
+      // Menú de navegación móvil
+      const nav = document.querySelector<HTMLElement>(".site-nav");
+      const toggle = nav?.querySelector<HTMLButtonElement>(".nav-toggle");
+      const menu = nav?.querySelector<HTMLElement>("#primary-navigation");
+      const desktop = window.matchMedia("(min-width: 941px)");
+      let menuOpen = false;
+
+      function setMenu(open: boolean, returnFocus = false) {
+        if (!nav || !toggle || !menu) return;
+        menuOpen = open;
+        toggle.setAttribute("aria-expanded", String(open));
+        toggle.setAttribute(
+          "aria-label",
+          open ? "Cerrar menú de navegación" : "Abrir menú de navegación",
+        );
+        menu.classList.toggle("is-open", open);
+        document.body.style.overflow = open ? "hidden" : "";
+        if (open) {
+          menu.querySelector<HTMLAnchorElement>("a")?.focus();
+        } else if (returnFocus) {
+          toggle.focus();
+        }
+      }
+
+      toggle?.addEventListener("click", () => setMenu(!menuOpen, menuOpen));
+
+      menu?.addEventListener("click", (event) => {
+        if ((event.target as Element).closest("a")) setMenu(false);
+      });
+
+      nav
+        ?.querySelectorAll<HTMLAnchorElement>(".nav-logo, .nav-cta")
+        .forEach((link) => {
+          link.addEventListener("click", () => {
+            if (menuOpen) setMenu(false);
+          });
+        });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && menuOpen) {
+          event.preventDefault();
+          setMenu(false, true);
+        }
+      });
+
+      desktop.addEventListener("change", (event) => {
+        if (event.matches && menuOpen) setMenu(false);
       });
     </script>
   </body>

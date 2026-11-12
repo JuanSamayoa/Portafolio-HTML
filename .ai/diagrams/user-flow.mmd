@@ -1,0 +1,36 @@
+flowchart TD
+    START(["Visitante llega a<br/>juan-samayoa.is-a.dev"]) --> HERO["Hero<br/>posicionamiento + disponibilidad"]
+
+    HERO --> PERFIL{"¿Qué busca?"}
+
+    PERFIL -->|"Contratar / reclutar"| IMPACT["Impacto<br/>4 métricas"]
+    PERFIL -->|"Resolver un problema"| SERVICES["Servicios<br/>4 especialidades"]
+    PERFIL -->|"Evaluar criterio técnico"| CASES["Casos de éxito<br/>problema · solución · resultado"]
+
+    IMPACT --> EXP["Experiencia<br/>5 roles"]
+    EXP --> SKILLS["Stack<br/>4 categorías"]
+    EXP --> CV["Descargar CV ES / EN"]
+
+    SERVICES --> CASES
+    CASES --> FAQ["FAQ<br/>7 preguntas"]
+    FAQ --> CONTACT["Contacto<br/>formulario + email + redes"]
+
+    PERFIL -->|"Revisar código"| PROJECTS["Proyectos<br/>5 tarjetas + GitHub"]
+    PROJECTS --> TOOLKIT["Toolkit<br/>4 recursos"]
+    TOOLKIT --> SQL["/toolkit/sql<br/>5 ejemplos · noindex"]
+    SQL -->|"volver al toolkit"| TOOLKIT
+
+    CERT["Certificaciones<br/>22 · modal de detalle"] --> CONTACT
+    CONTACT --> SUBMIT{"Envío del formulario"}
+    SUBMIT -->|"válido"| THANKS["/thanks<br/>confirmación 24–72 h"]
+    SUBMIT -->|"inválido"| CONTACT
+    THANKS --> BACK["Volver al inicio"]
+
+    CV --> CONTACT
+
+    classDef entry fill:#0f6e56,stroke:#0f6e56,color:#ffffff
+    classDef section fill:#e1f5ee,stroke:#5dcaa5,color:#04342c
+    classDef utility fill:#f0efe9,stroke:#a3a199,color:#1a1a18
+    class START,THANKS entry
+    class HERO,IMPACT,SERVICES,CASES,EXP,SKILLS,PROJECTS,TOOLKIT,SQL,CERT,FAQ,CONTACT section
+    class CV,BACK,SUBMIT,PERFIL,PERFIL utility

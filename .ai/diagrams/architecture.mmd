@@ -1,0 +1,53 @@
+flowchart TD
+    subgraph BUILD["Build — pnpm build"]
+        CFG["astro.config.mjs<br/>site · base · outDir · Vite"]
+        PAGES["src/pages<br/>index · thanks · 404 · toolkit/sql"]
+        LAYOUT["src/layouts/Layout.astro<br/>SEO · CSP · nav · footer · scripts"]
+        COMP["src/components<br/>13 componentes de sección"]
+        DATA["src/data<br/>personal · projects · certifications"]
+        TYPES["src/types/portfolio.ts<br/>contratos"]
+        CSS["src/styles/global.css<br/>tokens y reglas"]
+        DIST["dist/<br/>4 HTML · CSS y JS con hash · assets"]
+    end
+
+    subgraph RUNTIME["Runtime — navegador"]
+        NAV["Nav activa + reveal<br/>IntersectionObserver"]
+        MODAL["Modal de certificaciones<br/>dialog + CustomEvent"]
+        SQLUI["Copiar y descargar SQL<br/>clipboard + Blob"]
+        FORM["Formulario de contacto"]
+    end
+
+    subgraph THIRD["Terceros"]
+        CLD["Cloudinary<br/>imágenes de contenido"]
+        GF["Google Fonts<br/>3 familias"]
+        FS["FormSubmit.co<br/>entrega de email"]
+        GHP["GitHub Pages<br/>hosting + CNAME"]
+    end
+
+    CFG --> PAGES
+    PAGES --> LAYOUT
+    PAGES --> COMP
+    COMP --> DATA
+    DATA --> TYPES
+    LAYOUT --> CSS
+    LAYOUT --> DIST
+    COMP --> DIST
+    CSS --> DIST
+    DIST --> GHP
+
+    COMP -->|"img src remoto"| CLD
+    LAYOUT -->|"link stylesheet"| GF
+    FORM -->|"POST action"| FS
+    FORM -.->|"redirect _next"| PAGES
+
+    LAYOUT --> NAV
+    COMP --> MODAL
+    PAGES --> SQLUI
+    COMP --> FORM
+
+    classDef build fill:#e1f5ee,stroke:#0f6e56,color:#04342c
+    classDef runtime fill:#f0efe9,stroke:#5a5955,color:#1a1a18
+    classDef third fill:#ffffff,stroke:#a3a199,color:#1a1a18
+    class CFG,PAGES,LAYOUT,COMP,DATA,TYPES,CSS,DIST build
+    class NAV,MODAL,SQLUI,FORM runtime
+    class CLD,GF,FS,GHP third

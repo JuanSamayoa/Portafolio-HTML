@@ -4,7 +4,13 @@
 // Listens for custom event 'open-cert-modal' to display certification data
 ---
 
-<dialog id="cert-modal" class="cert-modal" aria-labelledby="modal-cert-title">
+<dialog
+  id="cert-modal"
+  class="cert-modal"
+  tabindex="-1"
+  aria-labelledby="modal-cert-title"
+  aria-describedby="modal-cert-issuer"
+>
   <div class="cert-modal-container">
     <button class="cert-modal-close" aria-label="Cerrar modal" type="button" data-close>
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -151,7 +157,7 @@
   .cert-modal-date {
     font-family: var(--mono);
     font-size: 13px;
-    color: var(--gray-400);
+    color: var(--gray-600);
     margin-bottom: auto;
   }
 
@@ -190,7 +196,7 @@
     border: 1px solid var(--gray-200);
     border-radius: 8px;
     background: var(--gray-100);
-    color: var(--gray-400);
+    color: var(--gray-600);
     font-family: var(--mono);
     font-size: 12px;
   }
@@ -229,6 +235,23 @@
     const modalDate = document.getElementById('modal-cert-date');
     const modalLink = document.getElementById('modal-cert-link') as HTMLAnchorElement;
     const modalNoLink = document.getElementById('modal-cert-no-link');
+    const FOCUSABLE_SELECTOR =
+      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    let lastTrigger: HTMLElement | null = null;
+
+    function getFocusable(): HTMLElement[] {
+      if (!modal) return [];
+      return Array.from(modal.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter(
+        (element) => {
+          const style = window.getComputedStyle(element);
+          return (
+            style.display !== 'none' &&
+            style.visibility !== 'hidden' &&
+            element.getClientRects().length > 0
+          );
+        },
+      );
+    }
 
     function openModal(data: {
       image: string;
@@ -236,9 +259,11 @@
       title: string;
       date: string;
       link?: string;
+      trigger?: HTMLElement;
     }) {
       if (!modal || !modalImage || !modalIssuer || !modalTitle || !modalDate) return;
 
+      lastTrigger = data.trigger ?? (document.activeElement as HTMLElement | null);
       modalImage.src = data.image;
       modalImage.alt = data.title;
       modalIssuer.textContent = data.issuer;
@@ -251,25 +276,77 @@
         modalNoLink.style.display = 'none';
       } else if (modalLink && modalNoLink) {
         modalLink.style.display = 'none';
+        modalLink.removeAttribute('href');
         modalNoLink.style.display = 'inline-flex';
       }
 
       modal.showModal();
       document.body.style.overflow = 'hidden'; // Prevent background scrolling
+
+      const firstFocusable = getFocusable()[0];
+      (firstFocusable ?? modal).focus();
+    }
+
+    function restoreAfterClose() {
+      document.body.style.overflow = '';
+      const trigger = lastTrigger;
+      lastTrigger = null;
+      if (trigger?.isConnected) trigger.focus();
     }
 
     function closeModal() {
-      if (!modal) return;
+      if (!modal || !modal.open) return;
       modal.close();
-      document.body.style.overflow = ''; // Restore scrolling
+      // El evento `close` es diferido: restaura aquí para no robar el foco a una reapertura.
+      restoreAfterClose();
     }
+
+    // Escape dispara `cancel` antes que el `close` diferido: restaura el scroll de inmediato.
+    modal?.addEventListener('cancel', () => {
+      document.body.style.overflow = '';
+    });
+
+    // Restaura scroll y foco también cuando el cierre ocurre con Escape
+    modal?.addEventListener('close', restoreAfterClose);
 
     // Close on button clicks
     closeBtns?.forEach(btn => btn.addEventListener('click', closeModal));
 
+    // Clicks inside the dialog must not reach the backdrop handler
+    modal
+      ?.querySelector('.cert-modal-container')
+      ?.addEventListener('click', (e) => e.stopPropagation());
+
     // Close on backdrop click
     modal?.addEventListener('click', (e) => {
       if (e.target === modal) closeModal();
+    });
+
+    // Trap focus: Tab/Shift+Tab cycle only through controls inside the dialog
+    modal?.addEventListener('keydown', (event) => {
+      if (event.key !== 'Tab' || !modal) return;
+
+      const focusable = getFocusable();
+      if (focusable.length === 0) {
+        event.preventDefault();
+        modal.focus();
+        return;
+      }
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (!first || !last) return;
+
+      const active = document.activeElement;
+      if (event.shiftKey) {
+        if (active === first || !modal.contains(active)) {
+          event.preventDefault();
+          last.focus();
+        }
+      } else if (active === last || !modal.contains(active)) {
+        event.preventDefault();
+        first.focus();
+      }
     });
 
     // Listen for custom event to open modal

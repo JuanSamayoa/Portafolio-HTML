@@ -10,6 +10,9 @@ docs/
 /.angular/cache
 
 # Dependencies
+/playwright-report/
+/test-results/
+/blob-report/
 node_modules/
 scripts/
 
@@ -72,3 +75,4 @@ desktop.ini
 .temp/
 .sonarlint/
 .qwen/
+continuar.txt

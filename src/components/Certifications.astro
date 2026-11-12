@@ -52,6 +52,11 @@ const allCertificationsCount =
                 )}
               </div>
             </div>
+            <button
+              class="cert-card-trigger"
+              type="button"
+              aria-label={`Ver certificación: ${certification.title}`}
+            ></button>
           </article>
         ))
       }
@@ -92,6 +97,11 @@ const allCertificationsCount =
                   )}
                 </div>
               </div>
+              <button
+                class="mini-cert-trigger"
+                type="button"
+                aria-label={`Ver certificación: ${certification.title}`}
+              ></button>
             </article>
           ))
         }
@@ -103,49 +113,41 @@ const allCertificationsCount =
 <CertModal />
 
 <script>
-  // Attach click handlers to certification cards
   function initCertCards() {
-    const certCards = document.querySelectorAll('.cert-card, .mini-cert');
-    
-    certCards.forEach((card) => {
-      // Add interactive attributes
-      card.setAttribute('role', 'button');
-      card.setAttribute('tabindex', '0');
-      card.setAttribute('aria-label', 'Ver certificación en detalle');
+    const triggers = document.querySelectorAll<HTMLButtonElement>(
+      ".cert-card-trigger, .mini-cert-trigger",
+    );
 
-      const imageData = card.querySelector('img');
-      const issuer = card.querySelector('.cert-issuer')?.textContent || '';
-      const title = card.querySelector('.cert-name, .mini-cert-name')?.textContent || '';
-      const date = card.querySelector('.cert-year')?.textContent || '';
-      const linkEl = card.querySelector('a.cert-verify[href]') as HTMLAnchorElement;
-      const link = linkEl?.href;
+    triggers.forEach((trigger) => {
+      trigger.addEventListener("click", () => {
+        const card = trigger.closest<HTMLElement>("article");
+        if (!card) return;
 
-      const openHandler = () => {
-        // Dispatch custom event to open modal
-        document.dispatchEvent(new CustomEvent('open-cert-modal', {
-          detail: {
-            image: imageData?.src || '',
-            issuer,
-            title,
-            date,
-            link,
-          }
-        }));
-      };
+        const image = card.querySelector<HTMLImageElement>("img");
+        const issuer = card.querySelector(".cert-issuer")?.textContent?.trim() || "";
+        const title =
+          card.querySelector(".cert-name, .mini-cert-name")?.textContent?.trim() || "";
+        const date = card.querySelector(".cert-year")?.textContent?.trim() || "";
+        const link = card.querySelector<HTMLAnchorElement>("a.cert-verify[href]")?.href;
 
-      card.addEventListener('click', openHandler);
-      card.addEventListener('keydown', (e: Event) => {
-        if ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') {
-          e.preventDefault();
-          openHandler();
-        }
+        document.dispatchEvent(
+          new CustomEvent("open-cert-modal", {
+            detail: {
+              image: image?.src || "",
+              issuer,
+              title,
+              date,
+              link,
+              trigger,
+            },
+          }),
+        );
       });
     });
   }
 
-  // Initialize on DOM ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initCertCards);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initCertCards);
   } else {
     initCertCards();
   }

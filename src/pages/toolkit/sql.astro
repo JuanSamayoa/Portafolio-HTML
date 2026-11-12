@@ -278,7 +278,12 @@ const allSqlCode = examples.map((ex) => ex.code).join("\n\n\n");
 </Layout>
 
 <!-- Datos pasados de Astro a JS vía JSON script -->
-<script type="application/json" id="sql-all-data" is:inline>{JSON.stringify(allSqlCode)}</script>
+<script
+  type="application/json"
+  id="sql-all-data"
+  is:inline
+  set:html={JSON.stringify(allSqlCode).replace(/</g, "\\u003c")}
+></script>
 
 <script>
   const sqlData = document.getElementById("sql-all-data");
@@ -362,7 +367,7 @@ const allSqlCode = examples.map((ex) => ex.code).join("\n\n\n");
 
   .sql-subtitle {
     max-width: 620px;
-    color: var(--gray-400);
+    color: var(--gray-200);
     font-size: 17px;
     line-height: 1.6;
   }
@@ -378,7 +383,7 @@ const allSqlCode = examples.map((ex) => ex.code).join("\n\n\n");
   .sql-stats {
     font-family: var(--mono);
     font-size: 11px;
-    color: var(--gray-400);
+    color: var(--gray-200);
     letter-spacing: 0.04em;
   }
 

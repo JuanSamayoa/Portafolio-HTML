@@ -1,0 +1,78 @@
+flowchart TD
+    subgraph PAGES["Páginas"]
+        INDEX["index.astro"]
+        THANKS["thanks.astro"]
+        NF["404.astro"]
+        SQLP["toolkit/sql.astro"]
+    end
+
+    LAYOUT["Layout.astro<br/>head · nav · footer · scripts"]
+
+    subgraph SECTIONS["Secciones de la home"]
+        HERO["Hero"]
+        IMPACT["Impact"]
+        SERVICES["Services"]
+        CASES["Cases"]
+        ABOUT["About"]
+        EXPERIENCE["Experience"]
+        PROJECTS["Projects"]
+        SKILLS["Skills"]
+        TOOLKIT["Toolkit"]
+        FAQ["Faq"]
+        CERTS["Certifications"]
+        CONTACT["Contact"]
+        MODAL["CertModal"]
+    end
+
+    subgraph DATA["Datos y tipos"]
+        PERSONAL["personalInfo"]
+        PROJECTSD["projectsData"]
+        CERTD["allCertificationsData<br/>featured · additional"]
+        TYPES["portfolio.ts"]
+    end
+
+    STYLES["global.css"]
+
+    INDEX --> LAYOUT
+    THANKS --> LAYOUT
+    NF --> LAYOUT
+    SQLP --> LAYOUT
+    SQLP --> PERSONAL
+
+    INDEX --> HERO
+    INDEX --> IMPACT
+    INDEX --> SERVICES
+    INDEX --> CASES
+    INDEX --> ABOUT
+    INDEX --> EXPERIENCE
+    INDEX --> PROJECTS
+    INDEX --> SKILLS
+    INDEX --> TOOLKIT
+    INDEX --> FAQ
+    INDEX --> CERTS
+    INDEX --> CONTACT
+
+    HERO --> PERSONAL
+    CONTACT --> PERSONAL
+    TOOLKIT --> PERSONAL
+    PROJECTS --> PERSONAL
+    PROJECTS --> PROJECTSD
+    CERTS --> CERTD
+    CERTS --> MODAL
+    CERTS -.->|"CustomEvent open-cert-modal"| MODAL
+
+    PERSONAL --> TYPES
+    PROJECTSD --> TYPES
+    CERTD --> TYPES
+
+    LAYOUT --> STYLES
+    MODAL -->|"style encapsulado"| MODAL
+
+    classDef page fill:#0f6e56,stroke:#0f6e56,color:#ffffff
+    classDef layout fill:#085041,stroke:#0f6e56,color:#ffffff
+    classDef comp fill:#e1f5ee,stroke:#5dcaa5,color:#04342c
+    classDef data fill:#f0efe9,stroke:#a3a199,color:#1a1a18
+    class INDEX,THANKS,NF,SQLP page
+    class LAYOUT layout
+    class HERO,IMPACT,SERVICES,CASES,ABOUT,EXPERIENCE,PROJECTS,SKILLS,TOOLKIT,FAQ,CERTS,CONTACT,MODAL comp
+    class PERSONAL,PROJECTSD,CERTD,TYPES,STYLES data

@@ -3,6 +3,10 @@ title: Mi primer blog
 description: ¿Quién soy?
 pubDate: 2026-11-12
 updatedDate: 2026-11-12
+tags:
+  - Juan Samayoa
+  - Quien soy
+  - Datos no profesionales
 draft: false
 ---
 # Un poco sobre mí

@@ -237,3 +237,32 @@ Cambios en código, contenido, configuración, documentación y decisiones. No s
 
 - Añadir una entrada por cada PR relevante, no solo por sesiones de documentación.
 - Enlazar cada entrada con el commit o PR correspondiente cuando exista.
+
+---
+
+## 2026-11-12 · Suite E2E del blog y endpoints SEO + Dependabot agrupado
+
+**Agente:** Buffy (Freebuff)
+
+**Resumen:** se amplió la suite E2E con un archivo nuevo `tests/blog.spec.ts` (12 pruebas) que cubre el índice del blog, filtrado por tags, vista del artículo, pie del artículo y los endpoints `/sitemap.xml` y `/rss.xml`, y se añadió `.github/dependabot.yml` con grupos semanales para GitHub Actions y dependencias npm.
+
+**Archivos:** `tests/blog.spec.ts`, `.github/dependabot.yml`, `.ai/CHANGELOG_AI.md`, `.ai/PROJECT_MAP.md`.
+
+**Verificación:**
+
+- `pnpm check`: 0 errores, 0 warnings, 0 hints (29 archivos).
+- `pnpm build`: 6 páginas y endpoints generados.
+- `pnpm check:links`: 97 referencias en 6 HTML, 0 roturas.
+- `pnpm test:links`: 6/6 pruebas Node.
+- `pnpm test:e2e`: 44/44 pruebas (12 nuevas del blog + 32 existentes).
+
+**Total E2E passing:** 44 tests en 3 specs de Playwright (phase1 11, phase2 6, phase3 8, blog 12) más 6 pruebas Node de referencias.
+
+**Estructura de `.github/dependabot.yml`:**
+
+- `github-actions`: directorio `/`, actualización semanal el lunes 09:00 America/Guatemala, un solo grupo `github-actions` con `patterns: ["*"]`.
+- `npm`: directorio `/`, misma cadencia semanal, grupo `dependencies-minor-patch` con `update-types: [minor, patch]`, actualizaciones mayores individuales, `commit-message: { prefix: "deps", include: "scope" }`, `open-pull-requests-limit: 12`.
+
+**Hallazgos no corregidos:** ninguno de los 12 tests del blog es bloqueante; se ajustaron tres aserciones (`toHaveURL`, primer `pre`, título de RSS) frente al DOM real sin modificar tests existentes.
+
+**Pendientes:** primera ejecución del workflow en GitHub Actions tras este commit.

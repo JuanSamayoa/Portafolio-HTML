@@ -1,0 +1,30 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/Guatemala"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/Guatemala"
+    groups:
+      "dependencies-minor-patch":
+        update-types:
+          - "minor"
+          - "patch"
+    open-pull-requests-limit: 12
+    commit-message:
+      prefix: "deps"
+      include: "scope"

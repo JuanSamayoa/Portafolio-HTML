@@ -82,12 +82,12 @@ Portafolio-HTML/
 │   ├── utils/
 │   │   └── cloudinary.ts             # Transformaciones f_auto,q_auto
 │   ├── content.config.ts             # Esquema de la colección `blog`
-│   └── env.d.ts                      # Referencias de tipos de Astro
-├── tests/
+│   └── env.d.ts                      # Referencias de tipos de Astro├── tests/
 │   ├── local-references.test.mjs     # 6 pruebas Node del comprobador de referencias
 │   ├── phase1.spec.ts                # Navegación, modal, contraste, viewports
 │   ├── phase2.spec.ts                # Foco, no-JS, movimiento reducido
-│   └── phase3.spec.ts                # Hero, anclas absolutas, menú en rutas auxiliares
+│   ├── phase3.spec.ts               # Hero, anclas absolutas, menú en rutas auxiliares
+│   └── blog.spec.ts                 # Blog, filtro por tags, artículo, sitemap, RSS
 ├── tools/
 │   └── check-local-references.mjs    # Verifica referencias locales del HTML en dist/
 ├── .gitignore
@@ -110,7 +110,7 @@ Portafolio-HTML/
 | Directorio | Propósito | Se versiona | Se publica |
 |---|---|---|---|
 | `.ai/` | Fuente de verdad documental para agentes | Sí | No |
-| `.github/workflows/` | Verificación, tests y despliegue | Sí | No |
+| `.github/` | Workflows (+ Dependabot) y configuración de CI | Sí | No |
 | `public/` | Assets estáticos y archivos de control del hosting | Sí | Sí, copiados a la raíz |
 | `src/components/` | Presentación por sección, sin lógica de negocio | Sí | Compilado |
 | `src/content/blog/` | Artículos Markdown de la colección | Sí | Genera HTML |
@@ -120,7 +120,7 @@ Portafolio-HTML/
 | `src/styles/` | Sistema visual único | Sí | CSS con hash |
 | `src/types/` | Contratos TypeScript | Sí | No |
 | `src/utils/` | Utilidades puras compartidas | Sí | Compilado |
-| `tests/` | Suite E2E y pruebas Node | Sí | No |
+| `tests/` | Suite E2E (32 + 12) y pruebas Node | Sí | No |
 | `tools/` | Scripts de verificación sin dependencias | Sí | No |
 | `scripts/` | Utilidades locales de despliegue manual | **No** (`.gitignore`) | No |
 | `docs/` | Borradores locales | **No** (`.gitignore`) | No |
@@ -199,6 +199,7 @@ flowchart TD
 | `/sitemap.xml` | `public/robots.txt` | Generado por `sitemap.xml.ts`; ya no hay archivo estático |
 | `public/assets/img/`, `public/assets/icons/` | `sw.js` (patrones de caché) | No existen; el worker no se registra |
 | `manifest.json` / `site.webmanifest` | `public/` | Duplicados; el Layout enlaza `site.webmanifest` |
+| `.github/dependabot.yml` | configuración de Dependabot | nuevo; grupos semanales github-actions + npm |
 
 ## Reglas
 

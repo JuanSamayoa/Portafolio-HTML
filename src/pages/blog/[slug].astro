@@ -386,15 +386,22 @@ const schemaOrg = {
     color: var(--gray-600);
   }
 
+  /* Barra de acciones del artículo: misma retícula que el texto (72ch),
+     fondo transparente y borde superior tenue. El fondo oscuro que tenía
+     antes venía de la regla global `footer` del sitio. */
   .post-footer {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
+    gap: 1rem;
+    width: 100%;
     max-width: 72ch;
+    /* Mismo font-size que .prose para que 72ch coincida exactamente. */
+    font-size: 17px;
     margin-top: 48px;
     padding-top: 24px;
+    background: transparent;
     border-top: 1px solid var(--gray-200);
   }
 
@@ -404,7 +411,7 @@ const schemaOrg = {
     border: 1px solid var(--gray-200);
     border-radius: var(--radius-sm);
     background: white;
-    color: var(--gray-600);
+    color: var(--gray-900);
     font-family: var(--mono);
     font-size: 11px;
     letter-spacing: 0.04em;
@@ -437,7 +444,7 @@ const schemaOrg = {
   }
 
   .post-footer-back {
-    color: var(--gray-600);
+    color: var(--gray-900);
     font-family: var(--mono);
     font-size: 12px;
     text-decoration: none;
@@ -499,6 +506,7 @@ const schemaOrg = {
 
     .post-footer {
       margin-top: 36px;
+      font-size: 16px;
     }
   }
 </style>

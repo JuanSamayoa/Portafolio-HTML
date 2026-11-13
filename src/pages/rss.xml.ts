@@ -12,7 +12,7 @@ export async function GET(context: APIContext) {
   return rss({
     title: "Juan Samayoa — Blog Técnico",
     description:
-      "Artículos sobre QA Automation, Playwright, SQL, arquitectura frontend y rendimiento web.",
+      "Artículos prácticos sobre desarrollo web full-stack, automatización QA, bases de datos, infraestructura self-hosted y decisiones técnicas reales detrás de cada proyecto.",
     site: context.site ?? FALLBACK_SITE,
     items: posts.map((post) => ({
       title: post.data.title,

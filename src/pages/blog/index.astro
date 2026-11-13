@@ -3,9 +3,9 @@ import { getCollection } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import { optimizedCloudinary } from "../../utils/cloudinary";
 
-const title = "Blog | Juan Samayoa — QA Automation Engineer";
+const title = "Blog | Juan Samayoa — Ingeniería de software y arquitectura";
 const description =
-  "Notas técnicas sobre testing automatizado, Astro, rendimiento web y calidad de software escritas por Juan Samayoa.";
+  "Artículos prácticos sobre desarrollo web full-stack, automatización QA, bases de datos, infraestructura self-hosted y decisiones técnicas reales detrás de cada proyecto.";
 const canonicalUrl = Astro.site
   ? new URL(Astro.url.pathname, Astro.site).toString()
   : "https://juan-samayoa.is-a.dev/blog/";
@@ -66,11 +66,13 @@ const slugifyTag = (tag: string) =>
   <section class="blog-hero">
     <div class="container">
       <span class="section-tag">blog</span>
-      <h1 class="blog-title">Notas sobre testing{" "}<br />y rendimiento web</h1>
+      <h1 class="blog-title">
+        Ingeniería de software, arquitectura y sistemas en producción
+      </h1>
       <p class="blog-subtitle">
-        Escribo sobre lo que mido: automatización con Playwright, SQL para
-        validar datos y decisiones de arquitectura frontend que sobreviven a
-        producción.
+        Artículos prácticos sobre desarrollo web full-stack, automatización QA,
+        bases de datos, infraestructura self-hosted y decisiones técnicas reales
+        detrás de cada proyecto.
       </p>
       <a class="blog-rss" href="/rss.xml">
         suscribirse a los artículos <span aria-hidden="true">· rss ↗</span>
@@ -229,7 +231,10 @@ const slugifyTag = (tag: string) =>
   }
 
   .blog-title {
-    max-width: 780px;
+    /* Ancho justo para que el titular cierre en tres líneas equilibradas en
+       escritorio sin dejar una palabra huérfana. */
+    max-width: 880px;
+    text-wrap: balance;
     margin: 12px 0 22px;
     font-family: var(--display);
     font-size: clamp(38px, 5.4vw, 64px);

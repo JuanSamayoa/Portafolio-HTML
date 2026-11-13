@@ -1726,8 +1726,11 @@ label span {
   line-height: 1.2;
 }
 
+/* Solo el pie del sitio (#contacto + .site-footer) es oscuro: con un selector
+   `footer` a secas, el <footer> de un artículo heredaba fondo negro y texto
+   gris ilegible. */
 #contacto,
-footer {
+.site-footer {
   background: var(--gray-900);
   color: white;
 }
@@ -1845,7 +1848,7 @@ textarea:focus {
   border: 0;
 }
 
-footer {
+.site-footer {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   padding: 28px 0;
   color: var(--gray-400);
@@ -1859,7 +1862,7 @@ footer {
   gap: 20px;
 }
 
-footer span {
+.site-footer span {
   color: var(--teal-200);
 }
 

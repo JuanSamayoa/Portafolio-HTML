@@ -14,7 +14,8 @@
   # ── Cross-Origin Isolation ──
   Cross-Origin-Opener-Policy: same-origin
   Cross-Origin-Resource-Policy: same-origin
-  Cross-Origin-Embedder-Policy: require-corp
+  # credentialless permite imágenes de res.cloudinary.com sin CORP propio
+  Cross-Origin-Embedder-Policy: credentialless
   X-Permitted-Cross-Domain-Policies: none
 
   # ── Reporting (optional) ──
@@ -22,9 +23,9 @@
   # Reporting-Endpoints: csp-endpoint="https://example.com/csp-reports"
 
   # ── Content Security Policy ──
-  # unsafe-inline para scripts es necesario por Astro inline scripts
-  # Se usa 'strict-dynamic' como capa adicional de protección
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://formsubmit.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co; upgrade-insecure-requests
+  # unsafe-inline se mantiene por los scripts inline de Astro y los atributos style
+  # externos limitados a los orígenes que el sitio realmente usa
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://res.cloudinary.com; connect-src 'self' https://formsubmit.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co; object-src 'none'; frame-src 'none'; worker-src 'self'; upgrade-insecure-requests
 
   # ── Cache Control for HTML ──
   Cache-Control: no-store, no-cache, must-revalidate, proxy-revalidate

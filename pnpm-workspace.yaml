@@ -1,0 +1,14 @@
+minimumReleaseAgeExclude:
+  - enhanced-resolve@5.26.2
+# pnpm 12 lee la configuración del proyecto desde este archivo; el campo "pnpm"
+# de package.json se ignora. Los overrides de seguridad viven aquí.
+overrides:
+  ajv: 8.18.0
+  # Fijado: 5.27.0 se publicó hoy y la política minimumReleaseAge lo rechaza.
+  enhanced-resolve: 5.26.2
+  fast-uri: ^3.1.9
+  lodash: 4.17.23
+  minimatch: 9.0.7
+  sharp: 0.35.5
+  source-map-js: ^1.2.2
+  sucrase: 3.35.1

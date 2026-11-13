@@ -56,6 +56,9 @@ self.addEventListener("activate", (event) => {
 // ================================
 self.addEventListener("fetch", (event) => {
   const { request } = event;
+
+  // Solo peticiones idempotentes: nunca inspeccionar ni cachear POST/PUT/PATCH
+  if (request.method !== "GET") return;
   const url = new URL(request.url);
 
   // Only intercept same-origin requests
@@ -90,7 +93,7 @@ async function cacheFirst(request) {
     if (cached) return cached;
 
     const response = await fetch(request);
-    if (response.ok) {
+    if (isCacheableResponse(response)) {
       const cache = await caches.open(CACHE_NAME);
       await cache.put(request, response.clone());
       await limitCacheSize(cache, MAX_DYNAMIC_ENTRIES);
@@ -104,7 +107,7 @@ async function cacheFirst(request) {
 async function networkFirst(request) {
   try {
     const response = await fetch(request);
-    if (response.ok) {
+    if (isCacheableResponse(response)) {
       const cache = await caches.open(CACHE_NAME);
       await cache.put(request, response.clone());
     }
@@ -132,7 +135,7 @@ async function staleWhileRevalidate(request) {
 
   const fetchPromise = fetch(request)
     .then(async (response) => {
-      if (response.ok) {
+      if (isCacheableResponse(response)) {
         const cache = await caches.open(CACHE_NAME);
         await cache.put(request, response.clone());
         await limitCacheSize(cache, MAX_DYNAMIC_ENTRIES);
@@ -148,6 +151,12 @@ async function staleWhileRevalidate(request) {
 // HELPERS
 // ================================
 
+function isCacheableResponse(response) {
+  if (!response.ok) return false;
+  const cacheControl = response.headers.get("cache-control") || "";
+  return !/\bno-store\b|\bprivate\b/i.test(cacheControl);
+}
+
 function isStaticAsset(url) {
   return DYNAMIC_CACHE_PATTERNS.some((p) => p.test(url));
 }
@@ -161,7 +170,7 @@ function isNavigationRequest(request) {
 }
 
 function isSensitivePath(pathname) {
-  const sensitive = ["/sw.js", "/.well-known/", "/_headers"];
+  const sensitive = ["/sw.js", "/.well-known/", "/_headers", "/assets/cv/"];
   return sensitive.some((s) => pathname.startsWith(s));
 }
 

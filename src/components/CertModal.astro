@@ -2,6 +2,11 @@
 // CertModal.astro - Modal component for certification preview
 // Uses native <dialog> element for better accessibility
 // Listens for custom event 'open-cert-modal' to display certification data
+import { featuredCertifications } from "../data/certifications";
+
+// Imagen inicial real: evita un <img> vacío antes de que el JS cargue el dato.
+const initialImage =
+  featuredCertifications[0]?.image ?? "/apple-touch-icon.png";
 ---
 
 <dialog
@@ -21,7 +26,12 @@
     
     <div class="cert-modal-content">
       <div class="cert-modal-image-wrapper">
-        <img id="modal-cert-image" src="" alt="" class="cert-modal-image" />
+        <img
+          id="modal-cert-image"
+          src={initialImage}
+          alt=""
+          class="cert-modal-image"
+        />
       </div>
       
       <div class="cert-modal-info">
@@ -61,6 +71,11 @@
   .cert-modal[open] {
     opacity: 1;
     visibility: visible;
+  }
+
+  .cert-modal-close:focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: 2px;
   }
 
   .cert-modal::backdrop {

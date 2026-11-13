@@ -15,6 +15,14 @@
   --display: "Syne", sans-serif;
   --body: "Inter", sans-serif;
   --focus-ring: 2px solid #1d9e75;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --section-space: clamp(72px, 9vw, 112px);
+  --shadow-card: 0 1px 2px rgba(26, 26, 24, 0.04), 0 10px 28px rgba(26, 26, 24, 0.06);
+  --shadow-card-hover: 0 2px 4px rgba(26, 26, 24, 0.05), 0 18px 42px rgba(26, 26, 24, 0.1);
+  --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 *,
@@ -37,6 +45,24 @@ body {
   font-size: 15px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Red de seguridad de foco: todo control alcanzable por teclado muestra anillo.
+   Especificidad cero para no pisar los estilos de foco ya definidos. */
+:where(a[href], button, summary, [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* Titulares equilibrados y párrafos sin líneas viudas */
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
 }
 
 ::selection {
@@ -237,7 +263,7 @@ nav {
 }
 
 section {
-  padding: 96px 0;
+  padding: var(--section-space) 0;
 }
 
 .container {
@@ -270,7 +296,8 @@ section {
   font-family: var(--display);
   font-size: 36px;
   font-weight: 700;
-  line-height: 1.1;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
   color: var(--gray-900);
 }
 
@@ -408,18 +435,19 @@ section {
   min-height: 220px;
   padding: 24px;
   border: 1px solid var(--gray-200);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   background: white;
+  box-shadow: var(--shadow-card);
   transition:
-    transform 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+    transform 0.25s var(--ease-out),
+    border-color 0.25s var(--ease-out),
+    box-shadow 0.25s var(--ease-out);
 }
 
 .toolkit-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   border-color: var(--teal-200);
-  box-shadow: 0 14px 32px rgba(26, 26, 24, 0.08);
+  box-shadow: var(--shadow-card-hover);
 }
 
 .toolkit-icon {
@@ -662,12 +690,23 @@ section {
   align-items: center;
   justify-content: center;
   min-height: 42px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   padding: 11px 18px;
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
-  transition: 0.2s ease;
+  transition:
+    background-color 0.2s var(--ease-out),
+    border-color 0.2s var(--ease-out),
+    color 0.2s var(--ease-out),
+    transform 0.2s var(--ease-out),
+    box-shadow 0.2s var(--ease-out);
+}
+
+.btn-primary:active,
+.btn-ghost:active,
+.btn-submit:active {
+  transform: translateY(1px);
 }
 
 .btn-primary,
@@ -714,7 +753,7 @@ section {
 
 .hero-card {
   padding: 24px;
-  border-radius: 16px;
+  border-radius: var(--radius-xl);
   box-shadow: 0 20px 60px rgba(26, 26, 24, 0.08);
 }
 
@@ -882,16 +921,17 @@ section {
   flex-direction: column;
   justify-content: space-between;
   border: 1px solid var(--gray-200);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   background: white;
   padding: 24px;
   overflow: hidden;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out);
 }
 
 .impact-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 28px rgba(26, 26, 24, 0.08);
+  box-shadow: var(--shadow-card-hover);
 }
 
 .impact-card::after {
@@ -1249,16 +1289,17 @@ label span {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   background: white;
+  box-shadow: var(--shadow-card);
   transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
+    transform 0.25s var(--ease-out),
+    box-shadow 0.25s var(--ease-out);
 }
 
 .project-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 18px 42px rgba(26, 26, 24, 0.1);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card-hover);
 }
 
 .project-img {
@@ -1386,8 +1427,9 @@ label span {
 
 .stack-category,
 .cert-card {
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   padding: 24px;
+  box-shadow: var(--shadow-card);
 }
 
 .stack-cat-icon {
@@ -1491,8 +1533,8 @@ label span {
 }
 
 .cert-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(29, 158, 117, 0.15);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card-hover);
   border-color: var(--teal-400);
 }
 

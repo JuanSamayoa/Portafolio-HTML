@@ -402,6 +402,7 @@ const allSqlCode = examples.map((ex) => ex.code).join("\n\n\n");
     border-radius: 16px;
     background: white;
     overflow: hidden;
+    scroll-margin-top: 88px;
   }
 
   .example-header {
@@ -474,6 +475,10 @@ const allSqlCode = examples.map((ex) => ex.code).join("\n\n\n");
     padding: 4px 10px;
     cursor: pointer;
     transition: all 0.2s ease;
+  }
+
+  .copy-btn:active {
+    transform: translateY(1px);
   }
 
   .copy-btn:hover,

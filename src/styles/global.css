@@ -83,7 +83,10 @@ p {
   border-radius: 4px;
 }
 
-nav {
+/* Solo la barra del sitio es fija: un selector `nav` a secas convertía
+   cualquier <nav> (p. ej. el enlace "volver al portafolio") en una segunda
+   barra que tapaba el inicio de la página. */
+.site-nav {
   position: fixed;
   inset: 0 0 auto;
   z-index: 20;
@@ -1923,7 +1926,7 @@ html.js .reveal.visible {
 }
 
 @media (max-width: 940px) {
-  nav {
+  .site-nav {
     padding: 0 22px;
   }
 

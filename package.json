@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
-    "@playwright/test": "1.63.0",
+    "@playwright/test": "1.65.0",
     "@tailwindcss/postcss": "^4.3.5",
     "@tailwindcss/vite": "^4.3.5",
     "postcss": "^8.5.32",

@@ -48,6 +48,14 @@ pnpm build; echo "BUILD_EXIT=$?"
 
 Además, según el cambio: revisar las 4 rutas en 375/768/1280 px, comprobar enlaces internos, metadatos y foco por teclado. No afirmar pruebas no ejecutadas.
 
+## Mensajes de commit
+
+Prohibido incluir firmas, pies de página o trailers de coautoría de herramientas IA (como "Generated with..." o "Co-Authored-By: ...") en los mensajes de commit.
+
+- Formato: Conventional Commits (`tipo(ámbito): resumen`), una o dos frases sobre el motivo del cambio.
+- Sin `Co-Authored-By` de ninguna herramienta, sin emojis de atribución y sin línea de "Generated with".
+- Si el mensaje ya viene redactado en el pedido, se usa tal cual, sin añadir pies.
+
 ## Cuándo detenerse y reportar
 
 - Falta un dato que solo el autor posee (contenido, decisión comercial, asset).

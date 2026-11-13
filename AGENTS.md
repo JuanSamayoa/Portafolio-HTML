@@ -28,3 +28,5 @@ Guías por herramienta: [`agents/CLAUDE.md`](./.ai/agents/CLAUDE.md), [`agents/C
 Lista canónica de comandos, archivos que no se modifican, validaciones obligatorias, criterios de parada y formato de reporte: [`agents/AGENTS.md`](./.ai/agents/AGENTS.md).
 
 No existe suite de tests: la validación real es `pnpm check` y `pnpm build`, documentada en ese archivo.
+
+**Mensajes de commit:** prohibido incluir firmas, pies de página o trailers de coautoría de herramientas IA (como "Generated with..." o "Co-Authored-By: ..."). Ver [`.ai/agents/AGENTS.md`](./.ai/agents/AGENTS.md#mensajes-de-commit).

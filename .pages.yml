@@ -1,0 +1,67 @@
+# Pages CMS — https://pagescms.org
+# Colección `blog` alineada con src/content.config.ts (Astro Content Collections).
+media:
+  # Los archivos subidos desde el panel se guardan en disco dentro del repo y se
+  # sirven desde /assets/blog (ruta pública equivalente a public/assets/blog).
+  input: public/assets/blog
+  output: /assets/blog
+
+content:
+  - name: blog
+    label: Blog
+    type: collection
+    path: src/content/blog
+    filename:
+      template: "{year}-{month}-{day}-{primary}.md"
+    view:
+      fields: [title, pubDate, tags, draft]
+      primary: title
+      sort: pubDate
+      default:
+        sort: pubDate
+        order: desc
+    fields:
+      - name: title
+        label: Título
+        type: string
+        required: true
+
+      - name: description
+        label: Descripción
+        type: text
+        required: true
+
+      - name: pubDate
+        label: Fecha de publicación
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+
+      - name: updatedDate
+        label: Fecha de actualización
+        type: date
+        options:
+          format: yyyy-MM-dd
+
+      - name: cover
+        label: Portada
+        type: image
+
+      - name: coverAlt
+        label: Texto alternativo de la portada
+        type: string
+
+      - name: tags
+        label: Etiquetas
+        type: string
+        list: true
+
+      - name: draft
+        label: Borrador
+        type: boolean
+        default: false
+
+      - name: body
+        label: Contenido
+        type: rich-text

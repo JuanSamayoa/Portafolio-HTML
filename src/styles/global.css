@@ -237,6 +237,31 @@ nav {
   width: 100%;
 }
 
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.nav-blog {
+  color: var(--gray-600);
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.nav-blog:hover {
+  color: var(--teal-400);
+}
+
+.nav-blog:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
 .nav-cta {
   color: var(--teal-600);
   border: 1px solid var(--teal-400);
@@ -2015,6 +2040,10 @@ html.js .reveal.visible {
     padding-inline: 12px;
   }
 
+  .nav-actions {
+    gap: 12px;
+  }
+
   .hero-title {
     font-size: clamp(38px, 11.25vw, 46px);
     max-width: 100%;
@@ -2139,6 +2168,14 @@ html.js .reveal.visible {
 
   .contact-form {
     padding: 20px;
+  }
+}
+
+@media (max-width: 380px) {
+  /* En 320 px la nav no tiene holgura para logo + blog + CTA + menú: el enlace
+     al blog se oculta aquí y el script de Layout lo inserta en el menú móvil. */
+  .nav-blog {
+    display: none;
   }
 }
 

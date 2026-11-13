@@ -1,0 +1,501 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import { optimizedCloudinary } from "../../utils/cloudinary";
+
+const title = "Blog | Juan Samayoa — QA Automation Engineer";
+const description =
+  "Notas técnicas sobre testing automatizado, Astro, rendimiento web y calidad de software escritas por Juan Samayoa.";
+const canonicalUrl = Astro.site
+  ? new URL(Astro.url.pathname, Astro.site).toString()
+  : "https://juan-samayoa.is-a.dev/blog/";
+const previewImage =
+  "https://res.cloudinary.com/df3b2ec0h/image/upload/v1785553053/og-image_vonu7x.png";
+
+const schemaOrg = {
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  name: "Blog de Juan Samayoa",
+  description,
+  url: canonicalUrl,
+  inLanguage: "es",
+  author: { "@type": "Person", name: "Juan Samayoa" },
+};
+
+const dateFormatter = new Intl.DateTimeFormat("es-GT", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+
+/** ~200 palabras por minuto; nunca menos de 1 minuto. */
+const readingTime = (body: string | undefined) => {
+  const words = (body ?? "").trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / 200));
+};
+
+const posts = (await getCollection("blog", ({ data }) => data.draft !== true))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .map((post) => ({
+    ...post,
+    href: `/blog/${post.id}/`,
+    formattedDate: dateFormatter.format(post.data.pubDate),
+    minutes: readingTime(post.body),
+  }));
+
+// Lista de tags única, ordenada alfabéticamente, para el filtro en cliente.
+const tags = [...new Set(posts.flatMap((post) => post.data.tags))].sort((a, b) =>
+  a.localeCompare(b, "es"),
+);
+const slugifyTag = (tag: string) =>
+  tag
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+---
+
+<Layout
+  {title}
+  {description}
+  {canonicalUrl}
+  {previewImage}
+  {schemaOrg}
+>
+  <section class="blog-hero">
+    <div class="container">
+      <span class="section-tag">blog</span>
+      <h1 class="blog-title">Notas sobre testing{" "}<br />y rendimiento web</h1>
+      <p class="blog-subtitle">
+        Escribo sobre lo que mido: automatización con Playwright, SQL para
+        validar datos y decisiones de arquitectura frontend que sobreviven a
+        producción.
+      </p>
+    </div>
+  </section>
+
+  <section class="blog-list">
+    <div class="container">
+      {
+        tags.length > 0 && (
+          <div class="blog-filters" data-filters>
+            <span class="filters-label">filtrar:</span>
+            <button
+              type="button"
+              class="filter-chip is-active"
+              data-tag="__all"
+              aria-pressed="true"
+            >
+              todos
+            </button>
+            {tags.map((tag) => (
+              <button
+                type="button"
+                class="filter-chip"
+                data-tag={slugifyTag(tag)}
+                aria-pressed="false"
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+        )
+      }
+
+      <p class="filter-status" role="status" aria-live="polite" data-count>
+        {posts.length} {posts.length === 1 ? "artículo" : "artículos"}
+      </p>
+
+      {
+        posts.length === 0 ? (
+          <p class="blog-empty">
+            Todavía no hay artículos publicados. Vuelve pronto.
+          </p>
+        ) : (
+          <div class="posts-grid">
+            {posts.map((post) => (
+              <article
+                class="post-card"
+                data-tags={post.data.tags.map(slugifyTag).join(" ")}
+              >
+                {post.data.cover && (
+                  <a
+                    class="post-cover"
+                    href={post.href}
+                    tabindex="-1"
+                    aria-hidden="true"
+                  >
+                    <img
+                      src={optimizedCloudinary(post.data.cover, "f_auto,q_auto,c_limit,w_800")}
+                      alt={post.data.coverAlt ?? ""}
+                      width="800"
+                      height="450"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </a>
+                )}
+                <div class="post-body">
+                  <div class="post-meta">
+                    <time datetime={post.data.pubDate.toISOString()}>
+                      {post.formattedDate}
+                    </time>
+                    <span aria-hidden="true">·</span>
+                    <span>{post.minutes} min de lectura</span>
+                  </div>
+                  <h2 class="post-title">
+                    <a href={post.href}>{post.data.title}</a>
+                  </h2>
+                  <p class="post-desc">{post.data.description}</p>
+                  {post.data.tags.length > 0 && (
+                    <ul class="post-tags">
+                      {post.data.tags.map((tag) => (
+                        <li class="tag">{tag}</li>
+                      ))}
+                    </ul>
+                  )}
+                  <a class="post-more" href={post.href} tabindex="-1">
+                    leer artículo <span aria-hidden="true">→</span>
+                  </a>
+                </div>
+              </article>
+            ))}
+          </div>
+        )
+      }
+
+      <nav class="blog-back" aria-label="Volver al portafolio">
+        <a href="/#proyectos">← volver al portafolio</a>
+      </nav>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  const filterRoot = document.querySelector<HTMLElement>("[data-filters]");
+  const cards = Array.from(
+    document.querySelectorAll<HTMLElement>(".post-card[data-tags]"),
+  );
+  const status = document.querySelector<HTMLElement>("[data-count]");
+
+  if (filterRoot && cards.length > 0) {
+    const chips = Array.from(
+      filterRoot.querySelectorAll<HTMLButtonElement>(".filter-chip"),
+    );
+    const emptyMessage = document.createElement("p");
+    emptyMessage.className = "blog-empty";
+    emptyMessage.textContent =
+      "Ningún artículo coincide con ese tag por ahora.";
+    emptyMessage.hidden = true;
+    status?.insertAdjacentElement("afterend", emptyMessage);
+
+    const apply = (selected: string) => {
+      let shown = 0;
+      for (const card of cards) {
+        const matches =
+          selected === "__all" ||
+          (card.dataset.tags ?? "").split(" ").includes(selected);
+        card.hidden = !matches;
+        if (matches) shown += 1;
+      }
+      for (const chip of chips) {
+        const active = chip.dataset.tag === selected;
+        chip.classList.toggle("is-active", active);
+        chip.setAttribute("aria-pressed", String(active));
+      }
+      if (status) {
+        status.textContent = `${shown} ${shown === 1 ? "artículo" : "artículos"}`;
+      }
+      emptyMessage.hidden = shown > 0;
+    };
+
+    for (const chip of chips) {
+      chip.addEventListener("click", () => {
+        apply(chip.dataset.tag ?? "__all");
+      });
+    }
+  }
+</script>
+
+<style>
+  .blog-hero {
+    padding: 148px 0 56px;
+    background: var(--gray-50);
+    border-bottom: 1px solid var(--gray-200);
+  }
+
+  .blog-title {
+    max-width: 780px;
+    margin: 12px 0 22px;
+    font-family: var(--display);
+    font-size: clamp(38px, 5.4vw, 64px);
+    font-weight: 700;
+    line-height: 0.98;
+    letter-spacing: -0.02em;
+    color: var(--gray-900);
+  }
+
+  .blog-subtitle {
+    max-width: 620px;
+    color: var(--gray-600);
+    font-size: 17px;
+    line-height: 1.7;
+  }
+
+  .blog-list {
+    padding: var(--section-space) 0;
+    background: var(--gray-50);
+  }
+
+  .blog-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+
+  .filters-label {
+    margin-right: 4px;
+    color: var(--gray-600);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .filter-chip {
+    min-height: 30px;
+    padding: 5px 12px;
+    border: 1px solid var(--gray-200);
+    border-radius: 999px;
+    background: white;
+    color: var(--gray-600);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    transition:
+      border-color 0.2s var(--ease-out),
+      background 0.2s var(--ease-out),
+      color 0.2s var(--ease-out),
+      transform 0.2s var(--ease-out);
+  }
+
+  .filter-chip:hover {
+    border-color: var(--teal-200);
+    transform: translateY(-1px);
+  }
+
+  .filter-chip:focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  .filter-chip.is-active {
+    border-color: var(--teal-400);
+    background: var(--teal-400);
+    color: white;
+  }
+
+  .filter-status {
+    margin-bottom: 28px;
+    color: var(--gray-600);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.05em;
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+  }
+
+  .post-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    background: white;
+    box-shadow: var(--shadow-card);
+    transition:
+      transform 0.25s var(--ease-out),
+      box-shadow 0.25s var(--ease-out),
+      border-color 0.25s var(--ease-out);
+  }
+
+  .post-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--teal-200);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .post-card[hidden] {
+    display: none;
+  }
+
+  .post-cover {
+    display: block;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--gray-100);
+  }
+
+  .post-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s var(--ease-out);
+  }
+
+  .post-card:hover .post-cover img {
+    transform: scale(1.04);
+  }
+
+  .post-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 24px;
+  }
+
+  .post-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    color: var(--gray-600);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+  }
+
+  .post-title {
+    margin: 12px 0 10px;
+    font-family: var(--display);
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  .post-title a {
+    color: var(--gray-900);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .post-title a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  .post-card {
+    position: relative;
+  }
+
+  .post-title a:focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
+
+  .post-desc {
+    color: var(--gray-600);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 16px;
+    list-style: none;
+  }
+
+  .post-more {
+    position: relative;
+    z-index: 1;
+    margin-top: auto;
+    padding-top: 20px;
+    color: var(--teal-600);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+  }
+
+  .post-more:hover {
+    color: var(--teal-400);
+  }
+
+  .blog-empty {
+    padding: 28px;
+    border: 1px dashed var(--gray-200);
+    border-radius: var(--radius-lg);
+    color: var(--gray-600);
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .blog-back {
+    margin-top: 44px;
+    padding-top: 24px;
+    border-top: 1px solid var(--gray-200);
+  }
+
+  .blog-back a {
+    color: var(--gray-600);
+    font-family: var(--mono);
+    font-size: 12px;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .blog-back a:hover {
+    color: var(--teal-600);
+  }
+
+  .blog-back a:focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  html:not(.js) .blog-filters,
+  html:not(.js) .filter-status {
+    display: none;
+  }
+
+  @media (max-width: 940px) {
+    .blog-hero {
+      padding-top: 120px;
+    }
+
+    .posts-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .blog-hero {
+      padding: 112px 0 44px;
+    }
+
+    .blog-title {
+      font-size: clamp(32px, 9vw, 42px);
+    }
+
+    .post-body {
+      padding: 20px;
+    }
+
+    .post-title {
+      font-size: 21px;
+    }
+  }
+</style>

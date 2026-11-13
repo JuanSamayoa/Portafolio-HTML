@@ -14,8 +14,12 @@ export default defineConfig({
   },
 
   // Configuración simplificada
+  // `compressHTML` se deja en su valor por defecto: es el que produce el
+  // markup más compacto (fijarlo a `true` conserva espacios entre nodos).
   build: {
     assets: "assets",
+    // Inlinea solo las hojas pequeñas; global.css queda como archivo cacheable.
+    inlineStylesheets: "auto",
   },
 
   vite: {

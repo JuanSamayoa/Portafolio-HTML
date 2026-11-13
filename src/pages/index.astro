@@ -20,10 +20,11 @@ const description =
 const canonicalUrl = Astro.site
   ? new URL(Astro.url.pathname, Astro.site).toString()
   : "https://juan-samayoa.is-a.dev/";
-const previewImage =
-  "https://res.cloudinary.com/df3b2ec0h/image/upload/v1785438411/IMG_8748_baq06u.jpg";
+// Twitter usa la misma tarjeta 1200x630 que Open Graph: el retrato no cumple
+// las proporciones de `summary_large_image`.
 const ogImage =
   "https://res.cloudinary.com/df3b2ec0h/image/upload/v1785553053/og-image_vonu7x.png";
+const previewImage = ogImage;
 const ogImageType = "image/png";
 const ogImageWidth = 1200;
 const ogImageHeight = 630;

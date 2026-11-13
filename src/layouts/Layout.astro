@@ -26,6 +26,8 @@ const {
   schemaOrg,
   robots = "index, follow, max-image-preview:large",
 } = Astro.props;
+const fontHref =
+  "https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap";
 const rawBase = import.meta.env.BASE_URL;
 const base = rawBase.endsWith("/") ? rawBase : `${rawBase}/`;
 const isHome = Astro.url.pathname === base;
@@ -100,21 +102,45 @@ const navLinks = [
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="format-detection" content="telephone=no" />
-    <link
-      rel="preconnect"
-      href="https://fonts.googleapis.com"
-      crossorigin="anonymous"
-    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       rel="preconnect"
       href="https://fonts.gstatic.com"
       crossorigin="anonymous"
     />
+    <!-- El avatar del hero vive en Cloudinary: abrir la conexión antes evita
+         perder un RTT en el LCP. Permanece dentro de la CSP (img-src). -->
     <link
-      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
-      rel="stylesheet"
+      rel="preconnect"
+      href="https://res.cloudinary.com"
       crossorigin="anonymous"
     />
+    <link rel="preload" as="style" href={fontHref} crossorigin="anonymous" />
+    <!-- Carga no bloqueante del CSS de fuentes; el handler inline está
+         permitido por script-src 'unsafe-inline'. -->
+    <link
+      id="font-stylesheet"
+      href={fontHref}
+      rel="stylesheet"
+      media="print"
+      crossorigin="anonymous"
+    />
+    <script is:inline>
+      // Activa el CSS de fuentes en cuanto llega: descarga sin bloquear el
+      // render y sin depender de un handler inline (compatible con la CSP).
+      (() => {
+        const link = document.getElementById("font-stylesheet");
+        if (!(link instanceof HTMLLinkElement)) return;
+        const enable = () => {
+          link.media = "all";
+        };
+        if (link.sheet) enable();
+        else link.addEventListener("load", enable, { once: true });
+      })();
+    </script>
+    <noscript>
+      <link href={fontHref} rel="stylesheet" crossorigin="anonymous" />
+    </noscript>
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <script
       type="application/ld+json"
@@ -155,7 +181,12 @@ const navLinks = [
           ))
         }
       </ul>
-      <a href={sectionHref("contacto")} class="nav-cta">contacto -></a>
+      <div class="nav-actions">
+        <!-- Fuera de #primary-navigation a propósito: la lista mantiene sus 8
+             anclas de sección y el enlace al blog queda siempre visible. -->
+        <a href={`${base}blog/`} class="nav-blog">blog</a>
+        <a href={sectionHref("contacto")} class="nav-cta">contacto -></a>
+      </div>
     </nav>
 
     <main id="main-content">
@@ -182,29 +213,39 @@ const navLinks = [
       );
       document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
 
-      // Active nav link on scroll
-      const sections = document.querySelectorAll<HTMLElement>("section[id]");
-      const links = document.querySelectorAll(".nav-links a");
+      // Active nav link on scroll — un solo listener pasivo y con throttle por frame
+      const sections = Array.from(
+        document.querySelectorAll<HTMLElement>("section[id]"),
+      );
+      const links = Array.from(document.querySelectorAll(".nav-links a"));
       let ticking = false;
 
-      window.addEventListener("scroll", () => {
-        if (ticking) return;
-        ticking = true;
-        requestAnimationFrame(() => {
-          let current = "";
-          sections.forEach((s) => {
-            if (window.scrollY >= s.offsetTop - 90) current = s.id;
-          });
-          links.forEach((l) => {
-            const href = l.getAttribute("href") ?? "";
-            l.classList.toggle(
-              "active",
-              href.startsWith("#") && href === `#${current}`,
-            );
-          });
-          ticking = false;
-        });
-      });
+      if (sections.length > 0 && links.length > 0) {
+        window.addEventListener(
+          "scroll",
+          () => {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(() => {
+              let current = "";
+              for (const section of sections) {
+                if (window.scrollY >= section.offsetTop - 90) {
+                  current = section.id;
+                }
+              }
+              for (const link of links) {
+                const href = link.getAttribute("href") ?? "";
+                link.classList.toggle(
+                  "active",
+                  href.startsWith("#") && href === `#${current}`,
+                );
+              }
+              ticking = false;
+            });
+          },
+          { passive: true },
+        );
+      }
 
       // Menú de navegación móvil
       const nav = document.querySelector<HTMLElement>(".site-nav");
@@ -228,6 +269,19 @@ const navLinks = [
         } else if (returnFocus) {
           toggle.focus();
         }
+      }
+
+      // Acceso al blog en el menú móvil. El enlace vive fuera de
+      // #primary-navigation para no alterar las 8 anclas de sección y no
+      // provocar desbordamiento en 320 px; aquí se refleja dentro del menú.
+      const blogLink = nav?.querySelector<HTMLAnchorElement>(".nav-blog");
+      if (menu && blogLink && !desktop.matches) {
+        const item = document.createElement("li");
+        const link = document.createElement("a");
+        link.href = blogLink.getAttribute("href") ?? "/blog/";
+        link.textContent = "blog";
+        item.append(link);
+        menu.append(item);
       }
 
       toggle?.addEventListener("click", () => setMenu(!menuOpen, menuOpen));

@@ -1,0 +1,504 @@
+---
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import { optimizedCloudinary } from "../../utils/cloudinary";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ data }) => data.draft !== true);
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<"blog">;
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const { title, description, pubDate, updatedDate, cover, coverAlt, tags } =
+  post.data;
+
+const site = Astro.site ?? new URL("https://juan-samayoa.is-a.dev");
+const canonicalUrl = new URL(`/blog/${post.id}/`, site).toString();
+const absoluteCover = cover
+  ? optimizedCloudinary(
+      new URL(cover, site).toString(),
+      "f_auto,q_auto,c_limit,w_1200",
+    )
+  : undefined;
+const previewImage =
+  absoluteCover ??
+  "https://res.cloudinary.com/df3b2ec0h/image/upload/v1785553053/og-image_vonu7x.png";
+
+const pageTitle = `${title} | Blog — Juan Samayoa`;
+
+const dateFormatter = new Intl.DateTimeFormat("es-GT", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+
+const words = (post.body ?? "").trim().split(/\s+/).filter(Boolean).length;
+const minutes = Math.max(1, Math.round(words / 200));
+
+const schemaOrg = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: title,
+  description,
+  url: canonicalUrl,
+  mainEntityOfPage: { "@type": "WebPage", "@id": canonicalUrl },
+  datePublished: pubDate.toISOString(),
+  dateModified: (updatedDate ?? pubDate).toISOString(),
+  inLanguage: "es",
+  image: previewImage,
+  keywords: tags.join(", "),
+  author: {
+    "@type": "Person",
+    name: "Juan Samayoa",
+    url: new URL("/", site).toString(),
+  },
+  publisher: { "@type": "Person", name: "Juan Samayoa" },
+};
+---
+
+<Layout
+  title={pageTitle}
+  {description}
+  {canonicalUrl}
+  {previewImage}
+  {schemaOrg}
+>
+  <article class="post">
+    <header class="post-header">
+      <div class="container post-header-inner">
+        <a class="back-link" href="/blog/">← volver al blog</a>
+
+        <div class="post-header-meta">
+          <time datetime={pubDate.toISOString()}>
+            {dateFormatter.format(pubDate)}
+          </time>
+          <span aria-hidden="true">·</span>
+          <span>{minutes} min de lectura</span>
+          {
+            updatedDate && (
+              <>
+                <span aria-hidden="true">·</span>
+                <span>
+                  actualizado el {dateFormatter.format(updatedDate)}
+                </span>
+              </>
+            )
+          }
+        </div>
+
+        <h1 class="post-title">{title}</h1>
+        <p class="post-lead">{description}</p>
+
+        {
+          tags.length > 0 && (
+            <ul class="post-tags">
+              {tags.map((tag) => (
+                <li class="tag tag-primary">{tag}</li>
+              ))}
+            </ul>
+          )
+        }
+      </div>
+    </header>
+
+    {
+      cover && (
+        <figure class="post-cover">
+          <div class="container">
+            <img
+              src={absoluteCover}
+              alt={coverAlt ?? title}
+              width="1200"
+              height="675"
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+            />
+          </div>
+        </figure>
+      )
+    }
+
+    <div class="container post-layout">
+      <div class="prose">
+        <Content />
+      </div>
+
+      <footer class="post-footer">
+        <button class="copy-link" type="button" data-copy-link>
+          copiar enlace del artículo
+        </button>
+        <a class="post-footer-back" href="/blog/">← todos los artículos</a>
+      </footer>
+    </div>
+  </article>
+</Layout>
+
+<script>
+  const button = document.querySelector<HTMLButtonElement>("[data-copy-link]");
+
+  if (button) {
+    const label = button.textContent ?? "";
+    let resetTimer = 0;
+
+    button.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        button.textContent = "✓ enlace copiado";
+        button.classList.add("is-copied");
+      } catch {
+        button.textContent = "no se pudo copiar";
+      }
+      window.clearTimeout(resetTimer);
+      resetTimer = window.setTimeout(() => {
+        button.textContent = label;
+        button.classList.remove("is-copied");
+      }, 2000);
+    });
+  }
+</script>
+
+<style>
+  .post-header {
+    padding: 132px 0 40px;
+    background: var(--gray-50);
+  }
+
+  .post-header-inner {
+    max-width: 1080px;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 26px;
+    color: var(--teal-600);
+    font-family: var(--mono);
+    font-size: 12px;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .back-link:hover {
+    color: var(--teal-400);
+  }
+
+  .post-header-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    color: var(--gray-600);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .post-title {
+    max-width: 22ch;
+    margin: 16px 0 18px;
+    font-family: var(--display);
+    font-size: clamp(34px, 5vw, 60px);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--gray-900);
+    text-wrap: balance;
+  }
+
+  .post-lead {
+    max-width: 64ch;
+    color: var(--gray-600);
+    font-size: 18px;
+    line-height: 1.65;
+  }
+
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 22px;
+    list-style: none;
+  }
+
+  .post-cover {
+    margin: 0;
+    padding: 40px 0 0;
+    background: var(--gray-50);
+  }
+
+  .post-cover img {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+  }
+
+  .post-layout {
+    padding-top: 44px;
+    padding-bottom: var(--section-space);
+  }
+
+  .prose {
+    max-width: 72ch;
+    font-size: 17px;
+    line-height: 1.78;
+    color: var(--gray-900);
+  }
+
+  .prose :global(> * + *) {
+    margin-top: 1.15em;
+  }
+
+  .prose :global(h2) {
+    margin-top: 2.2em;
+    padding-top: 0.2em;
+    font-family: var(--display);
+    font-size: clamp(26px, 3vw, 34px);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    color: var(--gray-900);
+    text-wrap: balance;
+  }
+
+  .prose :global(h3) {
+    margin-top: 1.9em;
+    font-family: var(--display);
+    font-size: 23px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--gray-900);
+  }
+
+  .prose :global(p),
+  .prose :global(li) {
+    color: var(--gray-600);
+    text-wrap: pretty;
+  }
+
+  .prose :global(ul),
+  .prose :global(ol) {
+    padding-left: 1.3em;
+  }
+
+  .prose :global(li + li) {
+    margin-top: 0.45em;
+  }
+
+  .prose :global(a) {
+    color: var(--teal-600);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    transition: color 0.2s ease;
+  }
+
+  .prose :global(a:hover) {
+    color: var(--teal-400);
+  }
+
+  .prose :global(strong) {
+    color: var(--gray-900);
+    font-weight: 600;
+  }
+
+  .prose :global(blockquote) {
+    margin-top: 1.6em;
+    padding: 4px 0 4px 20px;
+    border-left: 2px solid var(--teal-400);
+    color: var(--gray-600);
+    font-style: italic;
+  }
+
+  .prose :global(hr) {
+    margin: 2.4em 0;
+    border: 0;
+    height: 1px;
+    background: var(--gray-200);
+  }
+
+  .prose :global(code) {
+    padding: 2px 6px;
+    border: 1px solid var(--gray-200);
+    border-radius: 4px;
+    background: var(--gray-100);
+    color: var(--teal-800);
+    font-family: var(--mono);
+    font-size: 0.86em;
+  }
+
+  .prose :global(pre) {
+    overflow-x: auto;
+    margin-top: 1.6em;
+    padding: 20px;
+    border-radius: var(--radius-md);
+    background: var(--gray-900);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    line-height: 1.7;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .prose :global(pre code) {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--gray-200);
+    font-size: 13.5px;
+    tab-size: 2;
+  }
+
+  .prose :global(table) {
+    width: 100%;
+    margin-top: 1.6em;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  .prose :global(th),
+  .prose :global(td) {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--gray-200);
+    text-align: left;
+  }
+
+  .prose :global(th) {
+    color: var(--gray-900);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .prose :global(td) {
+    color: var(--gray-600);
+  }
+
+  .post-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    max-width: 72ch;
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--gray-200);
+  }
+
+  .copy-link {
+    min-height: 38px;
+    padding: 9px 16px;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    background: white;
+    color: var(--gray-600);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition:
+      border-color 0.2s var(--ease-out),
+      color 0.2s var(--ease-out),
+      transform 0.2s var(--ease-out);
+  }
+
+  .copy-link:hover {
+    border-color: var(--teal-400);
+    color: var(--teal-600);
+    transform: translateY(-1px);
+  }
+
+  .copy-link:active {
+    transform: translateY(1px);
+  }
+
+  .copy-link:focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  .copy-link.is-copied {
+    border-color: var(--teal-400);
+    background: var(--teal-50);
+    color: var(--teal-600);
+  }
+
+  .post-footer-back {
+    color: var(--gray-600);
+    font-family: var(--mono);
+    font-size: 12px;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .post-footer-back:hover {
+    color: var(--teal-600);
+  }
+
+  .back-link:focus-visible,
+  .post-footer-back:focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  html:not(.js) .copy-link {
+    display: none;
+  }
+
+  @media (max-width: 940px) {
+    .post-header {
+      padding-top: 112px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .post-header {
+      padding: 104px 0 32px;
+    }
+
+    .post-title {
+      max-width: 100%;
+      font-size: clamp(30px, 9vw, 40px);
+    }
+
+    .post-lead {
+      font-size: 16px;
+    }
+
+    .post-layout {
+      padding-top: 32px;
+    }
+
+    .prose {
+      font-size: 16px;
+      line-height: 1.75;
+    }
+
+    .prose :global(pre) {
+      padding: 16px;
+      margin-inline: -4px;
+    }
+
+    .prose :global(th),
+    .prose :global(td) {
+      padding: 8px 10px;
+    }
+
+    .post-footer {
+      margin-top: 36px;
+    }
+  }
+</style>

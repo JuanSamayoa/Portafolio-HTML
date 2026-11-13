@@ -1,5 +1,12 @@
 ---
 import { personalInfo } from "../data/personal";
+import { optimizedCloudinary } from "../utils/cloudinary";
+
+// 96px cubre el avatar de 48px a 2x sin cargar el original completo.
+const avatarSrc = optimizedCloudinary(
+  personalInfo.profileImage,
+  "f_auto,q_auto,c_fill,w_96,h_96",
+);
 ---
 
 <section id="hero">
@@ -52,11 +59,12 @@ import { personalInfo } from "../data/personal";
         <div class="hero-card-header">
           <img
             class="avatar-photo"
-            src={personalInfo.profileImage}
+            src={avatarSrc}
             alt="Foto de perfil de Juan Samayoa"
             width={48}
             height={48}
             loading="eager"
+            fetchpriority="high"
             decoding="async"
           />
           <div>

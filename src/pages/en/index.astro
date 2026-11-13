@@ -1,0 +1,59 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Hero from "../../components/Hero.astro";
+import About from "../../components/About.astro";
+import Services from "../../components/Services.astro";
+import Experience from "../../components/Experience.astro";
+import Projects from "../../components/Projects.astro";
+import Skills from "../../components/Skills.astro";
+import Certifications from "../../components/Certifications.astro";
+import Impact from "../../components/Impact.astro";
+import { personalInfo } from "../../data/personal";
+
+const lang = Astro.locale ?? "en";
+const langPrefix = lang === "en" ? "/en" : "";
+const site = Astro.site ?? new URL("https://juan-samayoa.is-a.dev");
+
+const title = "Juan Samayoa — Software engineering and architecture";
+const description =
+  "Portfolio of Juan Samayoa: software engineering, architecture and production systems. Technical decisions behind real projects.";
+const canonicalUrl = new URL(`${langPrefix}/`, site).toString();
+const previewImage =
+  "https://res.cloudinary.com/df3b2ec0h/image/upload/v1785553053/og-image_vonu7x.png";
+
+const schemaOrg = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Juan Samayoa",
+  headline: title,
+  description,
+  url: canonicalUrl,
+  sameAs: [
+    personalInfo.linkedin,
+    personalInfo.github,
+  ],
+  inLanguage: "en",
+  author: {
+    "@type": "Person",
+    name: "Juan Samayoa",
+    url: canonicalUrl,
+  },
+};
+---
+
+<Layout
+  {title}
+  {description}
+  {canonicalUrl}
+  {previewImage}
+  {schemaOrg}
+>
+  <Hero />
+  <About />
+  <Services />
+  <Experience />
+  <Projects />
+  <Skills />
+  <Certifications />
+  <Impact />
+</Layout>

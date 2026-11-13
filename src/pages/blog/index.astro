@@ -3,22 +3,32 @@ import { getCollection } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import { optimizedCloudinary } from "../../utils/cloudinary";
 
-const title = "Blog | Juan Samayoa — Ingeniería de software y arquitectura";
+const lang = Astro.locale ?? "es";
+const langPrefix = lang === "en" ? "/en" : "";
+
+const site = Astro.site ?? new URL("https://juan-samayoa.is-a.dev");
+
+const title =
+  lang === "en"
+    ? "Blog | Juan Samayoa — Software engineering and architecture"
+    : "Blog | Juan Samayoa — Ingeniería de software y arquitectura";
+
 const description =
-  "Artículos prácticos sobre desarrollo web full-stack, automatización QA, bases de datos, infraestructura self-hosted y decisiones técnicas reales detrás de cada proyecto.";
-const canonicalUrl = Astro.site
-  ? new URL(Astro.url.pathname, Astro.site).toString()
-  : "https://juan-samayoa.is-a.dev/blog/";
+  lang === "en"
+    ? "Practical posts about full-stack web development, QA automation, databases, self-hosted infrastructure and real technical decisions behind each project."
+    : "Artículos prácticos sobre desarrollo web full-stack, automatización QA, bases de datos, infraestructura self-hosted y decisiones técnicas reales detrás de cada proyecto.";
+
+const canonicalUrl = new URL(`${langPrefix}/blog/`, site).toString();
 const previewImage =
   "https://res.cloudinary.com/df3b2ec0h/image/upload/v1785553053/og-image_vonu7x.png";
 
 const schemaOrg = {
   "@context": "https://schema.org",
   "@type": "Blog",
-  name: "Blog de Juan Samayoa",
+  name: lang === "en" ? "Blog" : "Blog de Juan Samayoa",
   description,
   url: canonicalUrl,
-  inLanguage: "es",
+  inLanguage: lang === "en" ? "en" : "es-419",
   author: { "@type": "Person", name: "Juan Samayoa" },
 };
 
@@ -38,15 +48,16 @@ const posts = (await getCollection("blog", ({ data }) => data.draft !== true))
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
   .map((post) => ({
     ...post,
-    href: `/blog/${post.id}/`,
+    href: `${langPrefix}/blog/${post.id}/`,
     formattedDate: dateFormatter.format(post.data.pubDate),
     minutes: readingTime(post.body),
   }));
 
 // Lista de tags única, ordenada alfabéticamente, para el filtro en cliente.
 const tags = [...new Set(posts.flatMap((post) => post.data.tags))].sort((a, b) =>
-  a.localeCompare(b, "es"),
+  a.localeCompare(b, lang === "en" ? "en" : "es"),
 );
+
 const slugifyTag = (tag: string) =>
   tag
     .toLowerCase()
@@ -67,15 +78,17 @@ const slugifyTag = (tag: string) =>
     <div class="container">
       <span class="section-tag">blog</span>
       <h1 class="blog-title">
-        Ingeniería de software, arquitectura y sistemas en producción
+        {lang === "en"
+          ? "Software engineering, architecture and production systems"
+          : "Ingeniería de software, arquitectura y sistemas en producción"}
       </h1>
       <p class="blog-subtitle">
-        Artículos prácticos sobre desarrollo web full-stack, automatización QA,
-        bases de datos, infraestructura self-hosted y decisiones técnicas reales
-        detrás de cada proyecto.
+        {lang === "en"
+          ? "Practical posts about full-stack web development, QA automation, databases, self-hosted infrastructure and real technical decisions behind each project."
+          : "Artículos prácticos sobre desarrollo web full-stack, automatización QA, bases de datos, infraestructura self-hosted y decisiones técnicas reales detrás de cada proyecto."}
       </p>
       <a class="blog-rss" href="/rss.xml">
-        suscribirse a los artículos <span aria-hidden="true">· rss ↗</span>
+        {lang === "en" ? 'subscribe to articles' : 'suscribirse a los artículos'} <span aria-hidden="true">· rss ↗</span>
       </a>
     </div>
   </section>
@@ -85,14 +98,14 @@ const slugifyTag = (tag: string) =>
       {
         tags.length > 0 && (
           <div class="blog-filters" data-filters>
-            <span class="filters-label">filtrar:</span>
+            <span class="filters-label">{lang === "en" ? 'filter:' : 'filtrar:'}</span>
             <button
               type="button"
               class="filter-chip is-active"
               data-tag="__all"
               aria-pressed="true"
             >
-              todos
+              {lang === "en" ? "all" : "todos"}
             </button>
             {tags.map((tag) => (
               <button
@@ -109,13 +122,13 @@ const slugifyTag = (tag: string) =>
       }
 
       <p class="filter-status" role="status" aria-live="polite" data-count>
-        {posts.length} {posts.length === 1 ? "artículo" : "artículos"}
+        {posts.length} {posts.length === 1 ? (lang === "en" ? "article" : "artículo") : (lang === "en" ? "articles" : "artículos")}
       </p>
 
       {
         posts.length === 0 ? (
           <p class="blog-empty">
-            Todavía no hay artículos publicados. Vuelve pronto.
+            {lang === "en" ? "No articles published yet. Come back soon." : "Todavía no hay artículos publicados. Vuelve pronto."}
           </p>
         ) : (
           <div class="posts-grid">
@@ -147,7 +160,7 @@ const slugifyTag = (tag: string) =>
                       {post.formattedDate}
                     </time>
                     <span aria-hidden="true">·</span>
-                    <span>{post.minutes} min de lectura</span>
+                    <span>{post.minutes} {lang === 'en' ? 'min read' : 'min de lectura'}</span>
                   </div>
                   <h2 class="post-title">
                     <a href={post.href}>{post.data.title}</a>
@@ -161,7 +174,7 @@ const slugifyTag = (tag: string) =>
                     </ul>
                   )}
                   <a class="post-more" href={post.href} tabindex="-1">
-                    leer artículo <span aria-hidden="true">→</span>
+                    {lang === 'en' ? 'read article' : 'leer artículo'} <span aria-hidden="true">→</span>
                   </a>
                 </div>
               </article>
@@ -170,8 +183,8 @@ const slugifyTag = (tag: string) =>
         )
       }
 
-      <nav class="blog-back" aria-label="Volver al portafolio">
-        <a href="/#proyectos">← volver al portafolio</a>
+      <nav class="blog-back" aria-label={lang === "en" ? 'Back to portfolio' : 'Volver al portafolio'}>
+        <a href={lang === "en" ? '/en/#proyectos' : '/#proyectos'}>{lang === "en" ? '← back to portfolio' : '← volver al portafolio'}</a>
       </nav>
     </div>
   </section>
@@ -191,7 +204,9 @@ const slugifyTag = (tag: string) =>
     const emptyMessage = document.createElement("p");
     emptyMessage.className = "blog-empty";
     emptyMessage.textContent =
-      "Ningún artículo coincide con ese tag por ahora.";
+      lang === "en"
+        ? "No article matches that tag yet."
+        : "Ningún artículo coincide con ese tag por ahora.";
     emptyMessage.hidden = true;
     status?.insertAdjacentElement("afterend", emptyMessage);
 
@@ -199,8 +214,7 @@ const slugifyTag = (tag: string) =>
       let shown = 0;
       for (const card of cards) {
         const matches =
-          selected === "__all" ||
-          (card.dataset.tags ?? "").split(" ").includes(selected);
+          selected === "__all" || (card.dataset.tags ?? "").split(" ").includes(selected);
         card.hidden = !matches;
         if (matches) shown += 1;
       }
@@ -210,8 +224,9 @@ const slugifyTag = (tag: string) =>
         chip.setAttribute("aria-pressed", String(active));
       }
       if (status) {
-        status.textContent = `${shown} ${shown === 1 ? "artículo" : "artículos"}`;
+        status.textContent = `${shown} ${shown === 1 ? (lang === "en" ? "article" : "artículo") : (lang === "en" ? "articles" : "artículos")}`;
       }
+
       emptyMessage.hidden = shown > 0;
     };
 

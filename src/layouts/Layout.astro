@@ -12,41 +12,34 @@ export interface Props {
   ogImageHeight?: number;
   schemaOrg: Record<string, unknown>;
   robots?: string;
-}
-
-const {
-  title,
-  description,
-  canonicalUrl,
-  previewImage,
-  ogImage = previewImage,
-  ogImageType = "image/png",
-  ogImageWidth = 1200,
-  ogImageHeight = 630,
-  schemaOrg,
-  robots = "index, follow, max-image-preview:large",
-} = Astro.props;
+}const { title, description, canonicalUrl, previewImage, ogImage = previewImage, ogImageType = "image/png", ogImageWidth = 1200, ogImageHeight = 630, schemaOrg, robots = "index, follow, max-image-preview:large", } = Astro.props;
 const fontHref =
   "https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap";
 const rawBase = import.meta.env.BASE_URL;
 const base = rawBase.endsWith("/") ? rawBase : `${rawBase}/`;
-const isHome = Astro.url.pathname === base;
+const lang = Astro.locale;
+const langPrefix = lang === "en" ? "/en" : "";
+const isHome = Astro.url.pathname.replace(/^\/${langPrefix}/, "") === "";
 const sectionHref = (id: string) => (isHome ? `#${id}` : `${base}#${id}`);
 const navLinks = [
-  { id: "impacto", text: "impacto" },
-  { id: "servicios", text: "servicios" },
-  { id: "casos", text: "casos" },
-  { id: "sobre", text: "sobre" },
-  { id: "experiencia", text: "experiencia" },
-  { id: "proyectos", text: "proyectos" },
-  { id: "habilidades", text: "stack" },
-  { id: "certificaciones", text: "certs" },
+  { id: "impacto", text: lang === "es" ? "impacto" : "impact" },
+  { id: "servicios", text: lang === "es" ? "servicios" : "services" },
+  { id: "casos", text: lang === "es" ? "casos" : "cases" },
+  { id: "sobre", text: lang === "es" ? "sobre" : "about" },
+  { id: "experiencia", text: lang === "es" ? "experiencia" : "experience" },
+  { id: "proyectos", text: lang === "es" ? "proyectos" : "projects" },
+  { id: "habilidades", text: lang === "es" ? "stack" : "stack" },
+  { id: "certificaciones", text: lang === "es" ? "certs" : "certs" },
 ].map(({ id, text }) => ({ href: sectionHref(id), text }));
+const altLang = lang === "en" ? "es" : "en";
+const altPrefix = altLang === "en" ? "/" : "/en/";
+const currentPathRel = Astro.url.pathname.replace(/^\/${langPrefix}/, "");
+const altHref = (loc: string) => `${altPrefix}${currentPathRel === "" ? "/" : currentPathRel}${loc ? "/" + loc : ""}`;
 ---
 
 <!doctype html>
 <html
-  lang="es"
+  lang={lang}
   class="no-js"
   data-home={isHome ? "true" : undefined}
 >
@@ -54,6 +47,7 @@ const navLinks = [
     <meta charset="UTF-8" />
     <script is:inline>
       document.documentElement.classList.replace("no-js", "js");
+      document.documentElement.lang = document.documentElement.getAttribute("lang") ?? "es";
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
@@ -65,6 +59,8 @@ const navLinks = [
       title="Juan Samayoa — Blog"
       href={`${base}rss.xml`}
     />
+    <link rel="alternate" hreflang="{altLang}" href={altHref('')} />
+    <link rel="alternate" hreflang="x-default" href={altHref('')} />
     <meta name="author" content="Juan Samayoa" />
     <meta
       name="keywords"
@@ -88,10 +84,10 @@ const navLinks = [
     <meta property="og:image:height" content={String(ogImageHeight)} />
     <meta
       property="og:image:alt"
-      content="Vista previa del portafolio de Juan Samayoa"
+      content={lang === 'en' ? 'Preview of Juan Samayoa Portfolio' : 'Vista previa del portafolio de Juan Samayoa'}
     />
     <meta property="og:site_name" content="Juan Samayoa Portfolio" />
-    <meta property="og:locale" content="es_GT" />
+    <meta property="og:locale" content={lang === 'en' ? 'en_US' : 'es_419'} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@JSamayoa_" />
     <meta name="twitter:title" content={title} />
@@ -99,7 +95,7 @@ const navLinks = [
     <meta name="twitter:image" content={previewImage} />
     <meta
       name="twitter:image:alt"
-      content="Vista previa del portafolio de Juan Samayoa"
+      content={lang === 'en' ? 'Preview of Juan Samayoa Portfolio' : 'Vista previa del portafolio de Juan Samayoa'}
     />
     <meta name="theme-color" content="#0f6e56" />
     <meta name="application-name" content="Juan Samayoa" />
@@ -191,6 +187,10 @@ const navLinks = [
         <!-- Fuera de #primary-navigation a propósito: la lista mantiene sus 8
              anclas de sección y el enlace al blog queda siempre visible. -->
         <a href={`${base}blog/`} class="nav-blog">blog</a>
+        <div class="lang-picker" role="group" aria-label="Idioma del sitio">
+          <a class:list="[lang === 'es' && 'lang-picker-current']" href="/" lang="es">ES</a>
+          <a class:list="[lang === 'en' && 'lang-picker-current']" href="/en/" lang="en">EN</a>
+        </div>
         <a href={sectionHref("contacto")} class="nav-cta">contacto -></a>
       </div>
     </nav>

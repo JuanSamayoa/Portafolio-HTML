@@ -161,6 +161,54 @@ Cambios en código, contenido, configuración, documentación y decisiones. No s
 
 ---
 
+## 2026-11-12 · Blog, feed y sitemap dinámicos
+
+**Agente:** Buffy (Freebuff)
+
+**Resumen:** se incorporó un blog estático con Astro Content Collections, Pages CMS, RSS y sitemap dinámicos, más optimización de imágenes y fuentes no bloqueantes. También se endureció la CSP y se corrigió el pie del artículo.
+
+**Archivos:** `src/content.config.ts`, `src/content/blog/arquitectura-portafolio-astro.md`, `src/pages/blog/index.astro`, `src/pages/blog/[slug].astro`, `src/pages/rss.xml.ts`, `src/pages/sitemap.xml.ts`, `.pages.yml`, `src/utils/cloudinary.ts`, `src/layouts/Layout.astro`, `src/styles/global.css`.
+
+**Evidencia/verificación:** `pnpm check` 0 errores/warnings/hints (29 archivos); `pnpm build` 6 páginas + `/rss.xml` (1 item) + `/sitemap.xml` (3 url); `pnpm check:links` 97 referencias en 6 HTML; `pnpm test:links` 6/6; `pnpm test:e2e` 32/32.
+
+**Hallazgos no corregidos:** cadencia editorial del blog y propiedad de las imágenes de Cloudinary (`PENDIENTE DE DEFINICIÓN`).
+
+**Pendientes:** verificar la primera ejecución del workflow en GitHub Actions tras los cambios.
+
+---
+
+## 2026-11-12 · Limpieza de firmas IA en el historial y regla permanente
+
+**Agente:** Buffy (Freebuff)
+
+**Resumen:** se reescribieron los commits `849e20b`, `f9675c4` y `f6903ac` para eliminar firmas/trailers de IA (`Generated with`, `Co-Authored-By`), se eliminó `refs/original` y se hizo force-push con `--force-with-lease`. Se añadió la regla de mensajes de commit a `.ai/agents/AGENTS.md` y `AGENTS.md`.
+
+**Archivos:** `.ai/agents/AGENTS.md`, `AGENTS.md`.
+
+**Evidencia/verificación:** árbol idéntico `48ed284b2d25128447f7ce9fa1cffdc7e36d5ae5`; `git fsck` sin errores; HEAD `aa033ba` == `origin/main`.
+
+**Hallazgos no corregidos:** ninguno.
+
+**Pendientes:** ninguno.
+
+---
+
+## 2026-11-12 · Auditoría documental completa de `.ai/`
+
+**Agente:** Buffy (Freebuff)
+
+**Resumen:** se reescribieron README, IDENTITY, MISSION, PROJECT_CONTEXT, PRINCIPLES, ARCHITECTURE, PROJECT_MAP, FRONTEND, STANDARDS, UX_UI, ACCESSIBILITY, PERFORMANCE, SEO, SECURITY, DECISIONS, ROADMAP y CHANGELOG para reflejar el estado real (6 rutas, 32 pruebas, pnpm 12.18.0, blog, sitemap/RSS dinámicos, CSP endurecida, fuentes no bloqueantes, `optimizedCloudinary`). Sin comandos de clonado en el README.
+
+**Archivos:** `README.md`, `.ai/*.md`, `.ai/agents/AGENTS.md`, `AGENTS.md`, `CLAUDE.md`, `CODEX.md`.
+
+**Evidencia/verificación:** `pnpm astro check` (0 errores/warnings/hints), `pnpm build` (6 páginas + endpoints), `pnpm check:links` (97 referencias), `pnpm test:links` (6/6).
+
+**Hallazgos no corregidos:** los puntos marcados como `PENDIENTE DE DEFINICIÓN` se mantienen sin inferencia.
+
+**Pendientes:** ejecución real del workflow en GitHub Actions.
+
+---
+
 ## Plantilla para nuevas entradas
 
 ```markdown

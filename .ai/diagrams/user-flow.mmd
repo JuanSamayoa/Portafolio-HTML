@@ -15,6 +15,10 @@ flowchart TD
     CASES --> FAQ["FAQ<br/>7 preguntas"]
     FAQ --> CONTACT["Contacto<br/>formulario + email + redes"]
 
+    PERFIL -->|"Leer blog"| BLOG["Blog /blog/<br/>índice + filtro por tags"]
+    BLOG --> ARTICLE["/blog/<slug><br/>artículo + copiar enlace"]
+    ARTICLE -->|"volver al índice"| BLOG
+
     PERFIL -->|"Revisar código"| PROJECTS["Proyectos<br/>5 tarjetas + GitHub"]
     PROJECTS --> TOOLKIT["Toolkit<br/>4 recursos"]
     TOOLKIT --> SQL["/toolkit/sql<br/>5 ejemplos · noindex"]
@@ -32,5 +36,5 @@ flowchart TD
     classDef section fill:#e1f5ee,stroke:#5dcaa5,color:#04342c
     classDef utility fill:#f0efe9,stroke:#a3a199,color:#1a1a18
     class START,THANKS entry
-    class HERO,IMPACT,SERVICES,CASES,EXP,SKILLS,PROJECTS,TOOLKIT,SQL,CERT,FAQ,CONTACT section
+    class HERO,IMPACT,SERVICES,CASES,EXP,SKILLS,PROJECTS,TOOLKIT,SQL,CERT,FAQ,CONTACT,BLOG,ARTICLE section
     class CV,BACK,SUBMIT,PERFIL,PERFIL utility

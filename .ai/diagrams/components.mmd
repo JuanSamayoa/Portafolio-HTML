@@ -1,9 +1,13 @@
 flowchart TD
     subgraph PAGES["Páginas"]
         INDEX["index.astro"]
+        BLOGIDX["blog/index.astro"]
+        BLOGSLUG["blog/[slug].astro"]
         THANKS["thanks.astro"]
         NF["404.astro"]
         SQLP["toolkit/sql.astro"]
+        SITEMAP["sitemap.xml.ts"]
+        RSS["rss.xml.ts"]
     end
 
     LAYOUT["Layout.astro<br/>head · nav · footer · scripts"]
@@ -34,10 +38,16 @@ flowchart TD
     STYLES["global.css"]
 
     INDEX --> LAYOUT
+    BLOGIDX --> LAYOUT
+    BLOGSLUG --> LAYOUT
     THANKS --> LAYOUT
     NF --> LAYOUT
     SQLP --> LAYOUT
     SQLP --> PERSONAL
+    BLOGIDX --> CONTENT["content/blog + config"]
+    BLOGSLUG --> CONTENT
+    SITEMAP --> CONTENT
+    RSS --> CONTENT
 
     INDEX --> HERO
     INDEX --> IMPACT
@@ -72,7 +82,7 @@ flowchart TD
     classDef layout fill:#085041,stroke:#0f6e56,color:#ffffff
     classDef comp fill:#e1f5ee,stroke:#5dcaa5,color:#04342c
     classDef data fill:#f0efe9,stroke:#a3a199,color:#1a1a18
-    class INDEX,THANKS,NF,SQLP page
+    class INDEX,BLOGIDX,BLOGSLUG,THANKS,NF,SQLP,SITEMAP,RSS page
     class LAYOUT layout
     class HERO,IMPACT,SERVICES,CASES,ABOUT,EXPERIENCE,PROJECTS,SKILLS,TOOLKIT,FAQ,CERTS,CONTACT,MODAL comp
-    class PERSONAL,PROJECTSD,CERTD,TYPES,STYLES data
+    class PERSONAL,PROJECTSD,CERTD,TYPES,STYLES,CONTENT data

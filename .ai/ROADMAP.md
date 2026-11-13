@@ -19,6 +19,13 @@ Propuestas derivadas de defectos, deudas y ausencias verificadas. **Ninguna est�
 
 ## P0 — Integridad publicada
 
+### R-03 · Sincronizar `README.md` con el estado real
+
+- **Evidencia:** mencionaba `deploy-github.ps1/.sh` en raíz (viven en `scripts/`, ignorado), `public/assets/img`, `public/assets/icons` y 21 certificaciones (hoy 22).
+- **Aceptación:** el README no describe archivos inexistentes ni conteos erróneos.
+- **Estado:** Cerrado en la auditoría documental de 2026-11-12. `README.md` reescrito sin comandos, con inventario verificado de 92 archivos, 6 rutas, 32 pruebas y 22 certificaciones.
+- **Riesgo:** bajo.
+
 ### R-01 · Resolver el PDF inexistente del toolkit
 
 - **Evidencia:** `Toolkit.astro` enlaza `/toolkit/playwright-quick-start.pdf`; `public/toolkit/` no existe.
@@ -33,12 +40,6 @@ Propuestas derivadas de defectos, deudas y ausencias verificadas. **Ninguna est�
 - **Opciones:** usar `/og-image.png` (existe en `public/`) o una imagen dedicada 1200×630.
 - **Aceptación:** la URL de imagen responde 200 y la tarjeta social se previsualiza.
 - **Estado:** Cerrado en fase 1 (2026-11-11). `/thanks` y `/404` usan `https://juan-samayoa.is-a.dev/og-image.png`, que responde 200; `favicon.svg` no aparece en `dist/`.
-- **Riesgo:** bajo.
-
-### R-03 · Sincronizar `README.md` con el estado real
-
-- **Evidencia:** menciona `deploy-github.ps1/.sh` en raíz (viven en `scripts/`, ignorado), `public/assets/img`, `public/assets/icons` y 21 certificaciones (hoy 22).
-- **Aceptación:** el README no describe archivos inexistentes ni conteos erróneos.
 - **Riesgo:** bajo.
 
 ## P1 — Accesibilidad
@@ -107,10 +108,10 @@ Propuestas derivadas de defectos, deudas y ausencias verificadas. **Ninguna est�
 
 ### R-12 · Endurecer CSP
 
-- **Evidencia:** `script-src` incluye `fonts.googleapis.com` (innecesario) e `img-src https:` es abierto.
-- **Propuesta:** restringir a `https://res.cloudinary.com` y retirar el origen de fuentes de `script-src`.
-- **Aceptación:** el sitio funciona sin violaciones de CSP en las 4 rutas.
-- **Riesgo:** medio; probar en preview antes de `main`.
+- **Evidencia:** `script-src` incluía `fonts.googleapis.com` (innecesario) e `img-src https:` era abierto.
+- **Aceptación:** el sitio funciona sin violaciones de CSP en las 6 rutas.
+- **Estado:** Cerrado en la auditoría de 2026-11-12. CSP restringida a `self`, `https://res.cloudinary.com` y `https://formsubmit.co`, con `object-src 'none'`, `frame-src 'none'` y `worker-src 'self'`; `COEP: credentialless`.
+- **Riesgo:** bajo.
 
 ### R-13 · Renovar `security.txt`
 
@@ -159,7 +160,8 @@ Propuestas derivadas de defectos, deudas y ausencias verificadas. **Ninguna est�
 - **Evidencia:** no hay suite ni script `test`.
 - **Propuesta:** Playwright para 4 rutas, navegación por anclas, modal, copiado SQL y formulario (mock); ejecución en CI.
 - **Aceptación:** job de tests bloqueante y documentado.
-- **Estado:** Implementado en el workflow en fase 2 (2026-11-11). La suite suma 20 pruebas y CI ejecuta Chromium administrado por Playwright, `check`, build y E2E con artefactos solo en fallo. **No se ha ejecutado todavía en GitHub Actions**; la ruta CI se validó localmente con `CI=1` (20/20). Cobertura de formulario/copiado SQL sigue pendiente.
+- **Estado:** Implementado y ampliado. La suite suma 32 pruebas (10 en `phase1`, 6 en `phase2`, 8 en `phase3` más 6 pruebas Node de referencias) y CI ejecuta Chromium administrado por Playwright. **No se ha ejecutado todavía en GitHub Actions**; la ruta CI se validó localmente con `CI=1`.
+- **Riesgo:** alto (nuevas dependencias, tiempo de CI). **Requiere aprobación explícita.**
 - **Riesgo:** alto (nuevas dependencias, tiempo de CI). **Requiere aprobación explícita.**
 
 ### R-20 · Verificación de enlaces y assets
@@ -192,7 +194,7 @@ Propuestas derivadas de defectos, deudas y ausencias verificadas. **Ninguna est�
 
 ## Fuera de alcance observado
 
-Blog, CMS, autenticación, pagos, multi-idioma con routing, comentarios. Cualquiera de estos exige revisar `IDENTITY.md` y la restricción de dependencia mínima.
+Autenticación, pagos, multi-idioma con routing, comentarios. El blog y Pages CMS ya están implementados (colección `blog`, endpoints dinámicos y `.pages.yml`); cualquier ampliación exige revisar `IDENTITY.md` y la restricción de dependencia mínima.
 
 ## Reglas
 

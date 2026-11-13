@@ -6,7 +6,7 @@ Proporcionar una revisión repetible que cubra arquitectura, frontend, UX/UI, ac
 
 ## Alcance
 
-Cambios propuestos o ya aplicados sobre cualquier archivo del repositorio. No sustituye pruebas automatizadas (no existen).
+Cambios propuestos o ya aplicados sobre cualquier archivo del repositorio. No sustituye las pruebas automatizadas existentes (32 E2E + 6 Node).
 
 ## Checklist
 
@@ -21,7 +21,7 @@ Cambios propuestos o ya aplicados sobre cualquier archivo del repositorio. No su
 ### 2. Frontend
 
 - [ ] Datos nuevos en `src/data` con tipo en `src/types/portfolio.ts`.
-- [ ] Se usa `<Image>` con `width`, `height` y `alt`.
+- [ ] Las imágenes usan `width`, `height` y `alt`, y las de contenido pasan por `optimizedCloudinary`.
 - [ ] No hay `innerHTML`, `eval` ni estado persistido.
 - [ ] Los scripts son idempotentes y no rompen otras páginas.
 - [ ] El contrato del modal (`open-cert-modal`) sigue intacto si se tocó.
@@ -75,7 +75,7 @@ Cambios propuestos o ya aplicados sobre cualquier archivo del repositorio. No su
 - [ ] `pnpm check` sin errores.
 - [ ] `pnpm build` correcto si aplica.
 - [ ] Copy en español, sin métricas ni enlaces inventados.
-- [ ] Sin referencias a assets inexistentes.
+- [ ] Sin referencias a assets inexistentes (verificado con `pnpm check:links`).
 - [ ] Documentación (`.ai/`) actualizada si cambió una decisión o invariante.
 
 ## Formato de hallazgos

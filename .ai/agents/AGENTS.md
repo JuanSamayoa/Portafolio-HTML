@@ -6,8 +6,8 @@
 
 - Sitio estático (Astro 7, TypeScript strict) sin backend; runtime npm único: `astro`.
 - Contenido en `src/data`, secciones en `src/components`, shell en `src/layouts/Layout.astro`, diseño en `src/styles/global.css`, estáticos en `public/`.
-- 4 rutas: `/`, `/thanks`, `/404`, `/toolkit/sql`.
-- Sin suite de tests; validación real: `pnpm check` + `pnpm build`.
+- 6 rutas: `/`, `/blog/`, `/blog/<slug>/`, `/thanks`, `/404`, `/toolkit/sql`.
+- Suite E2E con 32 pruebas (`tests/phase1.spec.ts`, `phase2.spec.ts`, `phase3.spec.ts`) más 6 pruebas Node de referencias (`tests/local-references.test.mjs`).
 - Despliegue automático a GitHub Pages desde `main`; no hay staging.
 
 ## Orden de lectura
@@ -29,6 +29,9 @@
 | `pnpm build:production` | Build desde cero |
 | `pnpm preview` | Verificar `dist/` |
 | `pnpm clean` | Borrar `dist/` |
+| `pnpm check:links` | Verificar referencias locales del HTML |
+| `pnpm test:links` | Pruebas Node del comprobador |
+| `pnpm test:e2e` | Suite E2E de Playwright |
 
 `pnpm deploy` solo compila. No existen `pnpm test` ni `pnpm lint`.
 
@@ -46,7 +49,7 @@ pnpm check; echo "CHECK_EXIT=$?"
 pnpm build; echo "BUILD_EXIT=$?"
 ```
 
-Además, según el cambio: revisar las 4 rutas en 375/768/1280 px, comprobar enlaces internos, metadatos y foco por teclado. No afirmar pruebas no ejecutadas.
+Además, según el cambio: revisar las 6 rutas en 320/375/768/1024/1280/1440 px, comprobar enlaces internos, metadatos y foco por teclado. No afirmar pruebas no ejecutadas.
 
 ## Mensajes de commit
 

@@ -7,17 +7,23 @@ flowchart TD
     BUILD --> COMMIT["Commit + push a main"]
 
     COMMIT --> WF["GitHub Actions<br/>deploy-pages.yml"]
-    WF --> SETUP["checkout · corepack pnpm 10.19.0<br/>Node 22 · caché"]
+    WF -->    SETUP["checkout · corepack pnpm 12.18.0<br/>Node 22 · caché"]
     SETUP --> INSTALL["pnpm install --frozen-lockfile<br/>--prod=false --ignore-scripts"]
     INSTALL --> CICHECK["pnpm check<br/>bloqueante"]
     CICHECK -->|"falla"| STOP["Build rojo<br/>sin despliegue"]
-    CICHECK -->|"pasa"| CIBUILD["pnpm build"]
+    CICHECK -->|"pasa"| TESTLINKS["pnpm test:links<br/>6 pruebas Node"]
+    TESTLINKS -->|"falla"| STOP
+    TESTLINKS -->|"pasa"| CIBUILD["pnpm build"]
     CIBUILD -->|"falla"| STOP
-    CIBUILD -->|"ok"| ART["upload-pages-artifact<br/>path ./dist · 1 día"]
+    CIBUILD -->|"ok"| CHECKLINKS["pnpm check:links<br/>97 referencias"]
+    CHECKLINKS -->|"falla"| STOP
+    CHECKLINKS -->|"pasa"| E2E["playwright install +<br/>pnpm test:e2e (32)"]
+    E2E -->|"falla"| STOP
+    E2E -->|"ok"| ART["upload-pages-artifact<br/>path ./dist · 1 día"]
     ART --> DEPLOY["deploy-pages<br/>entorno github-pages"]
     DEPLOY --> LIVE["https://juan-samayoa.is-a.dev<br/>CNAME + .nojekyll"]
 
-    LIVE --> VERIFY["Verificación manual<br/>4 rutas · anclas · formulario"]
+    LIVE -->    VERIFY["Verificación manual<br/>6 rutas · anclas · formulario · blog"]
     VERIFY -->|"defecto"| REVERT["Revertir commit en main<br/>y volver a integrar"]
     REVERT --> WF
 

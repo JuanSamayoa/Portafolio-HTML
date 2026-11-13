@@ -1,194 +1,113 @@
-# SECURITY — Seguridad del sitio
+# SECURITY — Seguridad
 
 ## Objetivo
 
-Documentar las defensas implementadas, su alcance real según el hosting, las superficies de ataque del proyecto y las brechas que un agente no debe ampliar.
+Documentar el modelo de seguridad real del sitio (cabeceras, CSP, supply chain, service worker, formulario, datos personales) y sus límites, para que cualquier cambio conserve las protecciones existentes.
 
 ## Alcance
 
-Cabeceras y CSP, configuración de Astro/Vite, service worker, formulario, enlaces externos, dependencias y archivos de divulgación. No es una auditoría formal ni cubre la seguridad de Cloudinary, FormSubmit o GitHub.
+`src/layouts/Layout.astro`, `public/_headers`, `public/sw.js`, `astro.config.mjs`, `pnpm-workspace.yaml`, `.github/workflows/deploy-pages.yml`, `public/security.txt`, `public/robots.txt`. No incluye pentesting ni auditoría externa.
 
-## Modelo de amenaza observado
+## Modelo de seguridad
 
-| Activo | Exposición | Impacto si falla |
+| Capa | Implementación | Dónde |
 |---|---|---|
-| Reputación profesional del autor | Pública | Alto |
-| Email y redes de contacto | Públicas por diseño (`mailto:`, JSON-LD, `security.txt`) | Spam, suplantación |
-| CVs PDF | Públicos bajo `/assets/cv/` | Fuga de datos personales si contienen más de lo previsto |
-| Formulario de contacto | Endpoint público de FormSubmit | Spam, pérdida de mensajes |
-| Repositorio | Público | Reconocimiento de la pila |
-| Dominio y hosting | GitHub Pages + CNAME | Secuestro de dominio si se pierde el control |
+| CSP en meta | `default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://res.cloudinary.com; connect-src 'self' https://formsubmit.co; base-uri 'self'; form-action 'self' https://formsubmit.co; object-src 'none'; frame-src 'none'; worker-src 'self'` | `Layout.astro` |
+| Cabeceras HTTP | `_headers` con CSP (idéntica), `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy`, `Strict-Transport-Security`, `Cross-Origin-Opener-Policy: same-origin`, `Cross-Origin-Embedder-Policy: credentialless`, `Cross-Origin-Resource-Policy: same-origin` | `public/_headers` |
+| Cabeceras de desarrollo | `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `X-XSS-Protection: 1; mode=block` | `astro.config.mjs` (Vite) |
+| CSRF | `security.checkOrigin: true` | `astro.config.mjs` |
+| Service worker | Validación de origen con `new URL(event.request.url).origin !== self.location.origin`; caché solo de `GET`; exclusión de `/assets/cv/` y respuestas `no-store`/`private`; limpieza de cachés antiguos | `public/sw.js` |
+| Supply chain | Overrides fijados (`fast-uri`, `sharp 0.35.5`, `source-map-js 1.2.1`, `ajv 8.18.0`, `lodash 4.17.23`, `minimatch 9.0.7`, `sucrase 3.35.1`, `enhanced-resolve 5.20.1`); `minimumReleaseAge: 1440` con exclusiones explícitas; `--frozen-lockfile` en CI | `pnpm-workspace.yaml` |
+| Formulario | Envío a FormSubmit con redirección a `/thanks`; `required` en campos clave | `Contact.astro` |
+| Datos personales | Email, CVs y fotografía publicados de forma intencional | `personal.ts`, `public/` |
+| Robots | Bloqueo de crawlers de IA; `/assets/cv/` no se publica en sitemap pero sí es accesible | `robots.txt` |
+| Divulgación | `security.txt` (raíz y `.well-known`), expira `2027-01-31`, contacto `contact@juansamayoa.dev` | `public/` |
 
-No hay usuarios autenticados, sesiones, pagos, base de datos ni datos de terceros almacenados.
+## CSP en detalle
 
-## Content Security Policy
+- `script-src 'self' 'unsafe-inline'`: necesario para los scripts inline de JSON-LD, fuentes y comportamiento; **no** se usa `unsafe-eval`.
+- `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`: el inline es necesario para estilos de Astro; los estilos externos solo de Google Fonts.
+- `img-src 'self' data: blob: https://res.cloudinary.com`: permite imágenes locales, data URIs, blobs y Cloudinary; **no** se permite `https:` abierto.
+- `connect-src 'self' https://formsubmit.co`: solo el endpoint del formulario.
+- `object-src 'none'`, `frame-src 'none'`: sin plugins ni iframes.
+- `worker-src 'self'`: solo el service worker propio (que no se registra).
+- `base-uri 'self'`, `form-action 'self' https://formsubmit.co`.
 
-### Implementación dual
+La CSP se mantiene en dos lugares (`<meta>` y `_headers`) y ambos deben cambiar a la vez.
 
-1. **`<meta http-equiv="Content-Security-Policy">` en `src/layouts/Layout.astro`** — activa en GitHub Pages.
-2. **Cabecera `Content-Security-Policy` en `public/_headers`** — solo en hosts que la soportan (Cloudflare Pages, Netlify).
+## COEP y Cloudinary
 
-Directivas actuales del meta:
-
-```
-default-src 'self';
-script-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-font-src 'self' https://fonts.gstatic.com;
-img-src 'self' data: https: blob:;
-connect-src 'self' https://formsubmit.co;
-base-uri 'self';
-form-action 'self' https://formsubmit.co
-```
-
-La versión de `_headers` añade `frame-ancestors 'none'` y `upgrade-insecure-requests` (directivas ignoradas en `<meta>`).
-
-### Evaluación
-
-| Directiva | Estado | Comentario |
-|---|---|---|
-| `default-src 'self'` | Correcta | Base restrictiva |
-| `script-src 'unsafe-inline'` | **Debilidad** | Necesaria por los scripts inline de Astro; permite XSS inline si se inyectara HTML |
-| `script-src https://fonts.googleapis.com` | **Debilidad** | Google Fonts no requiere script; se puede retirar |
-| `style-src 'unsafe-inline'` | **Debilidad** | Requerida por estilos inline (`style="display:none"` en el formulario y el modal) |
-| `img-src https:` | **Permisiva** | Permite cualquier origen HTTPS, no solo Cloudinary |
-| `connect-src` | Correcta | Solo FormSubmit |
-| `frame-ancestors` | Solo en `_headers` | No aplica en `<meta>`; GitHub Pages no la recibe |
-| `object-src` | Ausente | Cubierta por `default-src 'self'` |
-| `report-uri` / `report-to` | Ausente | Sin telemetría de violaciones |
-| Trusted Types | Ausente | — |
-
-Consecuencia práctica: la CSP mitiga pero no elimina el riesgo de XSS. Su eficacia real depende de que no se introduzca HTML dinámico; hoy no hay `innerHTML` ni `document.write` en `src/`.
-
-## Uso de `set:html` en `toolkit/sql.astro`
-
-`allSqlCode` se construye exclusivamente a partir del arreglo estático `examples` definido en el propio archivo. No proviene de parámetros URL, formularios, API, CMS, almacenamiento ni contenido externo. Se emite como JSON con `<` escapado a `\u003c` para que ningún contenido pueda cerrar el elemento `<script>`; `JSON.parse` recupera el texto original. No se añade sanitizador porque no existe una fuente no confiable.
-
-**Regla obligatoria:** `set:html` no debe utilizarse con entrada de usuario, parámetros URL, respuestas de API, CMS o contenido externo sin sanitización y revisión de la CSP. Si el dataset SQL deja de ser estático, debe validarse/sanitizarse antes de inyectarse y añadirse una prueba con contenido hostil.
-
-## Cabeceras (`public/_headers`)
-
-| Cabecera | Valor | Nota |
-|---|---|---|
-| `Strict-Transport-Security` | `max-age=63072000; includeSubDomains; preload` | No se aplica desde el repositorio: Pages no lee `_headers` |
-| `X-Content-Type-Options` | `nosniff` | También en dev vía Vite |
-| `X-Frame-Options` | `DENY` | Compatibilidad con navegadores antiguos |
-| `X-XSS-Protection` | `0` | Desactiva el filtro legado |
-| `Referrer-Policy` | `strict-origin-when-cross-origin` | También como meta |
-| `Permissions-Policy` | Lista extensa en `()` | Cámara, micrófono, geolocalización, pagos, etc. |
-| `Cross-Origin-Opener-Policy` | `same-origin` | Aísla el contexto |
-| `Cross-Origin-Resource-Policy` | `same-origin` | Impide incrustar recursos propios |
-| `Cross-Origin-Embedder-Policy` | `require-corp` | **Riesgo sin verificar**: exigiría CORP compatible en las imágenes de Cloudinary; no comprobado (PENDIENTE DE DEFINICIÓN) |
-| `X-Permitted-Cross-Domain-Policies` | `none` | — |
-| `Cache-Control` HTML | `no-store, no-cache, must-revalidate...` | — |
-| `Cache-Control` JS/CSS | `public, max-age=31536000, immutable` | Coherente con hashes |
-| `Cache-Control` PDF | `private, no-store` | Los CVs no se cachean |
-
-**Limitación crítica:** GitHub Pages **ignora `_headers`**. En producción solo están activos el meta CSP y el `Referrer-Policy` meta. HSTS, `X-Frame-Options`, COOP/COEP y `Permissions-Policy` no se aplican desde el repositorio. Si el sitio se migra a un host que sí las aplique, `COEP: require-corp` puede romper las imágenes remotas de Cloudinary.
-
-## Configuración de Astro y Vite
-
-- `security.checkOrigin: true`: valida el origen en peticiones de desarrollo (protección CSRF de Astro).
-- Cabeceras de desarrollo: `X-Content-Type-Options`, `X-Frame-Options: DENY`, `X-XSS-Protection: 1; mode=block`.
-- `assetsInlineLimit: 0`: evita incrustar assets en HTML.
-- Nombres con hash en `assets/`: integridad de caché.
+- `Cross-Origin-Embedder-Policy: credentialless` (antes `require-corp`) para compatibilidad con imágenes de Cloudinary sin cabeceras CORP.
+- `Cross-Origin-Resource-Policy: same-origin` en `_headers`.
+- `Cross-Origin-Opener-Policy: same-origin`.
 
 ## Service worker (`public/sw.js`)
 
-Buenas prácticas presentes:
+- Publicado en la raíz pero **no registrado** desde `src/` (verificado: no hay `navigator.serviceWorker.register`).
+- Si se registrara, cachearía assets con estrategia cache-first para `/assets/` y network-first para el resto, excluyendo `/assets/cv/` y respuestas marcadas `no-store`/`private`.
+- Limpia cachés antiguos y valida el origen de cada request.
+- Hoy no aporta offline; su presencia puede generar expectativas falsas.
 
-- Solo intercepta peticiones del mismo origen.
-- No cachea rutas sensibles: `/sw.js`, `/.well-known/`, `/_headers`.
-- Valida origen en mensajes (`event.origin !== self.location.origin`).
-- Sanea el payload de notificaciones push (elimina caracteres no alfanuméricos) y limita a 250 caracteres.
-- Limita la caché dinámica a 50 entradas.
+## Supply chain y CI
 
-Riesgos:
-
-- **No está registrado** desde `src/`, por lo que hoy no se ejecuta; su superficie es latente.
-- Si se activa, el saneamiento elimina acentos y `ñ` (regex `[^a-zA-Z0-9 ._#-]`), degradando el texto en español.
-- Cachea navegación con `networkFirst`; un HTML cacheado podría servir contenido obsoleto tras un despliegue.
-- `install` hace `skipWaiting()` y `activate` hace `clients.claim()`: no hay control de versión progresiva.
+- `pnpm install --frozen-lockfile --prod=false --ignore-scripts` en CI.
+- `pnpm-workspace.yaml` concentra `overrides` y `minimumReleaseAge` (el campo `pnpm` de `package.json` se ignora en pnpm 12).
+- Workflow `deploy-pages.yml`:
+  - Permisos mínimos: `contents: read` global; `pages: write` e `id-token: write` solo en el job `deploy`.
+  - Acciones pinneadas por commit SHA exacto.
+  - Caché de pnpm 12.18.0 + Astro.
+  - `cancel-in-progress: false` en concurrencia para serializar despliegues.
+  - Pasos: install → `astro check` → `test:links` → build → `check:links` → playwright install → `test:e2e` → upload/deploy.
+- No ejecuta `pnpm audit` ni Dependabot; la seguridad de dependencias depende de los overrides y de `minimumReleaseAge`.
 
 ## Formulario de contacto
 
-- `action` apunta a un endpoint público de FormSubmit con hash (`src/components/Contact.astro`). El hash no es un secreto: está en el HTML publicado.
-- Campos ocultos: `_next` (redirect a `/thanks`), `_captcha=true`, `_honey` (honeypot), `_template=table`.
-- El honeypot está oculto con `style="display:none"` y `tabindex="-1"`, sin `aria-hidden`.
-- No hay rate limiting, verificación de origen propia ni captcha visible.
-- El correo destino se gestiona en FormSubmit, fuera del repositorio (`PENDIENTE DE DEFINICIÓN:` dirección efectiva y vigencia).
-- La CSP permite `form-action` y `connect-src` solo hacia `https://formsubmit.co`.
+- Destino: FormSubmit.co → correo del autor; redirección a `/thanks`.
+- Campos `required` en nombre, email y mensaje; `type="email"` para validación nativa.
+- No hay CAPTCHA ni honeypot; la protección depende del proveedor.
+- El email de destino se gestiona fuera del repositorio.
 
-## Enlaces externos y datos expuestos
+## Datos personales
 
-- Enlaces a GitHub, LinkedIn, Cloudinary y Google Sheets/Docs usan `target="_blank"` con `rel="noreferrer"` (implica `noopener` en navegadores modernos).
-- Email expuesto en `mailto:`, JSON-LD, `security.txt` y texto del footer de contacto.
-- `robots.txt` bloquea crawlers de IA y rutas internas, pero no protege los CVs ante acceso directo.
-- `security.txt` en raíz y en `/.well-known/security.txt` (idénticos): contacto, idioma preferido, política y `Expires: 2027-01-31`.
-
-## Dependencias
-
-| Tipo | Cantidad | Evaluación |
-|---|---|---|
-| Runtime | 1 (`astro ^7.1.6`) | Superficie mínima |
-| Desarrollo | 7 | Build, check, comprobador de referencias y E2E |
-| Overrides | 5 (`minimatch`, `ajv`, `sucrase`, `lodash`, `sharp`) | Fijan versiones transitivas por CVEs |
-| Scripts de instalación | Deshabilitados en CI (`--ignore-scripts`) | Reduce riesgo de supply chain |
-
-Riesgos: dependencias transitivas de Astro/Vite no auditadas en el repositorio; no hay `pnpm audit` en CI ni Dependabot configurado (`PENDIENTE DE DEFINICIÓN:` si existe fuera del repo). Google Fonts se carga sin SRI (no es posible con CSS dinámico de Google).
-
-## Superficies de ataque
-
-1. **Formulario público** (spam/abuso; sin límite de tasa).
-2. **Enlaces externos** (dependencia de terceros; sin validación de destino).
-3. **Imágenes remotas** (Cloudinary; un asset malicioso o eliminado afecta la vista).
-4. **Service worker** (latente hasta que se registre).
-5. **Repositorio público** (revela estructura, endpoints y datos de contacto).
-6. **Dominio custom** (riesgo de takeover si se abandona el repositorio o se pierde el DNS).
-7. **PDFs públicos** (metadatos y contenido personal).
-8. **Dependencias de build** (supply chain en CI, mitigado parcialmente por `--ignore-scripts` y lockfile).
-
-## Reglas
-
-- No añadir orígenes a la CSP sin necesidad documentada; actualizar meta y `_headers` a la vez.
-- No introducir `innerHTML`, `eval`, `new Function` ni scripts de terceros.
-- No eliminar `security.checkOrigin`, el honeypot ni `_captcha`.
-- No publicar secretos: el repositorio es público y no hay gestor de secretos.
-- No cambiar el endpoint del formulario sin autorización.
-- Mantener `rel="noreferrer"` en enlaces externos con `target="_blank"`.
-- No activar el service worker sin revisar caché, saneamiento y ciclo de vida.
-
-## Ejemplos reales
-
-- Meta CSP vigente en producción (GitHub Pages) — único control de cabeceras efectivo del repo.
-- `sw.js` rechaza mensajes de otro origen:
-
-```js
-if (event.origin && event.origin !== self.location.origin) return;
-```
-
-- Formulario con honeypot y captcha de FormSubmit en `Contact.astro`.
+- Email (`contact@juansamayoa.dev`), CVs PDF y fotografía se publican de forma intencional.
+- Aparecen en `personal.ts`, `security.txt`, Schema.org y CVs.
+- Mantener coherencia entre `personal.ts` y `security.txt` al cambiar datos.
 
 ## Riesgos conocidos
 
-| Riesgo | Severidad estimada | Evidencia |
-|---|---|---|
-| `_headers` inefectivo en GitHub Pages | Media | README lo reconoce; hosting real es Pages |
-| `'unsafe-inline'` en scripts y estilos | Media | CSP del Layout |
-| `img-src https:` abierto | Baja-media | CSP del Layout |
-| COEP `require-corp` frente a CORP de Cloudinary | Media (latente, sin verificar) | `_headers` |
-| CVs accesibles públicamente | Baja-media | `public/assets/cv/*.pdf` |
-| Email cosechable | Baja | Múltiples ubicaciones |
-| Sin rate limiting en formulario | Media | FormSubmit |
-| Sin auditoría de dependencias en CI | Media | Workflow |
-| `security.txt` caduca el 2027-01-31 | Baja | `public/security.txt` |
-| Sin reporting CSP | Baja | Ausencia |
+- **CSP con `'unsafe-inline'`** en scripts y estilos: necesaria para Astro y JSON-LD, pero reduce la protección frente a inyección si el contenido se vuelve dinámico.
+- **Dependencia de Cloudinary** para todas las imágenes de contenido; un fallo deja el sitio sin imágenes.
+- **FormSubmit** como único canal de contacto; si el proveedor cae, no hay alternativa.
+- **Sin auditoría automatizada** (`pnpm audit`, Dependabot, SAST) en CI.
+- **Service worker no registrado** pero presente: puede sugerir capacidades que no existen.
+- **Dos manifests duplicados** (`manifest.json` y `site.webmanifest`).
+- **Datos personales en repositorio público:** email, CVs y fotografía intencionales, pero deben tratarse con cuidado.
+- **GitHub Pages ignora `_headers`:** las cabeceras solo aplican en hosts compatibles.
 
 ## Recomendaciones futuras
 
-- Retirar `https://fonts.googleapis.com` de `script-src` y restringir `img-src` a `'self' data: blob: https://res.cloudinary.com`.
-- Migrar estilos inline del formulario y del modal a clases para poder eliminar `style-src 'unsafe-inline'`.
-- Si se adopta un host con cabeceras reales, revisar `COEP`/`CORP` frente a Cloudinary antes de desplegar.
-- Añadir `pnpm audit` (o Dependabot) al pipeline y renovar `security.txt` antes de su `Expires`.
-- Registrar el service worker solo tras corregir saneamiento de acentos y estrategia de actualización.
-- Evaluar un captcha accesible o rate limiting si aparece spam.
+- Incorporar `pnpm audit` y Dependabot al pipeline para sostener la supply chain.
+- Formalizar la decisión sobre el service worker (registrar o eliminar).
+- Eliminar el manifest duplicado o documentar por qué existen ambos.
+- Añadir honeypot o CAPTCHA al formulario si aparece spam.
+- Evaluar una alternativa de contacto de respaldo visible ante fallo de FormSubmit.
+- Revisar la CSP si se añade analítica o un nuevo origen externo.
+
+## Reglas
+
+- Cualquier origen externo nuevo debe declararse en la CSP del Layout **y** en `_headers`.
+- No usar `'unsafe-eval'`, `default-src *` ni ampliar `img-src` a `https:`.
+- No eliminar `object-src 'none'` ni `frame-src 'none'`.
+- Mantener `security.checkOrigin: true`.
+- No aceptar mensajes del service worker sin validar origen.
+- No exponer secretos en el repositorio (no hay `.env` versionado).
+- Actualizar `security.txt` antes de `2027-01-31`.
+- No registrar el service worker sin estrategia de actualización y pruebas.
+
+## Ejemplos reales
+
+- CSP idéntica en `Layout.astro` (meta) y `public/_headers`.
+- `sw.js` valida `new URL(event.request.url).origin !== self.location.origin` y excluye `/assets/cv/` y respuestas `no-store`/`private`.
+- `pnpm-workspace.yaml` concentra overrides y `minimumReleaseAge`; el campo `pnpm` de `package.json` se ignora en pnpm 12.
+- Workflow pinnea acciones por SHA y usa permisos mínimos.
+- `security.txt` duplicado en raíz y `.well-known`, con expiración `2027-01-31`.

@@ -1,13 +1,16 @@
 flowchart TD
     subgraph BUILD["Build — pnpm build"]
         CFG["astro.config.mjs<br/>site · base · outDir · Vite"]
-        PAGES["src/pages<br/>index · thanks · 404 · toolkit/sql"]
+        PAGES["src/pages<br/>index · blog · [slug] · thanks · 404 · toolkit/sql · sitemap.xml · rss.xml"]
         LAYOUT["src/layouts/Layout.astro<br/>SEO · CSP · nav · footer · scripts"]
         COMP["src/components<br/>13 componentes de sección"]
         DATA["src/data<br/>personal · projects · certifications"]
+        CONTENT["src/content/blog<br/>artículos Markdown"]
+        CONFIG["src/content.config.ts<br/>esquema zod"]
+        UTILS["src/utils/cloudinary.ts<br/>f_auto,q_auto"]
         TYPES["src/types/portfolio.ts<br/>contratos"]
         CSS["src/styles/global.css<br/>tokens y reglas"]
-        DIST["dist/<br/>4 HTML · CSS y JS con hash · assets"]
+        DIST["dist/<br/>6 HTML · 2 endpoints · CSS y JS con hash"]
     end
 
     subgraph RUNTIME["Runtime — navegador"]
@@ -15,6 +18,8 @@ flowchart TD
         MODAL["Modal de certificaciones<br/>dialog + CustomEvent"]
         SQLUI["Copiar y descargar SQL<br/>clipboard + Blob"]
         FORM["Formulario de contacto"]
+        BLOGFILTER["Filtro por tags<br/>aria-pressed + status"]
+        COPYLINK["Copiar enlace del artículo"]
     end
 
     subgraph THIRD["Terceros"]
@@ -27,6 +32,8 @@ flowchart TD
     CFG --> PAGES
     PAGES --> LAYOUT
     PAGES --> COMP
+    PAGES --> CONTENT
+    CONTENT --> CONFIG
     COMP --> DATA
     DATA --> TYPES
     LAYOUT --> CSS
@@ -43,7 +50,10 @@ flowchart TD
     LAYOUT --> NAV
     COMP --> MODAL
     PAGES --> SQLUI
+    PAGES --> BLOGFILTER
+    PAGES --> COPYLINK
     COMP --> FORM
+    COMP --> UTILS
 
     classDef build fill:#e1f5ee,stroke:#0f6e56,color:#04342c
     classDef runtime fill:#f0efe9,stroke:#5a5955,color:#1a1a18

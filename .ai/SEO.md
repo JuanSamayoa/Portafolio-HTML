@@ -1,117 +1,123 @@
-# SEO — Posicionamiento y metadatos
+# SEO — Optimización para motores de búsqueda
 
 ## Objetivo
 
-Documentar la estrategia SEO real del sitio: metadatos por ruta, datos estructurados, indexación, sitemap, compartición social y brechas detectadas.
+Documentar la estrategia SEO real del sitio: metadatos por ruta, datos estructurados, sitemap, feed, robots, canónicas y robots meta, para que cada página nueva se publique con metadatos completos y sin regresiones.
 
 ## Alcance
 
-Las 4 rutas generadas (`/`, `/thanks`, `/toolkit/sql`, `/404.html`), `robots.txt`, `sitemap.xml`, Open Graph, Twitter Cards y JSON-LD. No cubre copywriting ni palabras clave más allá de lo declarado.
+Las 6 rutas, el blog, los endpoints dinámicos, `robots.txt`, `security.txt` y los metadatos del `Layout`. No incluye analítica ni search console.
 
-## Estrategia observada
+## Estado actual
 
-SEO **on-page explícito y manual**: cada página construye sus metadatos en el frontmatter y los pasa al Layout, que los serializa en `<head>`. No hay generación automática de sitemap ni de canónicas.
+- `pnpm check:links`: 97 referencias locales en 6 HTML, sin roturas.
+- `sitemap.xml`: 3 `<url>` (home, índice del blog, 1 artículo).
+- `rss.xml`: 1 `<item>` (1 artículo publicado).
+- Sin analítica ni Search Console verificada.
+- Sin páginas de categoría o archivo del blog.
 
-### Metadatos por ruta
+## Metadatos por ruta
 
-| Ruta | Título | Canonical | Robots | JSON-LD |
-|---|---|---|---|---|
-| `/` | `Juan Samayoa \| QA Automation Engineer` | calculada con `Astro.site` + pathname (fallback `https://juan-samayoa.is-a.dev/`) | `index, follow, max-image-preview:large` (por defecto) | `Person` |
-| `/thanks` | `¡Gracias por contactarme! — Juan Samayoa` | `https://juan-samayoa.is-a.dev/thanks` | `noindex, follow` | `WebPage` |
-| `/404` | `Página no encontrada \| 404 — Juan Samayoa` | `https://juan-samayoa.is-a.dev/404` | `noindex, follow` | `WebPage` |
-| `/toolkit/sql` | `SQL Validation Playground \| Juan Samayoa — QA Toolkit` | `https://juan-samayoa.is-a.dev/toolkit/sql` | `noindex, follow` | `WebPage` con `author` |
-
-### Metadatos globales del Layout
-
-- `charset`, `viewport`, `author` (Juan Samayoa), `keywords` orientadas a QA/Playwright/Java/Selenium/Postman/SQL/Guatemala.
-- Open Graph: `og:type=website`, `og:url`, `og:title`, `og:description`, `og:image`, `og:image:secure_url`, `og:image:type`, `og:image:width`, `og:image:height`, `og:image:alt`, `og:site_name=Juan Samayoa Portfolio`, `og:locale=es_GT`.
-- Twitter: `summary_large_image`, `twitter:site=@JSamayoa_`, título, descripción, imagen y alt.
-- `theme-color=#0f6e56`, `application-name`, `mobile-web-app-capable`, `apple-mobile-web-app-status-bar-style`, `format-detection telephone=no`.
-- Iconos: `/favicon.ico`, `/apple-touch-icon.png` (declarado 180×180), `manifest=/site.webmanifest`.
-- JSON-LD del home:
-
-```json
-{
-  "@context": "https://schema.org",
-  "@type": "Person",
-  "name": "Juan Samayoa",
-  "jobTitle": "QA Automatizado",
-  "email": "contact@juansamayoa.dev",
-  "address": { "@type": "PostalAddress", "addressLocality": "Guatemala City", "addressCountry": "GT" },
-  "url": "https://juan-samayoa.is-a.dev/",
-  "sameAs": ["https://www.linkedin.com/in/juansamayoa/", "https://github.com/JuanSamayoa"]
-}
-```
-
-### Imágenes sociales
-
-| Página | `previewImage` | `ogImage` | Estado |
+| Ruta | `robots` | `previewImage` | Notas |
 |---|---|---|---|
-| `/` | Foto de perfil Cloudinary (`IMG_8748_baq06u.jpg`) | `og-image_vonu7x.png` 1200×630 | Coherente para OG; Twitter usa la foto de perfil |
-| `/thanks` | `https://juan-samayoa.is-a.dev/favicon.svg` | hereda | **Archivo inexistente** |
-| `/404` | `https://juan-samayoa.is-a.dev/favicon.svg` | hereda | **Archivo inexistente** |
-| `/toolkit/sql` | Imagen de proyecto `humanresources_tqjseu.webp` | hereda | Relación temática débil |
+| `/` | `index, follow, max-image-preview:large` | `/assets/img/profile/profile-600x600.webp` (Cloudinary) | Home con schema `Person` |
+| `/blog/` | `index, follow` | OG por defecto | Schema `Blog` |
+| `/blog/<slug>/` | `index, follow` | Portada del artículo o OG por defecto | Schema `BlogPosting` |
+| `/toolkit/sql` | `noindex, follow` | `/og-image.png` | Herramienta interna |
+| `/thanks` | `noindex, follow` | `/og-image.png` | Confirmación de formulario |
+| `/404` | `noindex, follow` | `/og-image.png` | Página de error |
 
-`public/og-image.png` existe pero ninguna página lo referencia.
+Todas las rutas pasan `title`, `description`, `canonicalUrl`, `previewImage` y `schemaOrg` al Layout; `ogImage`, `ogImageType`, `ogImageWidth` y `ogImageHeight` son opcionales con valores por defecto.
 
-### Indexación
+## Layout (`src/layouts/Layout.astro`)
 
-`public/robots.txt`:
+El Layout genera automáticamente:
 
-- `User-agent: *` → `Allow: /`; bloquea `/assets/cv/`, `/sw.js`, `/_headers`, `/security.txt`.
-- Bloqueo total a `GPTBot`, `ChatGPT-User`, `CCBot`, `Google-Extended`, `anthropic-ai`, `ClaudeBot`.
-- Declara `Sitemap: https://juan-samayoa.is-a.dev/sitemap.xml`.
+- `<title>` y `<meta name="description">`.
+- `<link rel="canonical">` con URL absoluta.
+- Open Graph: `og:type`, `og:site_name`, `og:url`, `og:title`, `og:description`, `og:image`, `og:image:type`, `og:image:width`, `og:image:height`, `og:locale` (`es_ES`).
+- Twitter Cards: `twitter:card` (`summary_large_image`), `twitter:title`, `twitter:description`, `twitter:image`.
+- JSON-LD con el objeto `schemaOrg` pasado por la página.
+- `robots` meta con el valor recibido (por defecto `index, follow, max-image-preview:large`).
+- `<link rel="alternate" type="application/rss+xml">` hacia `/rss.xml`.
+- Fuentes con carga no bloqueante y `preconnect`.
 
-`public/sitemap.xml`: una sola URL (`/`), `lastmod 2026-07-30`, `changefreq weekly`, `priority 1.0`. Es consistente con que `/thanks`, `/404` y `/toolkit/sql` sean `noindex`.
+## Datos estructurados
 
-Canonical y build: el build genera directorios (`/thanks/index.html`, `/toolkit/sql/index.html`) mientras las canónicas no llevan slash final. GitHub Pages puede redirigir con 301 a la versión con slash. PENDIENTE DE DEFINICIÓN: requiere verificación en producción antes de afirmar si hay duplicidad.
+| Ruta | Schema | Campos clave |
+|---|---|---|
+| Home | `Person` | name, jobTitle, url, email, sameAs (GitHub, LinkedIn, Twitter/X, YouTube) |
+| `/blog/` | `Blog` | name, description, url, publisher |
+| `/blog/<slug>/` | `BlogPosting` | headline, description, datePublished, dateModified, author, publisher, image, mainEntityOfPage, keywords |
+| Resto | `Person` o `WebSite` heredado | — |
+
+## Sitemap (`src/pages/sitemap.xml.ts`)
+
+- Endpoint dinámico; genera `/sitemap.xml` en build.
+- Incluye la home y el índice del blog siempre.
+- Añade un `<url>` por artículo con `draft !== true`, ordenado por `pubDate` descendente.
+- Usa `Astro.site` para URLs absolutas.
+- `changefreq`/`lastmod` derivados de `pubDate`/`updatedDate`.
+
+No existe un `sitemap.xml` estático en `public/`; el archivo fue reemplazado por el endpoint dinámico.
+
+## Feed RSS (`src/pages/rss.xml.ts`)
+
+- Endpoint dinámico; genera `/rss.xml` con `@astrojs/rss`.
+- Incluye artículos con `draft !== true`, ordenados por `pubDate` descendente.
+- `title`, `description`, `pubDate`, `link` por artículo; `customData` para categorías/tags.
+- Autodiscovery en el `<head>` del Layout y enlace visible en `/blog/`.
+
+## robots.txt (`public/robots.txt`)
+
+- `User-agent: *` con `Allow: /` y `Sitemap: https://juan-samayoa.is-a.dev/sitemap.xml`.
+- Bloqueo de crawlers de IA (`GPTBot`, `ChatGPT-User`, `CCBot`, `anthropic-ai`, `Claude-Web`, `Google-Extended`, `Bytespider`, `PerplexityBot`).
+- No bloquea imágenes ni assets.
+
+## Canonical y dominio
+
+- Dominio canónico: `https://juan-samayoa.is-a.dev` (`astro.config.mjs`, `public/CNAME`).
+- Canónicas absolutas construidas con `new URL(Astro.url.pathname, Astro.site)` en cada página.
+- `base: "/"`, por lo que no hay prefijo de subdirectorio.
+
+## Seguridad y SEO
+
+- CSP en `<meta>` (funciona en GitHub Pages) y en `public/_headers`.
+- `X-Robots-Tag` no se envía; el control es por meta `robots`.
+- `security.txt` duplicado en `/security.txt` y `/.well-known/security.txt`, expira `2027-01-31`.
+- El blog se anuncia también por RSS.
 
 ## Reglas
 
-- Toda página nueva debe pasar `title`, `description`, `canonicalUrl`, `previewImage` y `schemaOrg`.
-- `canonicalUrl` siempre absoluta, con el dominio de producción y sin parámetros.
-- `/thanks`, `/404` y páginas de utilidad llevan `robots="noindex, follow"`.
-- Si una ruta debe indexarse, se añade manualmente a `public/sitemap.xml`.
-- No cambiar `site`, `CNAME` ni el dominio sin actualizar canónicas, OG, sitemap, robots y `security.txt`.
-- `description` única por ruta, entre ~120 y 160 caracteres cuando sea posible.
-- No introducir keywords stuffing ni contenido oculto.
+- Toda página nueva debe pasar los 5 props requeridos al Layout.
+- Si debe indexarse, añadir la ruta a `sitemap.xml.ts`.
+- Un artículo con `draft: true` no aparece en el índice, sitemap ni RSS, pero se genera HTML. No lo uses para contenido que no deba publicarse en absoluto.
+- No cambiar el slug de un artículo publicado sin redirección.
+- Mantener canónicas absolutas y coherentes con el dominio.
+- La imagen social por defecto (`/og-image.png`, 1200×630) debe existir en `public/`.
+- No añadir `noindex` accidental a la home ni al blog.
 
 ## Ejemplos reales
 
-- Página con metadatos completos y `noindex`:
-
-```astro
-<Layout
-  title={title}
-  description={description}
-  canonicalUrl={canonicalUrl}
-  previewImage={previewImage}
-  {schemaOrg}
-  robots="noindex, follow"
->
-```
-
-- Cálculo de canonical en el home a partir de `Astro.site`, con fallback explícito al dominio de producción.
-- JSON-LD inyectado con `set:html` y `is:inline`, sin escaping manual.
+- Home: `canonicalUrl` construida con `Astro.site` + `Astro.url.pathname`; `schemaOrg` con `Person` y `sameAs`.
+- Blog: `getCollection("blog", ({ data }) => data.draft !== true)` ordenado por `pubDate` descendente; el mismo filtro se repite en sitemap y RSS.
+- Portada del artículo: `optimizedCloudinary(post.data.cover, "f_auto,q_auto,c_limit,w_1200")` con `coverAlt` o `title` como `alt`.
+- `/thanks` y `/404`: `robots="noindex, follow"` y `previewImage="/og-image.png"`.
+- `/toolkit/sql`: `robots="noindex, follow"` porque es una herramienta interna.
 
 ## Riesgos conocidos
 
-1. **`previewImage` roto en `/thanks` y `/404`**: apunta a `/favicon.svg`, que no existe; cualquier compartición de esas URLs produce imagen rota.
-2. **Twitter Card con imagen vertical**: `twitter:image` usa la foto de perfil (retrato) mientras la tarjeta es `summary_large_image` (1.91:1); el recorte puede ser desfavorable.
-3. **`og:image` del home en Cloudinary**: si el asset se elimina o cambia de versión, se rompe la vista previa social.
-4. **Sitemap manual y desactualizado**: solo la home, con `lastmod` fijo; no refleja cambios de contenido.
-5. **Canonical sin slash vs. directorios generados**: posible 301 o duplicidad (PENDIENTE DE DEFINICIÓN).
-6. **Datos estructurados mínimos**: solo `Person` y `WebPage`; no hay `BreadcrumbList`, `WebSite`, `ProfilePage` ni `ItemList` para proyectos/certificaciones.
-7. **`keywords` meta**: ignorado por Google; se mantiene por legado.
-8. **`jobTitle` en JSON-LD es "QA Automatizado"** mientras el `<title>` dice "QA Automation Engineer": inconsistencia semántica.
-9. **Sin `hreflang`**: correcto mientras no existan versiones por idioma, pero impide SEO internacional si se añade `/en`.
-10. **Contenido duplicado potencial** entre el hero y "Sobre mí" (descripciones similares), sin canibalización grave por ser una sola página.
+- **Sin medición:** no hay Search Console ni analítica; no se puede validar indexación ni CTR.
+- **Blog con un solo artículo:** el feed y el sitemap tienen una entrada; las páginas de archivo/categoría no existen.
+- **Duplicación de lógica:** índice, sitemap y RSS repiten filtro y orden.
+- **`previewImage` del home** apunta a una imagen de Cloudinary; si se elimina, el OG image se rompe.
+- **CSP y OG:** las imágenes sociales se sirven desde el dominio propio o Cloudinary; ambas deben estar permitidas.
+- **Slug inmutable:** cambiar el nombre del archivo del artículo rompe la URL y el feed sin redirección.
 
 ## Recomendaciones futuras
 
-- Corregir los `previewImage` de `/thanks` y `/404` a un asset existente (por ejemplo, `/og-image.png`).
-- Usar una imagen 1200×630 dedicada para `twitter:image` en todas las rutas.
-- Generar el sitemap automáticamente o, como mínimo, actualizarlo al añadir rutas indexables.
-- Unificar `jobTitle` con el título profesional usado en la UI.
-- Verificar en producción el comportamiento de canonical con/sin slash y ajustar `trailingSlash` si procede.
-- Añadir `ProfilePage`/`WebSite` con `sameAs` si se busca reforzar entidad de marca personal.
+- Verificar el sitio en Google Search Console y enviar el sitemap.
+- Definir una estrategia de categorías/tags del blog (ya existen tags, pero no hay páginas de archivo).
+- Añadir `lastmod` real al sitemap cuando se actualice un artículo.
+- Evaluar `hreflang` solo si se introduce multi-idioma.
+- Incorporar una imagen social por artículo (`cover` ya puede servir como OG image).

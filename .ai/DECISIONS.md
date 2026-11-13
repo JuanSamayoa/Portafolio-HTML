@@ -106,10 +106,10 @@ Estados posibles: `Aceptada` (implementada y coherente), `Implícita` (nunca for
 
 ## D-12 — pnpm fijado con Corepack
 
-- **Decisión:** fijar `pnpm@10.19.0` con hash y usar `--frozen-lockfile` en CI.
-- **Evidencia:** `packageManager` en `package.json`; pasos del workflow.
-- **Consecuencias:** builds reproducibles; actualizar pnpm requiere cambiar el hash.
-- **Estado:** Aceptada.
+- **Decisión:** fijar `pnpm@12.18.0` con hash y usar `--frozen-lockfile` en CI.
+- **Evidencia:** `packageManager` en `package.json`; pasos del workflow; `pnpm-workspace.yaml` con overrides.
+- **Consecuencias:** builds reproducibles; actualizar pnpm requiere cambiar el hash y revisar `pnpm-workspace.yaml`.
+- **Estado:** Aceptada (actualizada en la auditoría documental de 2026-11-12).
 
 ## D-13 — Sin pruebas automatizadas
 
@@ -134,12 +134,13 @@ Estados posibles: `Aceptada` (implementada y coherente), `Implícita` (nunca for
 - **Consecuencias:** accesibilidad y robustez gratuitas; limitaciones de animación y de control fino.
 - **Estado:** Aceptada.
 
-## D-16 — Sitemap manual
+## D-16 — Sitemap y RSS dinámicos desde la colección
 
-- **Decisión:** mantener `public/sitemap.xml` a mano con una sola URL.
-- **Evidencia:** archivo con `lastmod` fijo; no hay integración de sitemap en la config.
-- **Consecuencias:** control total; desactualización silenciosa al añadir rutas indexables.
-- **Estado:** Implícita.
+- **Decisión:** generar `/sitemap.xml` y `/rss.xml` desde `getCollection("blog")` en endpoints de Astro, excluyendo borradores.
+- **Contexto:** el blog añade rutas dinámicas y el sitemap manual se desactualizaba.
+- **Evidencia:** `src/pages/sitemap.xml.ts`, `src/pages/rss.xml.ts`, `src/content.config.ts`.
+- **Consecuencias:** el índice, el sitemap y el feed se mantienen coherentes; un borrador mal marcado puede publicar contenido no deseado.
+- **Estado:** Aceptada (sustituye la decisión anterior de sitemap manual; ver D-29).
 
 ## D-17 — `/toolkit/sql` fuera de índices
 
@@ -196,7 +197,7 @@ Estados posibles: `Aceptada` (implementada y coherente), `Implícita` (nunca for
 
 - **Decisión:** mantener el `<dialog>` nativo y añadir una trampa de foco pequeña en `CertModal.astro`: `Tab` y `Shift+Tab` ciclan entre controles visibles del diálogo; sin controles, el foco va al contenedor (`tabindex="-1"`). Al abrir se enfoca el primer control; al cerrar por botón, fondo o `Escape` se restaura el disparador. El cierre por botón/fondo se finaliza de forma síncrona e idempotente para que el evento `close` diferido no robe el foco a una reapertura.
 - **Contexto:** la fase 1 restauraba foco y scroll, pero no contenía el ciclo de tabulación y el evento `close` asíncrono podía interferir con una apertura inmediata.
-- **Evidencia:** `src/components/CertModal.astro`; pruebas de ciclo directo/inverso, `Escape`, cierre con botón, cierre con backdrop, reapertura y restauración en `tests/phase2.spec.ts`.
+- **Evidencia:** `src/components/CertModal.astro`; pruebas de ciclo directo/inverso, `Escape`, cierre con botón, cierre con backdrop, reapertura y restauración en `tests/phase2.spec.ts` y `tests/phase3.spec.ts`.
 - **Consecuencias:** sin dependencias nuevas; el contenido tras el modal queda inerte gracias a `showModal()`. La lista de enfocables debe mantenerse si se añaden controles.
 - **Estado:** Aceptada.
 
@@ -220,8 +221,90 @@ Estados posibles: `Aceptada` (implementada y coherente), `Implícita` (nunca for
 
 - **Decisión:** `tools/check-local-references.mjs` recorre el HTML de `dist/`, extrae `href`, `src`, `srcset`, `poster`, iconos, manifest y metadatos Open Graph/Twitter, ignora protocolos externos y resuelve rutas absolutas/relativas, query, fragmentos y `base` de Astro. Falla con código 1 e informa archivo y referencia.
 - **Contexto:** el build no detecta enlaces o assets locales inexistentes y ya hubo referencias huérfanas.
-- **Evidencia:** 26 referencias en 4 HTML sin roturas; 6 pruebas Node con fixtures válidos, rotos, `base` y código de salida; paso `pnpm check:links` en CI.
+- **Evidencia:** 97 referencias en 6 HTML sin roturas; 6 pruebas Node con fixtures válidos, rotos, `base` y código de salida; paso `pnpm check:links` en CI.
 - **Consecuencias:** verificación reproducible sin dependencias; `base` se lee del literal de `astro.config.mjs`, por lo que una base calculada exigiría pasar `--base`.
+- **Estado:** Aceptada.
+
+---
+
+## D-28 — Blog con Astro Content Collections y Pages CMS
+
+- **Decisión:** los artículos viven en `src/content/blog` validados con `src/content.config.ts` (zod) y se editan con Pages CMS mediante `.pages.yml`.
+- **Contexto:** añadir un canal editorial sin romper el modelo estático ni introducir un backend.
+- **Evidencia:** `src/content.config.ts`, `src/content/blog/arquitectura-portafolio-astro.md`, `.pages.yml`, `src/pages/blog/index.astro`, `src/pages/blog/[slug].astro`.
+- **Consecuencias:** publicar un artículo es crear un `.md`; borradores (`draft: true`) quedan fuera del índice, sitemap y RSS pero se generan en `dist/`. Pages CMS opera sobre el repositorio y depende de sus permisos.
+- **Estado:** Aceptada.
+
+## D-29 — Sitemap y RSS dinámicos desde la colección
+
+- **Decisión:** generar `/sitemap.xml` y `/rss.xml` en build a partir de `getCollection("blog", ({ data }) => data.draft !== true)`.
+- **Contexto:** el sitemap manual se desactualizaba al añadir rutas y artículos.
+- **Evidencia:** `src/pages/sitemap.xml.ts`, `src/pages/rss.xml.ts`, `robots.txt` con `Sitemap:`.
+- **Consecuencias:** índice, sitemap y feed comparten filtro y orden; un borrador mal marcado puede publicar contenido no deseado. No hay sitemap estático en `public/`.
+- **Estado:** Aceptada.
+
+## D-30 — CSP endurecida y COEP `credentialless`
+
+- **Decisión:** restringir la CSP a `self`, `https://res.cloudinary.com` y `https://formsubmit.co`, con `object-src 'none'`, `frame-src 'none'` y `worker-src 'self'`; usar `COEP: credentialless` para compatibilidad con Cloudinary.
+- **Contexto:** la CSP anterior permitía `https:` abierto y `COEP: require-corp` rompía imágenes remotas.
+- **Evidencia:** `Layout.astro` (meta), `public/_headers`, `SECURITY.md`.
+- **Consecuencias:** mejor protección frente a inyección; cualquier origen nuevo exige actualizar ambas copias. `unsafe-inline` sigue presente para scripts/estilos de Astro.
+- **Estado:** Aceptada.
+
+## D-31 — Helper de optimización de imágenes en Cloudinary
+
+- **Decisión:** centralizar la inserción de transformaciones en `src/utils/cloudinary.ts` (`optimizedCloudinary`, `f_auto,q_auto`, `c_limit,w_*`).
+- **Contexto:** evitar transformaciones manuales dispersas y URLs duplicadas.
+- **Evidencia:** `src/utils/cloudinary.ts`, uso en `Projects`, `Certifications`, `CertModal`, `Hero`, `blog/[slug]`.
+- **Consecuencias:** entrega optimizada por defecto; sin fallback local si Cloudinary falla.
+- **Estado:** Aceptada.
+
+## D-32 — Fuentes no bloqueantes
+
+- **Decisión:** cargar Google Fonts con `preload as=style`, hoja con `media="print"` activada por script inline y fallback `<noscript>`.
+- **Contexto:** la afirmación anterior de fuentes render-blocking quedó obsoleta.
+- **Evidencia:** `Layout.astro`, `PERFORMANCE.md`.
+- **Consecuencias:** mejor LCP potencial; dependencia de JS mínimo para activar la hoja (hay fallback).
+- **Estado:** Aceptada.
+
+## D-33 — Selectores acotados `.site-nav` y `.site-footer`
+
+- **Decisión:** reemplazar los selectores de elemento `nav`/`footer` por clases `.site-nav` y `.site-footer` para evitar colisiones con sub-navegaciones y pies de artículo.
+- **Contexto:** los estilos globales alcanzaban HTML de página (nav móvil, footer del artículo).
+- **Evidencia:** `global.css`, `Layout.astro`, `blog/[slug].astro`.
+- **Consecuencias:** encapsulación más segura; mayor verbosidad en el markup.
+- **Estado:** Aceptada.
+
+## D-34 — Enlace del blog en `.nav-actions`
+
+- **Decisión:** mantener el enlace `blog` dentro de `.nav-actions`, fuera de `#primary-navigation`, para preservar los 8 enlaces verificados en `phase1.spec.ts`.
+- **Contexto:** el test cuenta exactamente 8 anclas en la navegación principal.
+- **Evidencia:** `Layout.astro`, `tests/phase1.spec.ts`.
+- **Consecuencias:** en escritorio el blog vive en la barra de acciones; en móvil se inyecta en el panel.
+- **Estado:** Aceptada.
+
+## D-35 — Exclusiones del service worker
+
+- **Decisión:** el service worker excluye `/assets/cv/` y respuestas `no-store`/`private`, y valida el origen de cada request.
+- **Contexto:** evitar cachear CVs y respuestas no cacheables.
+- **Evidencia:** `public/sw.js`.
+- **Consecuencias:** mayor robustez si se registra; hoy no se registra (D-18).
+- **Estado:** Aceptada (complementa D-18).
+
+## D-36 — CI con mínimo privilegio y acciones pinneadas
+
+- **Decisión:** el workflow usa `contents: read` global, `pages: write`/`id-token: write` solo en `deploy`, acciones pinneadas por SHA, caché de pnpm+Astro y `cancel-in-progress: false`.
+- **Contexto:** hardening de supply chain y serialización de despliegues.
+- **Evidencia:** `.github/workflows/deploy-pages.yml`.
+- **Consecuencias:** despliegues serializados; cualquier cambio de permisos requiere revisión explícita.
+- **Estado:** Aceptada.
+
+## D-37 — Migración a pnpm 12.18.0 y overrides en workspace
+
+- **Decisión:** migrar a `pnpm@12.18.0` y trasladar `overrides` y `minimumReleaseAge` a `pnpm-workspace.yaml` (el campo `pnpm` de `package.json` se ignora en pnpm 12).
+- **Contexto:** pnpm 12 cambió la ubicación de la configuración de workspace.
+- **Evidencia:** `package.json`, `pnpm-workspace.yaml`, `pnpm-lock.yaml`.
+- **Consecuencias:** builds reproducibles; cambios de dependencias exigen actualizar el lockfile.
 - **Estado:** Aceptada.
 
 ---

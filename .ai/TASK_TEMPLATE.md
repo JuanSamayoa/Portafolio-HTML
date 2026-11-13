@@ -31,7 +31,7 @@ Toda tarea de cambio (código, contenido, estilos, configuración o documentaci�
 ## Criterios de aceptación
 - [ ] <resultado observable 1>
 - [ ] <resultado observable 2>
-- [ ] Sin regresiones en las 4 rutas.
+- [ ] Sin regresiones en las 6 rutas.
 
 ## Verificación
 ```bash
